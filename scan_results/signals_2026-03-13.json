@@ -1,0 +1,338 @@
+{
+  "scan_date": "2026-03-13",
+  "scan_timestamp": "2026-03-13T14:30:00Z",
+  "scanner_version": "1.0.0",
+  "num_returned": 10,
+  "companies": [
+    {
+      "company_name": "Apple Inc.",
+      "sector": "Technology / Consumer Electronics",
+      "headquarters": "USA",
+      "estimated_revenue_usd_bn": 435.61,
+      "signals": [
+        {
+          "signal_id": "product_launch",
+          "signal_label": "Major Product Launch",
+          "signal_icon": "🚀",
+          "description": "Apple launched seven new products including iPhone 17e, MacBook Neo ($599 entry-level laptop), M5 MacBook Air/Pro, iPad Air with M4, and new displays across March 2-11, 2026",
+          "news_headline": "Apple's Biggest Week of 2026: Details on Every New Product Announced",
+          "news_source": "MacRumors",
+          "news_date": "2026-03-04",
+          "strength": 9
+        }
+      ],
+      "overall_score": 8.5,
+      "lfc_fit_summary": "Global tech giant with massive consumer reach and brand visibility seeking to expand into sports partnerships. Product launch cycle demonstrates active marketing budget deployment. Premium brand alignment with LFC prestige.",
+      "recommended_asset": "Global Brand Partnership / Digital Integration",
+      "priority": "HIGH",
+      "decision_maker_title": "Chief Marketing Officer",
+      "notes": "Apple's March launch week shows active spending on global campaigns. TTM revenue $435.61bn makes them a tier-1 prospect. Technology sector looking to engage sports for lifestyle positioning."
+    },
+    {
+      "company_name": "Samsung Electronics",
+      "sector": "Technology / Consumer Electronics",
+      "headquarters": "South Korea",
+      "estimated_revenue_usd_bn": 233.3,
+      "signals": [
+        {
+          "signal_id": "product_launch",
+          "signal_label": "Major Product Launch",
+          "signal_icon": "🚀",
+          "description": "Galaxy S26 series and Galaxy Buds4 launched globally March 11, 2026 with record-breaking pre-order demand (70% selected S26 Ultra). Galaxy Book6 laptops also launched March 11. Strategic AI expansion announced.",
+          "news_headline": "Samsung Galaxy S26 Series and Galaxy Buds4 Series Now Available Worldwide",
+          "news_source": "Samsung Global Newsroom",
+          "news_date": "2026-03-11",
+          "strength": 9
+        },
+        {
+          "signal_id": "global_awareness",
+          "signal_label": "Global Brand Campaign",
+          "signal_icon": "📣",
+          "description": "Multi-market product launch coordinated across carriers, retailers, and Samsung.com with major marketing push during Mobile World Congress (March 1-4) and coordinated launch week.",
+          "news_headline": "Samsung Electronics' Strategy to Transition Global Manufacturing to AI-Driven Factories by 2030",
+          "news_source": "Samsung Global Newsroom",
+          "news_date": "2026-03-01",
+          "strength": 8
+        }
+      ],
+      "overall_score": 9.0,
+      "lfc_fit_summary": "Record-breaking Q4 2025 results (profit up 33%) with massive global product launches across Asia-Pacific, Americas. Record pre-order demand signals high marketing momentum. Premium positioning aligns with LFC's global fanbase especially in Asia where Samsung has dominant presence.",
+      "recommended_asset": "Technology Partner / Front-of-Shirt Sponsorship",
+      "priority": "HIGH",
+      "decision_maker_title": "Chief Marketing Officer",
+      "notes": "Samsung just reported record 2025 revenue of $233.3bn. Strong financial performance + aggressive 2026 launch strategy + Asia dominance = premium fit for LFC's Asian growth strategy. Record profit signals budget availability."
+    },
+    {
+      "company_name": "Amazon.com Inc.",
+      "sector": "E-Commerce / Cloud / Retail",
+      "headquarters": "USA",
+      "estimated_revenue_usd_bn": 716.92,
+      "signals": [
+        {
+          "signal_id": "funding_announcement",
+          "signal_label": "Major Capital Investment",
+          "signal_icon": "💰",
+          "description": "Announced $200 billion capital expenditure plan for 2026 fiscal year for AI and satellite dominance. Strategic $50 billion investment in OpenAI as exclusive third-party cloud provider.",
+          "news_headline": "Amazon Announces $200 Billion Capital Expenditure Plan for AI and Satellite Supremacy",
+          "news_source": "Multiple Sources",
+          "news_date": "2026-03-06",
+          "strength": 10
+        },
+        {
+          "signal_id": "major_global_expansion",
+          "signal_label": "Multi-Market Global Expansion",
+          "signal_icon": "🌐",
+          "description": "Announced 50+ new projects across 30 US states plus AU$750M investment in Brisbane robotics fulfillment center. Same-day grocery delivery expanding to 2,000+ cities globally. Expansion across AI infrastructure, rural delivery, and employee pay increases.",
+          "news_headline": "Amazon Announces Over 50 New Projects Across 30 States for 2026",
+          "news_source": "AboutAmazon.com",
+          "news_date": "2026-03-13",
+          "strength": 9
+        }
+      ],
+      "overall_score": 9.5,
+      "lfc_fit_summary": "World's largest e-commerce company with $716.9bn revenue and record $200bn investment plan signals massive budget for brand partnerships. Global expansion across 30+ markets aligns with LFC's international reach. Amazon Prime Video's sports content strategy suggests strategic interest in sports partnerships.",
+      "recommended_asset": "Global Retail Partner / Streaming Rights",
+      "priority": "HIGH",
+      "decision_maker_title": "Chief Marketing Officer / SVP Global Expansion",
+      "notes": "Amazon surpassed Walmart in 2025 revenue for the first time. $200bn CapEx plan shows unprecedented spending momentum. Multi-continent expansion (US, Australia) + AI budget = strong sponsorship capacity. Sports content angle via Prime Video offers secondary partnership value."
+    },
+    {
+      "company_name": "IKEA (Ingka Group)",
+      "sector": "Retail / Home Furnishings",
+      "headquarters": "Sweden",
+      "estimated_revenue_usd_bn": 48.9,
+      "signals": [
+        {
+          "signal_id": "global_awareness",
+          "signal_label": "Global Brand Campaign Launch",
+          "signal_icon": "📣",
+          "description": "Launched major global brand campaign 'Coming Home' on March 10, 2026 in partnership with global agency McCann. Cinematic film directed by Justyna Obasi rolling out globally starting South Korea, China, Belgium with further markets throughout 2026.",
+          "news_headline": "IKEA Retail (Ingka Group) and McCann Launch New Global Brand Campaign Celebrating Home, a Feeling Like No Other",
+          "news_source": "Roastbrief / Ingka Corporate",
+          "news_date": "2026-03-10",
+          "strength": 8
+        },
+        {
+          "signal_id": "major_global_expansion",
+          "signal_label": "Multi-Market Campaign Expansion",
+          "signal_icon": "🌐",
+          "description": "Global rollout of 'Coming Home' campaign across South Korea, China, Belgium with staggered market entry throughout 2026. Indicates active international marketing budget and expansion focus in Asia (strong LFC markets).",
+          "news_headline": "IKEA Global Campaign Launches Across South Korea, China, and Belgium",
+          "news_source": "Ingka Group",
+          "news_date": "2026-03-10",
+          "strength": 7
+        }
+      ],
+      "overall_score": 8.0,
+      "lfc_fit_summary": "Iconic global brand with EUR 41.5bn revenue launching major multi-market campaign. Asia-focused expansion (South Korea, China) aligns perfectly with LFC's 750m Asian fanbase. B2C lifestyle positioning seeks association with iconic global brands and fan engagement.",
+      "recommended_asset": "Asia Regional Sponsorship / Content Partnership",
+      "priority": "HIGH",
+      "decision_maker_title": "Chief Marketing Officer",
+      "notes": "IKEA's EUR 41.5bn revenue (approx $48.9bn USD) qualifies. Global campaign launch in March shows active spending. Asia expansion focus (Korea, China) perfectly matches LFC's geographic strategy. Lifestyle brand positioning suggests sports partnership interest for consumer engagement."
+    },
+    {
+      "company_name": "Broadcom Inc.",
+      "sector": "Semiconductors / Technology",
+      "headquarters": "USA",
+      "estimated_revenue_usd_bn": 68.28,
+      "signals": [
+        {
+          "signal_id": "financial_performance",
+          "signal_label": "Record Financial Performance",
+          "signal_icon": "📈",
+          "description": "Broadcom announced record Q1 FY2026 financial results with AI revenue doubling year-over-year. Q1 AI revenue reached $8.4 billion, up 106% YoY, driven by custom AI accelerators and AI networking.",
+          "news_headline": "Broadcom Inc. Announces First Quarter Fiscal Year 2026 Financial Results and Quarterly Dividend",
+          "news_source": "Broadcom Investor Relations",
+          "news_date": "2026-03-04",
+          "strength": 9
+        },
+        {
+          "signal_id": "major_global_expansion",
+          "signal_label": "AI-Driven Global Growth",
+          "signal_icon": "🌐",
+          "description": "Expects revenue growth of 47% YoY to $22.0 billion in Q2 FY2026. Leading provider of AI infrastructure chips with unprecedented demand. Global expansion driven by AI data center proliferation across all major markets.",
+          "news_headline": "Broadcom Forecasts 47% Revenue Growth in Q2 FY2026 on AI Momentum",
+          "news_source": "Broadcom Investor Relations",
+          "news_date": "2026-03-04",
+          "strength": 9
+        }
+      ],
+      "overall_score": 8.5,
+      "lfc_fit_summary": "Tier-1 semiconductor leader with record $68.28bn TTM revenue and 106% YoY AI growth shows exceptional financial momentum. Record profit margins indicate strong budget capacity for brand partnerships. AI/tech positioning aligns with modern digital-first sports sponsorships.",
+      "recommended_asset": "Global Technology Partner",
+      "priority": "HIGH",
+      "decision_maker_title": "Chief Marketing Officer / SVP Commercial",
+      "notes": "Broadcom's record Q1 FY2026 results with 47% projected Q2 growth shows exceptional financial performance and future momentum. $68.28bn TTM revenue qualifies. AI focus positions them as future-facing technology leader seeking prestige brand partnerships."
+    },
+    {
+      "company_name": "PepsiCo Inc.",
+      "sector": "Beverage & Food",
+      "headquarters": "USA",
+      "estimated_revenue_usd_bn": 93.93,
+      "signals": [
+        {
+          "signal_id": "financial_performance",
+          "signal_label": "Record Financial Performance",
+          "signal_icon": "📈",
+          "description": "PepsiCo reported $93.9 billion in 2025 revenues, up 2.25% YoY, with profit of $11.5 billion. Strong financial foundation with consistent growth and high operating margins.",
+          "news_headline": "PepsiCo Reports $93.9B Revenues for 2025, Profit $11.5B",
+          "news_source": "PepsiCo Investor Relations",
+          "news_date": "2026-02-15",
+          "strength": 8
+        },
+        {
+          "signal_id": "sports_affinity",
+          "signal_label": "Sports Partnership History",
+          "signal_icon": "⚽",
+          "description": "PepsiCo (Pepsi/Gatorade brands) has established history of global sports sponsorships and partnerships. Brand portfolio includes Gatorade which is official hydration partner for multiple sports leagues. March 2026 sponsorship activity demonstrates continued sports engagement.",
+          "news_headline": "Coca-Cola Announces Sponsorship Move Before 2026 March Madness",
+          "news_source": "Yahoo Sports",
+          "news_date": "2026-03-06",
+          "strength": 7
+        }
+      ],
+      "overall_score": 8.0,
+      "lfc_fit_summary": "Major global beverage/food corporation with $93.93bn revenue and strong profit base. Portfolio includes sports-affiliated brands (Gatorade, Pepsi) indicating existing sports marketing infrastructure. Competitor Coca-Cola's sponsorship activity in March signals active category engagement.",
+      "recommended_asset": "Official Beverage Partner / Stadium Hospitality",
+      "priority": "MEDIUM",
+      "decision_maker_title": "Chief Marketing Officer / Gatorade CMO",
+      "notes": "PepsiCo's $93.93bn revenue and $11.5bn profit show solid financial foundation. Gatorade and Pepsi brands already embedded in sports. Coca-Cola's concurrent sponsorship activity shows category remains active. Good fit for beverage partnership though may face Coca-Cola competition."
+    },
+    {
+      "company_name": "Coca-Cola Company",
+      "sector": "Beverage",
+      "headquarters": "USA",
+      "estimated_revenue_usd_bn": 47.66,
+      "signals": [
+        {
+          "signal_id": "leadership_change",
+          "signal_label": "CEO Leadership Transition",
+          "signal_icon": "👤",
+          "description": "Henrique Braun appointed to succeed James Quincey as CEO of The Coca-Cola Company, effective March 31, 2026. Signals strategic leadership shift and potential reorientation of marketing priorities and sponsorship strategy.",
+          "news_headline": "Henrique Braun Appointed New CEO of The Coca-Cola Company",
+          "news_source": "Coca-Cola Investor Relations",
+          "news_date": "2026-03-11",
+          "strength": 8
+        },
+        {
+          "signal_id": "sports_affinity",
+          "signal_label": "Sports Sponsorship Activity",
+          "signal_icon": "⚽",
+          "description": "Coca-Cola announced sponsorship moves before 2026 March Madness (NCAA Tournament). Demonstrates active sports marketing engagement and budget allocation for sports properties.",
+          "news_headline": "Coca-Cola Announces Sponsorship Move Before 2026 March Madness",
+          "news_source": "Yahoo Sports",
+          "news_date": "2026-03-06",
+          "strength": 7
+        }
+      ],
+      "overall_score": 8.0,
+      "lfc_fit_summary": "Global beverage leader with $47.66bn TTM revenue and new CEO taking office March 31 creates strategic window for partnership discussions. New leadership often brings fresh sponsorship priorities and increased budgets. Active March sponsorship signals category momentum.",
+      "recommended_asset": "Official Beverage Partner",
+      "priority": "MEDIUM",
+      "decision_maker_title": "Chief Marketing Officer / New CEO Henrique Braun",
+      "notes": "Coca-Cola's CEO transition effective March 31, 2026 is a key signal. New leadership typically brings strategic sponsorship reevaluations. $47.66bn revenue + $11.5bn profit base supports partnership budgets. March Madness sponsorship shows active engagement in sports."
+    },
+    {
+      "company_name": "Microsoft Corporation",
+      "sector": "Technology / Cloud / Software",
+      "headquarters": "USA",
+      "estimated_revenue_usd_bn": 305.45,
+      "signals": [
+        {
+          "signal_id": "major_partnership",
+          "signal_label": "Strategic Partnership",
+          "signal_icon": "🤝",
+          "description": "Microsoft confirmed ongoing strategic partnership with OpenAI, describing it as 'one of the most consequential partnerships in global technology.' Joint statement on Feb 27, 2026 emphasizing commitment to responsible AI development and broad accessibility.",
+          "news_headline": "Microsoft and OpenAI Confirm Evolving Strategic Partnership in 2026",
+          "news_source": "Microsoft Official / OpenAI",
+          "news_date": "2026-02-27",
+          "strength": 8
+        },
+        {
+          "signal_id": "global_awareness",
+          "signal_label": "Partner Program Updates & Expansion",
+          "signal_icon": "📣",
+          "description": "Microsoft announced significant Partner Program updates in March 2026 with AI integration, updated specialization requirements, and expanded incentives. Effective April 1, 2026, new Copilot + Power Accelerate program with Agent 365 included.",
+          "news_headline": "Microsoft March 2026 Partner Center Announcements - AI Integration and Program Expansion",
+          "news_source": "Microsoft Partner Center",
+          "news_date": "2026-03-10",
+          "strength": 7
+        }
+      ],
+      "overall_score": 8.0,
+      "lfc_fit_summary": "Tier-1 global technology company with $305.45bn TTM revenue demonstrating strategic partnership commitments. Major AI partnership signals budget availability and focus on global brand positioning. Cloud dominance (Azure $75bn+ annually) indicates premium partnership capacity.",
+      "recommended_asset": "Digital Technology Partner",
+      "priority": "MEDIUM",
+      "decision_maker_title": "Chief Marketing Officer / Chief Partnerships Officer",
+      "notes": "Microsoft's $305.45bn TTM revenue and confirmation of major OpenAI partnership shows strategic focus. Azure's $75bn+ growth indicates strong financial momentum. Partner program expansion in March suggests active marketing budget. Good fit for digital/technology partnerships."
+    },
+    {
+      "company_name": "Zalando SE",
+      "sector": "E-Commerce / Fashion Retail",
+      "headquarters": "Germany",
+      "estimated_revenue_usd_bn": 15.3,
+      "signals": [
+        {
+          "signal_id": "global_awareness",
+          "signal_label": "Global Brand Campaign Launch",
+          "signal_icon": "📣",
+          "description": "Zalando launched Spring/Summer 2026 campaign on March 9, 2026, featuring actress Lily Collins as the brand's first-ever global brand ambassador. Campaign celebrates 'vibrant energy and diverse fashion of warmer months in Europe.'",
+          "news_headline": "Zalando Celebrates European Summer in Style with New Campaign Featuring Lily Collins",
+          "news_source": "Zalando Corporate",
+          "news_date": "2026-03-09",
+          "strength": 8
+        },
+        {
+          "signal_id": "financial_performance",
+          "signal_label": "Record Revenue Growth",
+          "signal_icon": "📈",
+          "description": "Zalando delivered strong 2025 results with 16.8% revenue growth to EUR 12.3 billion ($15.3bn USD). Expects further acceleration in 2026. Active customer base reached 62 million (new high). Announced EUR 300 million share buyback.",
+          "news_headline": "Zalando Delivers Strong 2025 Results with 16.8% Growth, Announces 300M Euro Buyback",
+          "news_source": "Zalando Corporate",
+          "news_date": "2026-03-06",
+          "strength": 8
+        }
+      ],
+      "overall_score": 8.0,
+      "lfc_fit_summary": "Leading European e-commerce platform with $15.3bn revenue (EUR 12.3bn) and record 16.8% growth in 2025. Strong 62M active customer base and new global brand ambassador campaign signals lifestyle/fashion positioning. Share buyback + growth forecast indicates confidence in budgets for partnerships.",
+      "recommended_asset": "European Regional Partner / Lifestyle Brand",
+      "priority": "MEDIUM",
+      "decision_maker_title": "Chief Marketing Officer / Chief Commercial Officer",
+      "notes": "Zalando's EUR 12.3bn revenue (approx $15.3bn USD) meets $10bn+ threshold. 16.8% YoY growth and record customer base (62M) shows momentum. March global campaign launch + first-ever global ambassador indicates increased marketing investment. Strong European presence aligns with LFC's base."
+    },
+    {
+      "company_name": "Eaton Corporation",
+      "sector": "Electrical Equipment / Industrial",
+      "headquarters": "USA",
+      "estimated_revenue_usd_bn": 27.4,
+      "signals": [
+        {
+          "signal_id": "financial_performance",
+          "signal_label": "Record Financial Performance",
+          "signal_icon": "📈",
+          "description": "Eaton reported record 2025 revenue of $27.4 billion, up 10% from 2024 (8% organic growth + 2% from acquisitions). Record operating profit shows strong margin expansion and financial strength.",
+          "news_headline": "Eaton Reports Record Fourth Quarter 2025 Results with Accelerating Orders",
+          "news_source": "Eaton Investor Relations",
+          "news_date": "2026-02-20",
+          "strength": 8
+        },
+        {
+          "signal_id": "major_partnership",
+          "signal_label": "Strategic Partnership",
+          "signal_icon": "🤝",
+          "description": "Eaton announced strategic partnership with SPAN on March 9, 2026 to transform home power management and enable affordable electrification at scale. Partnership signals commitment to global sustainability and green infrastructure expansion.",
+          "news_headline": "Eaton and SPAN Establish Strategic Partnership for Home Electrification",
+          "news_source": "Eaton Corporate",
+          "news_date": "2026-03-09",
+          "strength": 7
+        }
+      ],
+      "overall_score": 8.0,
+      "lfc_fit_summary": "Global industrial/electrical leader with $27.4bn record revenue and 10% growth demonstrates strong financial performance. Strategic partnership on sustainability aligns with modern ESG-focused sponsorships. Industrial sectors increasingly seeking sports partnerships for brand modernization.",
+      "recommended_asset": "Sustainability / ESG Partner",
+      "priority": "MEDIUM",
+      "decision_maker_title": "Chief Marketing Officer / SVP Commercial",
+      "notes": "Eaton's record $27.4bn revenue with 10% growth and new strategic partnership signals strong financial capacity and strategic orientation. Industrial sector less typical for football sponsorships, but sustainability focus offers differentiated partnership angle. Good financial profile."
+    }
+  ]
+}
