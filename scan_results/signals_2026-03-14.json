@@ -1,0 +1,128 @@
+{
+  "scan_date": "2026-03-14",
+  "scan_timestamp": "2026-03-14T12:00:00Z",
+  "scanner_version": "1.0.0",
+  "num_returned": 5,
+  "companies": [
+    {
+      "company_name": "Coca-Cola",
+      "sector": "Beverages & FMCG",
+      "headquarters": "USA",
+      "estimated_revenue_usd_bn": 47.9,
+      "signals": [
+        {
+          "signal_id": "leadership_change",
+          "signal_label": "CEO Transition - New Strategic Direction",
+          "signal_icon": "👤",
+          "description": "Henrique Braun, COO, becomes CEO effective March 31, 2026, replacing James Quincey after 9 years. Braun brings 30-year tenure, focus on international growth, consumer engagement, and emerging market innovation.",
+          "news_headline": "The Coca-Cola Company Names Henrique Braun as Next CEO, Effective March 31, 2026",
+          "news_source": "Coca-Cola Investor Relations / Reuters",
+          "news_date": "2025-12-10",
+          "strength": 9
+        }
+      ],
+      "overall_score": 8.5,
+      "lfc_fit_summary": "Coca-Cola is the world's most aggressive sports sponsor (938+ deals in 2023), with a 70-year football legacy. New CEO prioritises consumer connection and innovation. Perfect timing for LFC sleeve/beverage partnership discussion as leadership signals strategic refresh.",
+      "recommended_asset": "Official Beverage Partner or Sleeve Partner",
+      "priority": "HIGH",
+      "decision_maker_title": "Chief Marketing Officer / Chief Commercial Officer",
+      "notes": "Braun's mandate includes leveraging technology and getting closer to consumer needs. Coca-Cola's Copa América and World Cup partnerships show commitment to football globally. LFC's Asian fanbase and premium positioning align with Coca-Cola's growth strategy in emerging markets."
+    },
+    {
+      "company_name": "Samsung Electronics",
+      "sector": "Consumer Electronics & Smartphones",
+      "headquarters": "South Korea",
+      "estimated_revenue_usd_bn": 233.3,
+      "signals": [
+        {
+          "signal_id": "product_launch",
+          "signal_label": "Galaxy S26 Series Launch - Consumer AI Flagship",
+          "signal_icon": "🚀",
+          "description": "Samsung launched Galaxy S26 series on March 11, 2026, featuring next-gen AI (Galaxy AI 3.0) and 'Privacy Display.' Massive consumer marketing push targeting global audiences with emphasis on innovation leadership.",
+          "news_headline": "Samsung Unveils Galaxy S26 Series: The Most Intuitive Galaxy AI Phone Yet",
+          "news_source": "Samsung Global Newsroom",
+          "news_date": "2026-03-11",
+          "strength": 9
+        }
+      ],
+      "overall_score": 8.8,
+      "lfc_fit_summary": "Samsung is seeking premium brand associations for its flagship Galaxy line. The S26 needs global B2C visibility across Asia (key LFC market), Americas, Europe. Samsung has proven football activation playbook (Galaxy 11 campaign, 150M+ views, FA partnership). LFC front-of-shirt or sleeve placement reaches 750M+ passionate global fanbase during Galaxy launch peak.",
+      "recommended_asset": "Official Smartphone Partner or Sleeve Partner",
+      "priority": "HIGH",
+      "decision_maker_title": "Global CMO / Chief Marketing Officer",
+      "notes": "Samsung's previous football campaigns (Galaxy 11 with Ronaldo/Messi, FA England partnership, Saudi Pro League sponsorship) show strategic commitment. Galaxy S26 launch timing (March 11) coincides with peak marketing spend. LFC fanbase in Indonesia, Thailand, China aligns with Samsung's growth priorities."
+    },
+    {
+      "company_name": "Netflix",
+      "sector": "Streaming Media & Entertainment",
+      "headquarters": "USA",
+      "estimated_revenue_usd_bn": 45.2,
+      "signals": [
+        {
+          "signal_id": "major_partnership",
+          "signal_label": "Live Sports Strategy Pivot - Major Sports Content Deals",
+          "signal_icon": "🤝",
+          "description": "Netflix announced MLB Opening Day exclusive (March 26, 2026 - Yankees vs Giants), World Baseball Classic exclusive, FIFA World Cup 2026 partnership with Gary Lineker daily show, and multiple live sports rights acquisitions signalling major pivot to premium sports content.",
+          "news_headline": "Netflix Expands into Live Sports: MLB Opening Day, World Baseball Classic, World Cup Coverage Announced for 2026",
+          "news_source": "Netflix Investor Relations / Sports Business",
+          "news_date": "2026-03-13",
+          "strength": 8
+        }
+      ],
+      "overall_score": 8.2,
+      "lfc_fit_summary": "Netflix is aggressively building sports content portfolio and seeking premium sport partnerships for brand association and sponsorship activation. Football/soccer content is critical for 2026 World Cup strategy. LFC partnership provides exclusive content opportunities (player access, behind-the-scenes), hospitality integration, and global marketing platform across 325M+ subscribers in LFC's key markets (Asia, Americas, MENA).",
+      "recommended_asset": "Content Partnership / Digital Media Rights Partner or Premium Hospitality",
+      "priority": "HIGH",
+      "decision_maker_title": "Chief Content Officer / Chief Marketing Officer",
+      "notes": "Netflix's live sports expansion is core 2026 strategy. World Cup (2026 in USA) and football focus aligns with LFC's global appeal. LFC can offer exclusive documentary series, match day experiences, player interviews as part of broader content deal. Timing is critical as Netflix finalizes sports sponsorship strategy."
+    },
+    {
+      "company_name": "Apple",
+      "sector": "Consumer Electronics & Technology",
+      "headquarters": "USA",
+      "estimated_revenue_usd_bn": 416.0,
+      "signals": [
+        {
+          "signal_id": "product_launch",
+          "signal_label": "Massive iPhone & Mac Product Portfolio Launch Week",
+          "signal_icon": "🚀",
+          "description": "Apple announced iPhone 17e (entry $599), MacBook Neo ($599 low-cost laptop), MacBook Air M5, iPad Air M4, new displays on March 11, 2026. Record Q1 FY2026 revenue of $143.8B (+16% YoY). iPhone revenue alone at $85.3B (+23% YoY).",
+          "news_headline": "Apple's Biggest Week of 2026: iPhone 17e, MacBook Neo, and Complete Product Refresh Launches March 11",
+          "news_source": "MacRumors / Apple Newsroom",
+          "news_date": "2026-03-11",
+          "strength": 8
+        }
+      ],
+      "overall_score": 7.8,
+      "lfc_fit_summary": "Apple is in peak launch cycle with consumer hardware targeting global markets (iPhone 17e at accessible price point $599 drives mass-market appeal). Apple TV+ and sports partnerships (exclusive F1 rights, MLB, rugby technology partnerships) show commitment to premium content integration. LFC partnership provides device visibility through stadium tech, app integrations, and premium hospitality experiences for high-net-worth customers.",
+      "recommended_asset": "Technology Partner / Digital Experience Partner or Premium Hospitality",
+      "priority": "MEDIUM-HIGH",
+      "decision_maker_title": "Chief Marketing Officer / SVP Services Marketing",
+      "notes": "Apple's approach is ecosystem integration, not traditional kit sponsorship. LFC can negotiate exclusive Apple Watch/iPhone app experiences, stadium connectivity, or premium hospitality tied to Apple services. Apple's F1 exclusivity and rugby RFU partnership show sports positioning. Peak launch timing (March 11) means marketing budgets active."
+    },
+    {
+      "company_name": "Levi Strauss & Co.",
+      "sector": "Apparel & Fashion",
+      "headquarters": "USA",
+      "estimated_revenue_usd_bn": 6.3,
+      "signals": [
+        {
+          "signal_id": "global_awareness",
+          "signal_label": "Global 'Behind Every Original' Campaign Launch in Asia",
+          "signal_icon": "📣",
+          "description": "Levi's launched global 2026 campaign 'Behind Every Original' in India on March 13, 2026, starring Global Brand Ambassador Alia Bhatt. Campaign celebrates authenticity, originality, individuality targeting Gen-Z/millennial audience. Strategic focus on women's denim expansion in India and Asia-Pacific.",
+          "news_headline": "Levi's Brings 'Behind Every Original' Global Campaign to India with Alia Bhatt as Global Brand Ambassador",
+          "news_source": "Business Standard / PR Newswire",
+          "news_date": "2026-03-13",
+          "strength": 7
+        }
+      ],
+      "overall_score": 6.8,
+      "lfc_fit_summary": "Levi's is below the $10bn revenue threshold but shows strong momentum in Asia where LFC has massive fanbase (Indonesia, Thailand, India expansion). Global brand campaign launch timing (March 13) signals active marketing budget. Consumer-facing apparel brand seeking premium brand association. LFC partnership could drive Asia market penetration, particularly India, and provide lifestyle/premium positioning vs. pure denim category.",
+      "recommended_asset": "Asia Regional Partner or Lifestyle Partner",
+      "priority": "MEDIUM",
+      "decision_maker_title": "Chief Marketing Officer / Asia-Pacific Regional Director",
+      "notes": "Levi's focus on women's denim and Gen-Z/millennial authenticity narrative aligns with LFC's progressive brand positioning. Alia Bhatt partnership shows investment in Asia-specific talent. While below $10bn threshold, strong Asia expansion momentum and March 13 campaign launch make timing opportune. Potential for regional kit or lifestyle partnership in India/Southeast Asia."
+    }
+  ]
+}
