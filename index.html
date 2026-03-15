@@ -8,148 +8,139 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
     --red: #C8102E; --red-dark: #9e0c24; --red-light: #f8e9ec;
-    --gold: #F6C63A; --gold-dark: #d4a612;
+    --gold: #F6C63A;
     --grey-50: #f9fafb; --grey-100: #f3f4f6; --grey-200: #e5e7eb;
-    --grey-400: #9ca3af; --grey-600: #4b5563; --grey-800: #1f2937; --grey-900: #111827;
-    --green: #10b981; --orange: #f59e0b;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,.08); --shadow-md: 0 4px 16px rgba(0,0,0,.1);
+    --grey-400: #9ca3af; --grey-500: #6b7280; --grey-600: #4b5563;
+    --grey-800: #1f2937; --grey-900: #111827;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.04);
+    --shadow-md: 0 4px 16px rgba(0,0,0,.1);
     --shadow-lg: 0 10px 40px rgba(0,0,0,.15);
     --radius: 12px; --radius-sm: 8px;
   }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--grey-100); color: var(--grey-800); min-height: 100vh; }
 
-  /* HEADER */
-  .header { background: var(--red); color: white; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 64px; box-shadow: 0 2px 12px rgba(200,16,46,.4); position: sticky; top: 0; z-index: 100; }
+  /* ── HEADER ── */
+  .header { background: var(--red); color: white; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 64px; box-shadow: 0 2px 12px rgba(200,16,46,.35); position: sticky; top: 0; z-index: 100; }
   .header-left { display: flex; align-items: center; gap: 12px; }
-  .lfc-badge { width: 40px; height: 40px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 900; color: var(--red); flex-shrink: 0; }
-  .header h1 { font-size: 1.1rem; font-weight: 700; }
-  .header h1 span { font-weight: 400; opacity: .8; font-size: .9rem; }
+  .lfc-badge { width: 38px; height: 38px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 900; color: var(--red); flex-shrink: 0; }
+  .header h1 { font-size: 1.05rem; font-weight: 700; letter-spacing: -.01em; }
+  .header h1 span { font-weight: 400; opacity: .75; font-size: .88rem; }
   .header-right { display: flex; align-items: center; gap: 10px; }
-  .scan-date-badge { background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25); color: white; padding: 4px 12px; border-radius: 20px; font-size: .8rem; font-weight: 500; }
-  .header-btn { background: var(--gold); color: var(--red-dark); border: none; padding: 8px 14px; border-radius: 8px; font-weight: 700; font-size: .82rem; cursor: pointer; transition: all .15s; display: flex; align-items: center; gap: 5px; }
-  .header-btn:hover { background: var(--gold-dark); color: white; }
-  .header-btn.secondary { background: rgba(255,255,255,.15); color: white; border: 1px solid rgba(255,255,255,.3); }
-  .header-btn.secondary:hover { background: rgba(255,255,255,.25); }
+  .scan-badge { background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.2); color: white; padding: 4px 12px; border-radius: 20px; font-size: .78rem; font-weight: 500; }
+  .hbtn { border: none; padding: 8px 14px; border-radius: 8px; font-weight: 700; font-size: .8rem; cursor: pointer; transition: all .15s; display: flex; align-items: center; gap: 5px; }
+  .hbtn.primary { background: var(--gold); color: var(--red-dark); }
+  .hbtn.primary:hover { background: #e6b800; }
+  .hbtn.ghost { background: rgba(255,255,255,.15); color: white; border: 1px solid rgba(255,255,255,.25); }
+  .hbtn.ghost:hover { background: rgba(255,255,255,.25); }
+  .loading-bar { height: 3px; background: var(--gold); position: fixed; top: 64px; left: 0; z-index: 99; transition: width .4s ease; }
 
-  /* MAIN */
-  .main { max-width: 1400px; margin: 0 auto; padding: 24px 24px 48px; }
+  /* ── MAIN ── */
+  .main { max-width: 1400px; margin: 0 auto; padding: 24px 24px 60px; }
 
-  /* STATS */
-  .stats-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 20px; }
-  .stat-card { background: white; border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow-sm); }
-  .stat-value { font-size: 2rem; font-weight: 800; color: var(--grey-900); line-height: 1; }
-  .stat-value.red { color: var(--red); } .stat-value.orange { color: var(--orange); } .stat-value.green { color: var(--green); }
-  .stat-label { font-size: .75rem; color: var(--grey-400); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; margin-top: 4px; }
+  /* ── STATS ── */
+  .stats-row { display: flex; gap: 14px; margin-bottom: 20px; }
+  .stat-card { background: white; border-radius: var(--radius); padding: 18px 24px; box-shadow: var(--shadow-sm); flex: 1; }
+  .stat-val { font-size: 2.2rem; font-weight: 800; color: var(--grey-900); line-height: 1; }
+  .stat-lbl { font-size: .73rem; color: var(--grey-400); font-weight: 600; text-transform: uppercase; letter-spacing: .05em; margin-top: 5px; }
 
-  /* TOOLBAR */
+  /* ── TOOLBAR ── */
   .toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
-  .filter-btn { background: white; border: 1.5px solid var(--grey-200); color: var(--grey-600); padding: 7px 14px; border-radius: 8px; font-size: .82rem; font-weight: 600; cursor: pointer; transition: all .15s; display: flex; align-items: center; gap: 6px; }
-  .filter-btn:hover { border-color: var(--red); color: var(--red); background: var(--red-light); }
-  .filter-btn.active { background: var(--red); border-color: var(--red); color: white; }
-  .filter-btn .count { background: rgba(255,255,255,.25); border-radius: 20px; padding: 1px 7px; font-size: .72rem; }
-  .filter-btn:not(.active) .count { background: var(--grey-100); color: var(--grey-600); }
-  .search-wrap { margin-left: auto; position: relative; }
-  .search-wrap input { background: white; border: 1.5px solid var(--grey-200); border-radius: 8px; padding: 8px 12px 8px 34px; font-size: .84rem; width: 220px; outline: none; transition: border .15s; }
+  .search-wrap { position: relative; }
+  .search-wrap input { background: white; border: 1.5px solid var(--grey-200); border-radius: 8px; padding: 8px 12px 8px 34px; font-size: .84rem; width: 240px; outline: none; transition: border .15s; }
   .search-wrap input:focus { border-color: var(--red); }
-  .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--grey-400); font-size: 13px; }
-  .sort-select { background: white; border: 1.5px solid var(--grey-200); border-radius: 8px; padding: 8px 10px; font-size: .82rem; color: var(--grey-600); cursor: pointer; outline: none; font-weight: 600; }
+  .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--grey-400); font-size: 13px; pointer-events: none; }
 
-  /* SIGNAL FILTER ROW */
-  .signal-filter-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 10px 14px; background: white; border: 1.5px solid var(--grey-200); border-radius: var(--radius-sm); margin-bottom: 18px; }
-  .signal-filter-label { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--grey-400); flex-shrink: 0; margin-right: 4px; }
-  .sig-filter-btn { display: inline-flex; align-items: center; gap: 4px; padding: 4px 11px; border-radius: 20px; font-size: .75rem; font-weight: 600; cursor: pointer; border: 1.5px solid var(--grey-200); background: var(--grey-50); color: var(--grey-600); transition: all .15s; white-space: nowrap; }
-  .sig-filter-btn:hover { border-color: var(--red); color: var(--red); background: var(--red-light); }
-  .sig-filter-btn.active { background: var(--grey-800); border-color: var(--grey-800); color: white; }
-  .sig-filter-btn .sig-count { background: var(--grey-200); border-radius: 20px; padding: 1px 5px; font-size: .68rem; color: var(--grey-600); }
-  .sig-filter-btn.active .sig-count { background: rgba(255,255,255,.2); color: white; }
-  .clear-sig-btn { margin-left: auto; font-size: .75rem; color: var(--red); cursor: pointer; background: none; border: none; font-weight: 600; padding: 4px 8px; border-radius: 6px; transition: all .15s; flex-shrink: 0; }
-  .clear-sig-btn:hover { background: var(--red-light); }
-  .clear-sig-btn:disabled { opacity: .3; cursor: default; }
+  /* ── SIGNAL FILTERS ── */
+  .sig-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 10px 14px; background: white; border: 1.5px solid var(--grey-200); border-radius: var(--radius-sm); margin-bottom: 20px; }
+  .sig-row-label { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--grey-400); flex-shrink: 0; margin-right: 2px; }
+  .sig-btn { display: inline-flex; align-items: center; gap: 4px; padding: 4px 11px; border-radius: 20px; font-size: .75rem; font-weight: 600; cursor: pointer; border: 1.5px solid var(--grey-200); background: var(--grey-50); color: var(--grey-600); transition: all .15s; white-space: nowrap; }
+  .sig-btn:hover { border-color: var(--red); color: var(--red); background: var(--red-light); }
+  .sig-btn.on { background: var(--grey-900); border-color: var(--grey-900); color: white; }
+  .sig-btn .n { background: var(--grey-200); border-radius: 20px; padding: 1px 6px; font-size: .68rem; color: var(--grey-500); }
+  .sig-btn.on .n { background: rgba(255,255,255,.18); color: white; }
+  .clear-btn { margin-left: auto; font-size: .74rem; color: var(--red); cursor: pointer; background: none; border: none; font-weight: 600; padding: 4px 8px; border-radius: 6px; transition: background .15s; flex-shrink: 0; }
+  .clear-btn:hover { background: var(--red-light); }
+  .clear-btn:disabled { opacity: .3; cursor: default; }
 
-  /* CARDS */
-  .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 18px; }
-  .prospect-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; transition: box-shadow .2s, transform .15s; border: 1.5px solid var(--grey-200); cursor: pointer; display: flex; flex-direction: column; }
-  .prospect-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); border-color: var(--red); }
-  .priority-banner { height: 4px; }
-  .priority-HIGH { background: var(--red); } .priority-MEDIUM { background: var(--orange); } .priority-LOW { background: var(--green); }
+  /* ── GRID ── */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 18px; }
 
-  .card-header { padding: 16px 18px 12px; display: flex; align-items: flex-start; gap: 12px; border-bottom: 1px solid var(--grey-100); }
-  .company-logo { width: 42px; height: 42px; border-radius: 10px; background: var(--grey-100); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; color: var(--grey-600); flex-shrink: 0; border: 1px solid var(--grey-200); }
-  .card-meta { flex: 1; min-width: 0; }
-  .card-meta h3 { font-size: .97rem; font-weight: 700; color: var(--grey-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .meta-row { display: flex; align-items: center; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
-  .tag { display: inline-flex; align-items: center; gap: 3px; padding: 2px 7px; border-radius: 20px; font-size: .7rem; font-weight: 600; }
+  /* ── CARD ── */
+  .card { background: white; border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; border: 1.5px solid var(--grey-200); cursor: pointer; transition: box-shadow .2s, transform .15s, border-color .15s; }
+  .card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); border-color: var(--red); }
+  .card-top-bar { height: 4px; background: var(--red); }
+
+  .card-header { padding: 16px 18px 14px; display: flex; align-items: center; gap: 13px; border-bottom: 1px solid var(--grey-100); }
+  .company-logo { width: 44px; height: 44px; border-radius: 10px; overflow: hidden; flex-shrink: 0; border: 1px solid var(--grey-200); background: var(--grey-100); display: flex; align-items: center; justify-content: center; }
+  .company-logo img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
+  .company-logo .initials { font-size: 15px; font-weight: 800; color: var(--grey-500); }
+  .card-identity { flex: 1; min-width: 0; }
+  .card-identity h3 { font-size: .97rem; font-weight: 700; color: var(--grey-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 5px; }
+  .tags { display: flex; gap: 5px; flex-wrap: wrap; }
+  .tag { display: inline-flex; align-items: center; gap: 3px; padding: 2px 8px; border-radius: 20px; font-size: .69rem; font-weight: 600; }
   .tag.sector { background: #eff6ff; color: #2563eb; }
   .tag.hq { background: var(--grey-100); color: var(--grey-600); }
-  .tag.revenue { background: #f0fdf4; color: #16a34a; }
+  .tag.rev { background: #f0fdf4; color: #16a34a; }
 
-  .score-circle { width: 46px; height: 46px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; font-weight: 800; font-size: .95rem; line-height: 1; }
-  .score-circle .score-label { font-size: .52rem; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; margin-top: 1px; opacity: .7; }
-  .score-high { background: #fef2f2; color: var(--red); border: 2px solid var(--red); }
-  .score-medium { background: #fffbeb; color: #d97706; border: 2px solid #f59e0b; }
-  .score-low { background: #f0fdf4; color: #15803d; border: 2px solid #22c55e; }
+  .card-signals { padding: 13px 18px 16px; display: flex; flex-direction: column; gap: 8px; }
+  .sig-count-label { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--grey-400); margin-bottom: 2px; }
 
-  .card-signals { padding: 12px 18px; display: flex; flex-direction: column; gap: 7px; flex: 1; }
-  .signals-title { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--grey-400); margin-bottom: 2px; }
-  .signal-chip { display: flex; align-items: flex-start; gap: 9px; background: var(--grey-50); border: 1px solid var(--grey-200); border-radius: var(--radius-sm); padding: 9px 11px; }
-  .sig-icon { font-size: .95rem; flex-shrink: 0; line-height: 1.4; }
+  .signal-chip { display: flex; align-items: flex-start; gap: 10px; background: var(--grey-50); border: 1px solid var(--grey-200); border-radius: var(--radius-sm); padding: 10px 12px; transition: border-color .15s; }
+  .signal-chip:hover { border-color: #d1d5db; }
+  .sig-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
   .sig-body { flex: 1; min-width: 0; }
-  .sig-label { font-size: .78rem; font-weight: 700; color: var(--grey-800); }
-  .sig-desc { font-size: .73rem; color: var(--grey-600); margin-top: 2px; line-height: 1.4; }
-  .sig-source { font-size: .68rem; color: var(--grey-400); margin-top: 3px; }
-  .sig-strength { flex-shrink: 0; display: flex; gap: 2px; align-items: center; }
-  .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--grey-200); }
-  .dot.on { background: var(--red); }
+  .sig-type { font-size: .77rem; font-weight: 700; color: var(--grey-800); margin-bottom: 2px; }
+  .sig-desc { font-size: .74rem; color: var(--grey-600); line-height: 1.45; }
+  .sig-meta { display: flex; align-items: center; gap: 8px; margin-top: 5px; flex-wrap: wrap; }
+  .sig-source { font-size: .68rem; color: var(--grey-400); }
+  .sig-link { font-size: .68rem; color: var(--red); font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 3px; }
+  .sig-link:hover { text-decoration: underline; }
 
-  .card-footer { padding: 12px 18px; border-top: 1px solid var(--grey-100); background: var(--grey-50); }
-  .fit-summary { font-size: .78rem; color: var(--grey-600); line-height: 1.5; }
-  .fit-summary strong { color: var(--red); }
-  .asset-tag { display: inline-flex; align-items: center; gap: 4px; background: #fff9ed; border: 1px solid var(--gold); color: #b45309; padding: 3px 9px; border-radius: 20px; font-size: .7rem; font-weight: 700; margin-top: 7px; }
-  .footer-actions { display: flex; gap: 7px; margin-top: 10px; }
-  .action-btn { flex: 1; padding: 8px; border-radius: 7px; font-size: .76rem; font-weight: 600; cursor: pointer; border: none; transition: all .15s; display: flex; align-items: center; justify-content: center; gap: 5px; }
-  .action-btn.primary { background: var(--red); color: white; }
-  .action-btn.primary:hover { background: var(--red-dark); }
-  .action-btn.secondary { background: white; color: var(--grey-600); border: 1.5px solid var(--grey-200); }
-  .action-btn.secondary:hover { border-color: var(--red); color: var(--red); }
+  .more-signals { font-size: .72rem; color: var(--grey-400); text-align: center; padding: 4px 0 0; }
 
-  /* MODAL */
-  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 24px; backdrop-filter: blur(4px); opacity: 0; pointer-events: none; transition: opacity .2s; }
-  .modal-overlay.open { opacity: 1; pointer-events: all; }
-  .modal { background: white; border-radius: 16px; width: 100%; max-width: 620px; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg); transform: translateY(20px); transition: transform .2s; }
-  .modal-overlay.open .modal { transform: translateY(0); }
-  .modal-header { padding: 22px 22px 14px; border-bottom: 1px solid var(--grey-200); display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; position: sticky; top: 0; background: white; z-index: 1; }
-  .modal-header h2 { font-size: 1.15rem; font-weight: 800; color: var(--grey-900); }
-  .close-btn { width: 30px; height: 30px; background: var(--grey-100); border: none; border-radius: 50%; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--grey-600); transition: all .15s; flex-shrink: 0; }
+  /* ── EMPTY / ERROR ── */
+  .empty { grid-column: 1/-1; text-align: center; padding: 80px 24px; }
+  .empty-icon { font-size: 3rem; margin-bottom: 16px; }
+  .empty h3 { font-size: 1.05rem; color: var(--grey-600); margin-bottom: 8px; font-weight: 700; }
+  .empty p { font-size: .875rem; color: var(--grey-400); max-width: 380px; margin: 0 auto; line-height: 1.6; }
+
+  /* ── MODAL ── */
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 24px; backdrop-filter: blur(3px); opacity: 0; pointer-events: none; transition: opacity .2s; }
+  .overlay.open { opacity: 1; pointer-events: all; }
+  .modal { background: white; border-radius: 16px; width: 100%; max-width: 640px; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg); transform: translateY(16px); transition: transform .2s; }
+  .overlay.open .modal { transform: translateY(0); }
+  .modal-hdr { padding: 22px 22px 16px; border-bottom: 1px solid var(--grey-200); display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; position: sticky; top: 0; background: white; z-index: 1; }
+  .modal-hdr-left { display: flex; align-items: center; gap: 13px; }
+  .modal-logo { width: 48px; height: 48px; border-radius: 10px; overflow: hidden; border: 1px solid var(--grey-200); background: var(--grey-100); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .modal-logo img { width: 100%; height: 100%; object-fit: contain; padding: 5px; }
+  .modal-logo .initials { font-size: 16px; font-weight: 800; color: var(--grey-500); }
+  .modal-hdr h2 { font-size: 1.1rem; font-weight: 800; color: var(--grey-900); margin-bottom: 5px; }
+  .close-btn { width: 30px; height: 30px; background: var(--grey-100); border: none; border-radius: 50%; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--grey-500); transition: all .15s; flex-shrink: 0; }
   .close-btn:hover { background: var(--red); color: white; }
-  .modal-body { padding: 18px 22px 22px; }
+  .modal-body { padding: 20px 22px 24px; }
   .modal-section { margin-bottom: 22px; }
-  .modal-section h4 { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--grey-400); margin-bottom: 10px; }
-  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .info-item { display: flex; flex-direction: column; gap: 2px; }
-  .info-label { font-size: .7rem; color: var(--grey-400); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
-  .info-value { font-size: .86rem; font-weight: 600; color: var(--grey-800); }
-  .modal-signal { background: var(--grey-50); border: 1px solid var(--grey-200); border-radius: var(--radius-sm); padding: 13px 15px; margin-bottom: 9px; }
-  .modal-signal .signal-header { display: flex; align-items: center; gap: 7px; font-weight: 700; margin-bottom: 5px; font-size: .88rem; }
-  .modal-signal .signal-detail { font-size: .81rem; color: var(--grey-600); line-height: 1.5; }
-  .modal-signal .signal-news { margin-top: 7px; padding: 8px 11px; background: white; border-radius: 6px; border: 1px solid var(--grey-200); font-size: .76rem; color: var(--grey-600); }
-  .modal-signal .news-headline { font-weight: 600; color: var(--grey-800); margin-bottom: 2px; }
-  .pitch-block { background: linear-gradient(135deg, var(--red-light) 0%, #fff5f5 100%); border: 1.5px solid #fca5a5; border-radius: var(--radius-sm); padding: 14px; }
-  .pitch-block p { font-size: .84rem; color: var(--grey-700); line-height: 1.6; }
+  .modal-section-title { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--grey-400); margin-bottom: 10px; }
+  .modal-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 4px; }
+  .info-item .lbl { font-size: .68rem; color: var(--grey-400); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 2px; }
+  .info-item .val { font-size: .86rem; font-weight: 600; color: var(--grey-800); }
+  .modal-signal { background: var(--grey-50); border: 1px solid var(--grey-200); border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 10px; }
+  .modal-signal-hdr { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: .88rem; color: var(--grey-900); margin-bottom: 7px; }
+  .modal-signal-desc { font-size: .82rem; color: var(--grey-600); line-height: 1.55; }
+  .modal-signal-news { margin-top: 10px; padding: 9px 12px; background: white; border-radius: 7px; border: 1px solid var(--grey-200); }
+  .modal-signal-news .headline { font-size: .8rem; font-weight: 700; color: var(--grey-800); margin-bottom: 4px; line-height: 1.4; }
+  .modal-signal-news .source-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .modal-signal-news .source { font-size: .72rem; color: var(--grey-400); }
+  .modal-signal-news .article-link { font-size: .72rem; color: var(--red); font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 3px; }
+  .modal-signal-news .article-link:hover { text-decoration: underline; }
 
-  /* EMPTY / LOADING */
-  .empty-state { grid-column: 1/-1; text-align: center; padding: 80px 24px; color: var(--grey-400); }
-  .empty-state .empty-icon { font-size: 3rem; margin-bottom: 16px; }
-  .empty-state h3 { font-size: 1.1rem; color: var(--grey-600); margin-bottom: 8px; }
-  .empty-state p { font-size: .875rem; max-width: 400px; margin: 0 auto; line-height: 1.6; }
-  .loading-bar { height: 3px; background: var(--red); position: fixed; top: 64px; left: 0; z-index: 99; transition: width .3s; }
-
-  /* TOAST */
-  .toast { position: fixed; bottom: 24px; right: 24px; background: var(--grey-900); color: white; padding: 11px 16px; border-radius: 10px; font-size: .84rem; font-weight: 500; z-index: 500; transform: translateY(80px); opacity: 0; transition: all .3s; max-width: 340px; }
+  /* ── TOAST ── */
+  .toast { position: fixed; bottom: 24px; right: 24px; background: var(--grey-900); color: white; padding: 11px 16px; border-radius: 10px; font-size: .83rem; font-weight: 500; z-index: 500; transform: translateY(70px); opacity: 0; transition: all .25s; }
   .toast.show { transform: translateY(0); opacity: 1; }
 
-  @media (max-width: 600px) {
+  @media (max-width: 640px) {
     .header { padding: 0 1rem; } .main { padding: 14px 12px 48px; }
-    .cards-grid { grid-template-columns: 1fr; } .search-wrap input { width: 160px; }
+    .grid { grid-template-columns: 1fr; } .stats-row { flex-direction: column; }
+    .search-wrap input { width: 180px; }
   }
 </style>
 </head>
@@ -163,59 +154,59 @@
     <h1>Commercial Signals <span>/ Sponsorship Prospecting</span></h1>
   </div>
   <div class="header-right">
-    <span class="scan-date-badge" id="scanDateBadge">Loading…</span>
-    <button class="header-btn secondary" onclick="fetchData()" title="Refresh">↻ Refresh</button>
-    <button class="header-btn" onclick="document.getElementById('fileInput').click()" title="Load local file">📂 Load file</button>
+    <span class="scan-badge" id="scanBadge">Loading…</span>
+    <button class="hbtn ghost" onclick="fetchData()">↻ Refresh</button>
+    <button class="hbtn primary" onclick="document.getElementById('fileInput').click()">📂 Load file</button>
   </div>
 </header>
 
 <main class="main">
-  <div class="stats-bar">
-    <div class="stat-card"><div class="stat-value" id="statTotal">—</div><div class="stat-label">Total Prospects</div></div>
-    <div class="stat-card"><div class="stat-value red" id="statHigh">—</div><div class="stat-label">High Priority</div></div>
-    <div class="stat-card"><div class="stat-value orange" id="statMedium">—</div><div class="stat-label">Medium Priority</div></div>
-    <div class="stat-card"><div class="stat-value green" id="statSignals">—</div><div class="stat-label">Total Signals</div></div>
-    <div class="stat-card"><div class="stat-value" id="statAvgScore">—</div><div class="stat-label">Avg Fit Score</div></div>
+
+  <!-- Stats -->
+  <div class="stats-row" id="statsRow" style="display:none">
+    <div class="stat-card"><div class="stat-val" id="statCompanies">—</div><div class="stat-lbl">Companies Today</div></div>
+    <div class="stat-card"><div class="stat-val" id="statSignals">—</div><div class="stat-lbl">Signals Detected</div></div>
   </div>
 
+  <!-- Toolbar -->
   <div class="toolbar" id="toolbar" style="display:none">
-    <button class="filter-btn active" data-filter="all" onclick="setPriority(this)">All <span class="count" id="cAll">0</span></button>
-    <button class="filter-btn" data-filter="HIGH" onclick="setPriority(this)">🔴 High <span class="count" id="cHigh">0</span></button>
-    <button class="filter-btn" data-filter="MEDIUM" onclick="setPriority(this)">🟡 Medium <span class="count" id="cMedium">0</span></button>
-    <button class="filter-btn" data-filter="LOW" onclick="setPriority(this)">🟢 Low <span class="count" id="cLow">0</span></button>
     <div class="search-wrap">
       <span class="search-icon">🔍</span>
-      <input type="text" id="searchInput" placeholder="Search companies, sectors…" oninput="render()" />
+      <input type="text" id="searchInput" placeholder="Search companies, sectors, signals…" oninput="render()" />
     </div>
-    <select class="sort-select" id="sortSelect" onchange="render()">
-      <option value="score">Sort: Score</option>
-      <option value="name">Sort: Name A–Z</option>
-      <option value="signals">Sort: Signal Count</option>
-      <option value="revenue">Sort: Revenue</option>
-    </select>
   </div>
 
-  <div class="signal-filter-row" id="sigRow" style="display:none">
-    <span class="signal-filter-label">Signal type</span>
-    <div id="sigBtns" style="display:flex;gap:6px;flex-wrap:wrap;flex:1"></div>
-    <button class="clear-sig-btn" id="clearSig" onclick="clearSigFilters()" disabled>Clear filters</button>
+  <!-- Signal filters -->
+  <div class="sig-row" id="sigRow" style="display:none">
+    <span class="sig-row-label">Signal type</span>
+    <div id="sigBtns" style="display:flex;gap:6px;flex-wrap:wrap;flex:1;"></div>
+    <button class="clear-btn" id="clearBtn" onclick="clearFilters()" disabled>Clear</button>
   </div>
 
-  <div class="cards-grid" id="grid">
-    <div class="empty-state">
+  <!-- Cards -->
+  <div class="grid" id="grid">
+    <div class="empty">
       <div class="empty-icon">⚽</div>
       <h3>Loading today's signals…</h3>
-      <p>Fetching the latest scan from GitHub. If this takes more than a few seconds, try the Refresh button.</p>
+      <p>Fetching the latest scan from GitHub. If this takes more than a few seconds, use Load file to open a local scan result.</p>
     </div>
   </div>
+
 </main>
 
 <input type="file" id="fileInput" accept=".json" onchange="loadFile(event)" style="display:none" />
 
-<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+<!-- Modal -->
+<div class="overlay" id="overlay" onclick="if(event.target===this)closeModal()">
   <div class="modal">
-    <div class="modal-header">
-      <div><h2 id="mTitle"></h2><div id="mMeta" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:5px"></div></div>
+    <div class="modal-hdr">
+      <div class="modal-hdr-left">
+        <div class="modal-logo" id="mLogo"></div>
+        <div>
+          <h2 id="mTitle"></h2>
+          <div id="mTags" style="display:flex;gap:5px;flex-wrap:wrap;"></div>
+        </div>
+      </div>
       <button class="close-btn" onclick="closeModal()">✕</button>
     </div>
     <div class="modal-body" id="mBody"></div>
@@ -225,211 +216,204 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// ── CONFIG ──────────────────────────────────────────────────────────────
-// This URL is updated automatically once GitHub Pages is live
+// ── CONFIG ────────────────────────────────────────────────────────────────
 const DATA_URL = 'https://fletchert131-sudo.github.io/lfc-signals/scan_results/signals_latest.json';
 
 const SIGNAL_TYPES = [
-  { id: 'leadership_change',      icon: '👤', label: 'Leadership Change' },
-  { id: 'financial_performance',  icon: '📈', label: 'Strong Financials' },
-  { id: 'funding_announcement',   icon: '💰', label: 'Major Funding' },
-  { id: 'market_expansion',       icon: '🌍', label: 'Market Expansion' },
-  { id: 'major_global_expansion', icon: '🌐', label: 'Global Expansion' },
-  { id: 'product_launch',         icon: '🚀', label: 'Product Launch' },
-  { id: 'rebrand',                icon: '🔄', label: 'Rebrand' },
-  { id: 'global_awareness',       icon: '📣', label: 'Brand Campaign' },
-  { id: 'major_partnership',      icon: '🤝', label: 'Major Partnership' },
-  { id: 'competitor_sponsorship', icon: '🏆', label: 'Competitor Activity' },
-  { id: 'sports_affinity',        icon: '⚽', label: 'Sports Affinity' },
+  { id: 'leadership_change',    icon: '👤', label: 'Leadership Change' },
+  { id: 'strong_financials',    icon: '📊', label: 'Strong Financials' },
+  { id: 'major_funding',        icon: '💰', label: 'Major Funding' },
+  { id: 'market_expansion',     icon: '🌍', label: 'Market Expansion' },
+  { id: 'global_expansion',     icon: '🌐', label: 'Global Expansion' },
+  { id: 'product_launch',       icon: '🚀', label: 'Product Launch' },
+  { id: 'rebrand',              icon: '🔄', label: 'Rebrand' },
+  { id: 'sports_sponsorship',   icon: '🏅', label: 'Sports Sponsorship' },
+  { id: 'esg_sustainability',   icon: '🌿', label: 'ESG / Sustainability' },
+  { id: 'stock_listing',        icon: '🏛️', label: 'Stock Market Listing' },
+  // Legacy IDs for backward compat with existing scan data
+  { id: 'financial_performance',icon: '📊', label: 'Strong Financials' },
+  { id: 'funding_announcement', icon: '💰', label: 'Major Funding' },
+  { id: 'major_global_expansion',icon:'🌐', label: 'Global Expansion' },
+  { id: 'global_awareness',     icon: '📣', label: 'Brand Campaign' },
+  { id: 'major_partnership',    icon: '🤝', label: 'Major Partnership' },
+  { id: 'competitor_sponsorship',icon:'🏆', label: 'Competitor Activity' },
+  { id: 'sports_affinity',      icon: '⚽', label: 'Sports Affinity' },
 ];
 
-// ── STATE ────────────────────────────────────────────────────────────────
+// ── STATE ─────────────────────────────────────────────────────────────────
 let allCompanies = [];
-let priorityFilter = 'all';
-let sigFilters = new Set();
+let activeFilters = new Set();
 
-// ── DATA LOADING ─────────────────────────────────────────────────────────
+// ── LOGO ──────────────────────────────────────────────────────────────────
+const DOMAIN_MAP = {
+  'samsung': 'samsung.com', 'coca-cola': 'coca-cola.com', 'netflix': 'netflix.com',
+  'apple': 'apple.com', 'levi': 'levi.com', 'nike': 'nike.com', 'adidas': 'adidas.com',
+  'amazon': 'amazon.com', 'microsoft': 'microsoft.com', 'google': 'google.com',
+  'alibaba': 'alibaba.com', 'hyundai': 'hyundai.com', 'toyota': 'toyota.com',
+  'pepsi': 'pepsi.com', 'pepsico': 'pepsico.com', 'hsbc': 'hsbc.com',
+  'reliance': 'ril.com', 'grab': 'grab.com', 'aramco': 'aramco.com',
+};
+
+function getDomain(name) {
+  const lower = name.toLowerCase();
+  for (const [k, v] of Object.entries(DOMAIN_MAP)) {
+    if (lower.includes(k)) return v;
+  }
+  // Generic guess: first word + .com
+  return lower.split(/[\s&,]/)[0].replace(/[^a-z0-9]/g,'') + '.com';
+}
+
+function logoHTML(companyName, size = 44) {
+  const domain = getDomain(companyName);
+  const inits = companyName.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
+  return `<img src="https://logo.clearbit.com/${domain}" alt="" style="width:${size}px;height:${size}px;object-fit:contain;padding:4px"
+    onerror="this.parentElement.innerHTML='<span class=\\"initials\\">${inits}</span>'" />`;
+}
+
+// ── DATA ──────────────────────────────────────────────────────────────────
 async function fetchData() {
   setLoading(true);
   try {
-    const res = await fetch(DATA_URL + '?t=' + Date.now());
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
-    loadData(data);
-    toast('✓ Signals updated');
-  } catch (e) {
+    const r = await fetch(DATA_URL + '?t=' + Date.now());
+    if (!r.ok) throw new Error(r.status);
+    loadData(await r.json());
+    toast('✓ Signals refreshed');
+  } catch {
     setLoading(false);
     document.getElementById('grid').innerHTML = `
-      <div class="empty-state">
+      <div class="empty">
         <div class="empty-icon">📡</div>
-        <h3>Couldn't fetch latest signals</h3>
-        <p>GitHub Pages may not be live yet, or there's a network issue.<br>Use <strong>Load file</strong> to open a local scan result instead.</p>
+        <h3>Could not load signals</h3>
+        <p>Use <strong>Load file</strong> to open a local <code>signals_latest.json</code> instead.</p>
       </div>`;
-    document.getElementById('scanDateBadge').textContent = 'Not connected';
+    document.getElementById('scanBadge').textContent = 'Not connected';
   }
 }
 
 function loadFile(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    try { loadData(JSON.parse(ev.target.result)); toast('✓ Loaded: ' + file.name); }
-    catch { toast('❌ Invalid JSON file'); }
-  };
-  reader.readAsText(file);
-  e.target.value = '';
+  const file = e.target.files[0]; if (!file) return;
+  const r = new FileReader();
+  r.onload = ev => { try { loadData(JSON.parse(ev.target.result)); toast('✓ ' + file.name); } catch { toast('❌ Invalid JSON'); } };
+  r.readAsText(file); e.target.value = '';
 }
 
 function loadData(data) {
   allCompanies = data.companies || [];
-  priorityFilter = 'all';
-  sigFilters.clear();
-  document.querySelector('[data-filter="all"]').classList.add('active');
-  document.querySelectorAll('[data-filter]:not([data-filter="all"])').forEach(b => b.classList.remove('active'));
-  document.getElementById('scanDateBadge').textContent = '📅 ' + (data.scan_date || 'Unknown');
-  updateStats();
-  buildSigButtons();
+  activeFilters.clear();
+  document.getElementById('scanBadge').textContent = '📅 ' + (data.scan_date || 'Unknown');
+  // Stats
+  const sigs = allCompanies.reduce((s,c)=>s+(c.signals||[]).length, 0);
+  document.getElementById('statCompanies').textContent = allCompanies.length;
+  document.getElementById('statSignals').textContent = sigs;
+  // Show UI
+  document.getElementById('statsRow').style.display = 'flex';
   document.getElementById('toolbar').style.display = 'flex';
+  buildSigBtns();
   document.getElementById('sigRow').style.display = allCompanies.length ? 'flex' : 'none';
   setLoading(false);
   render();
 }
 
 function setLoading(on) {
-  document.getElementById('loadingBar').style.width = on ? '70%' : '0';
+  document.getElementById('loadingBar').style.width = on ? '65%' : '0';
 }
 
-// ── STATS ────────────────────────────────────────────────────────────────
-function updateStats() {
-  const t = allCompanies.length;
-  const hi = allCompanies.filter(c => c.priority === 'HIGH').length;
-  const me = allCompanies.filter(c => c.priority === 'MEDIUM').length;
-  const lo = allCompanies.filter(c => c.priority === 'LOW').length;
-  const sigs = allCompanies.reduce((s, c) => s + (c.signals||[]).length, 0);
-  const avg = t ? (allCompanies.reduce((s,c) => s + (c.overall_score||0), 0)/t).toFixed(1) : '—';
-  document.getElementById('statTotal').textContent = t;
-  document.getElementById('statHigh').textContent = hi;
-  document.getElementById('statMedium').textContent = me;
-  document.getElementById('statSignals').textContent = sigs;
-  document.getElementById('statAvgScore').textContent = avg;
-  document.getElementById('cAll').textContent = t;
-  document.getElementById('cHigh').textContent = hi;
-  document.getElementById('cMedium').textContent = me;
-  document.getElementById('cLow').textContent = lo;
-}
-
-// ── SIGNAL FILTERS ───────────────────────────────────────────────────────
-function buildSigButtons() {
+// ── SIGNAL FILTERS ────────────────────────────────────────────────────────
+function buildSigBtns() {
   const map = new Map();
   allCompanies.forEach(c => (c.signals||[]).forEach(s => {
     if (!s.signal_id) return;
     if (!map.has(s.signal_id)) {
-      const meta = SIGNAL_TYPES.find(t => t.id === s.signal_id);
-      map.set(s.signal_id, { icon: meta?.icon || s.signal_icon || '📌', label: meta?.label || s.signal_label || s.signal_id, count: 0 });
+      const meta = SIGNAL_TYPES.find(t=>t.id===s.signal_id);
+      map.set(s.signal_id, { icon: meta?.icon||s.signal_icon||'📌', label: meta?.label||s.signal_label||s.signal_id, count:0 });
     }
     map.get(s.signal_id).count++;
   }));
-  const sorted = [...map.entries()].sort((a,b) => {
-    const ai = SIGNAL_TYPES.findIndex(t=>t.id===a[0]);
-    const bi = SIGNAL_TYPES.findIndex(t=>t.id===b[0]);
-    return (ai===-1?99:ai)-(bi===-1?99:bi);
+  const sorted = [...map.entries()].sort((a,b)=>{
+    const ai=SIGNAL_TYPES.findIndex(t=>t.id===a[0]), bi=SIGNAL_TYPES.findIndex(t=>t.id===b[0]);
+    return (ai<0?99:ai)-(bi<0?99:bi);
   });
-  document.getElementById('sigBtns').innerHTML = sorted.map(([id,m]) =>
-    `<button class="sig-filter-btn" data-sig="${id}" onclick="toggleSig(this,'${id}')">${m.icon} ${m.label} <span class="sig-count">${m.count}</span></button>`
+  document.getElementById('sigBtns').innerHTML = sorted.map(([id,m])=>
+    `<button class="sig-btn" data-id="${id}" onclick="toggleSig(this,'${id}')">${m.icon} ${m.label}<span class="n">${m.count}</span></button>`
   ).join('');
 }
 
 function toggleSig(btn, id) {
-  sigFilters.has(id) ? (sigFilters.delete(id), btn.classList.remove('active')) : (sigFilters.add(id), btn.classList.add('active'));
-  document.getElementById('clearSig').disabled = sigFilters.size === 0;
+  activeFilters.has(id) ? (activeFilters.delete(id), btn.classList.remove('on')) : (activeFilters.add(id), btn.classList.add('on'));
+  document.getElementById('clearBtn').disabled = activeFilters.size === 0;
   render();
 }
 
-function clearSigFilters() {
-  sigFilters.clear();
-  document.querySelectorAll('.sig-filter-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('clearSig').disabled = true;
-  render();
-}
-
-// ── FILTERS ───────────────────────────────────────────────────────────────
-function setPriority(btn) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  priorityFilter = btn.dataset.filter;
+function clearFilters() {
+  activeFilters.clear();
+  document.querySelectorAll('.sig-btn').forEach(b=>b.classList.remove('on'));
+  document.getElementById('clearBtn').disabled = true;
   render();
 }
 
 // ── RENDER ────────────────────────────────────────────────────────────────
 function render() {
-  const search = document.getElementById('searchInput').value.toLowerCase();
-  const sort = document.getElementById('sortSelect').value;
+  const q = document.getElementById('searchInput').value.toLowerCase();
   let list = allCompanies.filter(c => {
-    if (priorityFilter !== 'all' && c.priority !== priorityFilter) return false;
-    if (sigFilters.size > 0 && ![...sigFilters].every(id => (c.signals||[]).some(s=>s.signal_id===id))) return false;
-    if (search && !([c.company_name,c.sector,c.headquarters,c.lfc_fit_summary].join(' ').toLowerCase().includes(search) ||
-      (c.signals||[]).some(s=>(s.signal_label+s.description).toLowerCase().includes(search)))) return false;
+    if (activeFilters.size > 0 && ![...activeFilters].every(id=>(c.signals||[]).some(s=>s.signal_id===id))) return false;
+    if (q && !([c.company_name,c.sector,c.headquarters].join(' ').toLowerCase().includes(q) ||
+               (c.signals||[]).some(s=>(s.signal_label||'').toLowerCase().includes(q)||(s.description||'').toLowerCase().includes(q)))) return false;
     return true;
   });
-  list.sort((a,b) => {
-    if (sort==='score')   return (b.overall_score||0)-(a.overall_score||0);
-    if (sort==='name')    return a.company_name.localeCompare(b.company_name);
-    if (sort==='signals') return (b.signals||[]).length-(a.signals||[]).length;
-    if (sort==='revenue') return (b.estimated_revenue_usd_bn||0)-(a.estimated_revenue_usd_bn||0);
-    return 0;
-  });
   const grid = document.getElementById('grid');
-  if (!list.length) { grid.innerHTML = `<div class="empty-state"><div class="empty-icon">🔍</div><h3>No matches</h3><p>Try adjusting your filters.</p></div>`; return; }
-  grid.innerHTML = list.map(c => cardHTML(c)).join('');
+  if (!list.length) {
+    grid.innerHTML = `<div class="empty"><div class="empty-icon">🔍</div><h3>No matches</h3><p>Try clearing your filters or searching something else.</p></div>`;
+    return;
+  }
+  grid.innerHTML = list.map(cardHTML).join('');
 }
 
-function scoreClass(s) { return s>=8?'score-high':s>=6?'score-medium':'score-low'; }
-function initials(n) { return n.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase(); }
-function dots(s) { let h=''; for(let i=1;i<=10;i++) h+=`<div class="dot${i<=s?' on':''}"></div>`; return h; }
-
+// ── CARD ──────────────────────────────────────────────────────────────────
 function cardHTML(c) {
-  const sigs = c.signals||[];
-  const score = c.overall_score||0;
+  const sigs = c.signals || [];
   const rev = c.estimated_revenue_usd_bn ? `$${c.estimated_revenue_usd_bn}bn` : null;
   const enc = encodeURIComponent(JSON.stringify(c));
-  const sigsHtml = sigs.slice(0,2).map(s=>`
-    <div class="signal-chip">
-      <div class="sig-icon">${s.signal_icon||'📌'}</div>
-      <div class="sig-body">
-        <div class="sig-label">${s.signal_label}</div>
-        <div class="sig-desc">${s.description||''}</div>
-        ${s.news_source?`<div class="sig-source">📰 ${s.news_source}${s.news_date?' · '+s.news_date:''}</div>`:''}
-      </div>
-      <div class="sig-strength">${dots(s.strength||5)}</div>
-    </div>`).join('');
-  const extra = sigs.length>2?`<div style="font-size:.72rem;color:var(--grey-400);text-align:center;padding:3px">+${sigs.length-2} more signals</div>`:'';
-  return `
-    <div class="prospect-card" onclick="openModal('${enc}')">
-      <div class="priority-banner priority-${c.priority||'LOW'}"></div>
-      <div class="card-header">
-        <div class="company-logo">${initials(c.company_name)}</div>
-        <div class="card-meta">
-          <h3>${c.company_name}</h3>
-          <div class="meta-row">
-            ${c.sector?`<span class="tag sector">${c.sector}</span>`:''}
-            ${c.headquarters?`<span class="tag hq">📍 ${c.headquarters}</span>`:''}
-            ${rev?`<span class="tag revenue">💰 ${rev}</span>`:''}
+
+  const sigsHTML = sigs.slice(0,3).map(s => {
+    const meta = SIGNAL_TYPES.find(t=>t.id===s.signal_id);
+    const icon = meta?.icon || s.signal_icon || '📌';
+    const link = s.news_url
+      ? `<a class="sig-link" href="${s.news_url}" target="_blank" onclick="event.stopPropagation()">↗ Read article</a>`
+      : '';
+    return `
+      <div class="signal-chip">
+        <div class="sig-icon">${icon}</div>
+        <div class="sig-body">
+          <div class="sig-type">${s.signal_label||''}</div>
+          <div class="sig-desc">${s.description||''}</div>
+          <div class="sig-meta">
+            ${s.news_source ? `<span class="sig-source">📰 ${s.news_source}${s.news_date?' · '+s.news_date:''}</span>` : ''}
+            ${link}
           </div>
         </div>
-        <div class="score-circle ${scoreClass(score)}">${score.toFixed(1)}<span class="score-label">fit</span></div>
+      </div>`;
+  }).join('');
+
+  const more = sigs.length > 3 ? `<div class="more-signals">+${sigs.length-3} more signal${sigs.length-3>1?'s':''} — click to see all</div>` : '';
+
+  return `
+    <div class="card" onclick="openModal('${enc}')">
+      <div class="card-top-bar"></div>
+      <div class="card-header">
+        <div class="company-logo">${logoHTML(c.company_name)}</div>
+        <div class="card-identity">
+          <h3>${c.company_name}</h3>
+          <div class="tags">
+            ${c.sector ? `<span class="tag sector">${c.sector}</span>` : ''}
+            ${c.headquarters ? `<span class="tag hq">📍 ${c.headquarters}</span>` : ''}
+            ${rev ? `<span class="tag rev">💰 ${rev}</span>` : ''}
+          </div>
+        </div>
       </div>
       <div class="card-signals">
-        <div class="signals-title">Buy Signals (${sigs.length})</div>
-        ${sigsHtml}${extra}
-      </div>
-      <div class="card-footer">
-        <div class="fit-summary"><strong>LFC Angle:</strong> ${c.lfc_fit_summary||'N/A'}</div>
-        ${c.recommended_asset?`<div class="asset-tag">🏷️ ${c.recommended_asset}</div>`:''}
-        <div class="footer-actions">
-          <button class="action-btn primary" onclick="event.stopPropagation();copyBrief('${enc}')">📋 Copy Brief</button>
-          <button class="action-btn secondary" onclick="event.stopPropagation();openModal('${enc}')">🔍 Full Details</button>
-        </div>
+        <div class="sig-count-label">Buy Signals (${sigs.length})</div>
+        ${sigsHTML}
+        ${more}
       </div>
     </div>`;
 }
@@ -437,53 +421,64 @@ function cardHTML(c) {
 // ── MODAL ─────────────────────────────────────────────────────────────────
 function openModal(enc) {
   const c = JSON.parse(decodeURIComponent(enc));
+  const sigs = c.signals || [];
+  const rev = c.estimated_revenue_usd_bn ? `$${c.estimated_revenue_usd_bn}bn` : null;
+
+  // Logo
+  document.getElementById('mLogo').innerHTML = logoHTML(c.company_name, 48);
+
+  // Title + tags
   document.getElementById('mTitle').textContent = c.company_name;
-  document.getElementById('mMeta').innerHTML = [
+  document.getElementById('mTags').innerHTML = [
     c.sector && `<span class="tag sector">${c.sector}</span>`,
     c.headquarters && `<span class="tag hq">📍 ${c.headquarters}</span>`,
-    c.estimated_revenue_usd_bn && `<span class="tag revenue">💰 $${c.estimated_revenue_usd_bn}bn</span>`,
-    `<span class="tag" style="background:${c.priority==='HIGH'?'#fef2f2':c.priority==='MEDIUM'?'#fffbeb':'#f0fdf4'};color:${c.priority==='HIGH'?'var(--red)':c.priority==='MEDIUM'?'#d97706':'#15803d'}">${c.priority||'N/A'} Priority</span>`
+    rev && `<span class="tag rev">💰 ${rev}</span>`,
   ].filter(Boolean).join('');
-  document.getElementById('mBody').innerHTML = `
-    <div class="modal-section">
-      <h4>Overview</h4>
-      <div class="info-grid">
-        <div class="info-item"><span class="info-label">Fit Score</span><span class="info-value">${(c.overall_score||0).toFixed(1)} / 10</span></div>
-        <div class="info-item"><span class="info-label">Decision Maker</span><span class="info-value">${c.decision_maker_title||'N/A'}</span></div>
-        <div class="info-item"><span class="info-label">Recommended Asset</span><span class="info-value">${c.recommended_asset||'N/A'}</span></div>
-        <div class="info-item"><span class="info-label">Priority</span><span class="info-value">${c.priority||'N/A'}</span></div>
-        ${c.notes?`<div class="info-item" style="grid-column:1/-1"><span class="info-label">Notes</span><span class="info-value" style="font-weight:400;color:var(--grey-600)">${c.notes}</span></div>`:''}
-      </div>
-    </div>
-    <div class="modal-section">
-      <h4>Buy Signals (${(c.signals||[]).length})</h4>
-      ${(c.signals||[]).map(s=>`
-        <div class="modal-signal">
-          <div class="signal-header">${s.signal_icon||'📌'} ${s.signal_label} <span style="margin-left:auto;font-size:.72rem;color:var(--grey-400)">Strength: ${s.strength||'?'}/10</span></div>
-          <div class="signal-detail">${s.description||''}</div>
-          ${s.news_headline?`<div class="signal-news"><div class="news-headline">"${s.news_headline}"</div><div>📰 ${s.news_source||'Unknown'}${s.news_date?' · '+s.news_date:''}</div></div>`:''}
-        </div>`).join('')}
-    </div>
-    <div class="modal-section">
-      <h4>LFC Partnership Angle</h4>
-      <div class="pitch-block"><p>${c.lfc_fit_summary||'N/A'}</p></div>
-    </div>
-    <button class="action-btn primary" style="width:100%;padding:12px;font-size:.85rem" onclick="copyBrief('${encodeURIComponent(JSON.stringify(c))}')">📋 Copy Outreach Brief</button>`;
-  document.getElementById('modalOverlay').classList.add('open');
-}
-function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
-document.addEventListener('keydown', e => e.key==='Escape' && closeModal());
 
-// ── COPY BRIEF ────────────────────────────────────────────────────────────
-function copyBrief(enc) {
-  const c = JSON.parse(decodeURIComponent(enc));
-  const today = new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
-  const sigLines = (c.signals||[]).map(s=>`  • ${s.signal_icon||'–'} ${s.signal_label}: ${s.description}${s.news_source?' ('+s.news_source+(s.news_date?', '+s.news_date:'')+')'  :''}`).join('\n');
-  const brief = `LFC COMMERCIAL — SPONSORSHIP PROSPECT BRIEF\nGenerated: ${today}\n${'─'.repeat(48)}\n\nCOMPANY: ${c.company_name}\nSECTOR: ${c.sector||'N/A'}\nHQ: ${c.headquarters||'N/A'}\nREVENUE: ${c.estimated_revenue_usd_bn?'$'+c.estimated_revenue_usd_bn+'bn':'N/A'}\nPRIORITY: ${c.priority||'N/A'}\nFIT SCORE: ${(c.overall_score||0).toFixed(1)}/10\n\nBUY SIGNALS DETECTED:\n${sigLines||'  None'}\n\nKEY DECISION MAKER: ${c.decision_maker_title||'N/A'}\nRECOMMENDED ASSET: ${c.recommended_asset||'N/A'}\n\nLFC PARTNERSHIP ANGLE:\n${c.lfc_fit_summary||'N/A'}\n${c.notes?'\nNOTES:\n'+c.notes:''}\n${'─'.repeat(48)}`.trim();
-  navigator.clipboard.writeText(brief).then(()=>toast('📋 Brief copied')).catch(()=>{
-    const t=document.createElement('textarea'); t.value=brief; document.body.appendChild(t); t.select(); document.execCommand('copy'); document.body.removeChild(t); toast('📋 Brief copied');
-  });
+  // Body
+  const infoHTML = `
+    <div class="modal-section">
+      <div class="modal-section-title">Company Details</div>
+      <div class="modal-info-grid">
+        ${c.decision_maker_title ? `<div class="info-item"><div class="lbl">Key Contact</div><div class="val">${c.decision_maker_title}</div></div>` : ''}
+        ${c.estimated_revenue_usd_bn ? `<div class="info-item"><div class="lbl">Annual Revenue</div><div class="val">$${c.estimated_revenue_usd_bn}bn</div></div>` : ''}
+        ${c.headquarters ? `<div class="info-item"><div class="lbl">Headquarters</div><div class="val">${c.headquarters}</div></div>` : ''}
+        ${c.sector ? `<div class="info-item"><div class="lbl">Sector</div><div class="val">${c.sector}</div></div>` : ''}
+        ${c.notes ? `<div class="info-item" style="grid-column:1/-1"><div class="lbl">Notes</div><div class="val" style="font-weight:400;color:var(--grey-600)">${c.notes}</div></div>` : ''}
+      </div>
+    </div>`;
+
+  const sigsHTML = `
+    <div class="modal-section">
+      <div class="modal-section-title">Buy Signals (${sigs.length})</div>
+      ${sigs.map(s => {
+        const meta = SIGNAL_TYPES.find(t=>t.id===s.signal_id);
+        const icon = meta?.icon || s.signal_icon || '📌';
+        const articleLink = s.news_url
+          ? `<a class="article-link" href="${s.news_url}" target="_blank">↗ Read article</a>`
+          : '';
+        return `
+          <div class="modal-signal">
+            <div class="modal-signal-hdr">${icon} ${s.signal_label||''}</div>
+            <div class="modal-signal-desc">${s.description||''}</div>
+            ${(s.news_headline||s.news_source) ? `
+              <div class="modal-signal-news">
+                ${s.news_headline ? `<div class="headline">"${s.news_headline}"</div>` : ''}
+                <div class="source-row">
+                  <span class="source">📰 ${s.news_source||''}${s.news_date?' · '+s.news_date:''}</span>
+                  ${articleLink}
+                </div>
+              </div>` : ''}
+          </div>`;
+      }).join('')}
+    </div>`;
+
+  document.getElementById('mBody').innerHTML = infoHTML + sigsHTML;
+  document.getElementById('overlay').classList.add('open');
 }
+
+function closeModal() { document.getElementById('overlay').classList.remove('open'); }
+document.addEventListener('keydown', e => e.key === 'Escape' && closeModal());
 
 // ── TOAST ─────────────────────────────────────────────────────────────────
 let toastTimer;
@@ -491,7 +486,7 @@ function toast(msg) {
   const el = document.getElementById('toast');
   el.textContent = msg; el.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=>el.classList.remove('show'), 3000);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 3000);
 }
 
 // ── INIT ──────────────────────────────────────────────────────────────────
