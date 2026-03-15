@@ -1,128 +1,96 @@
 {
-  "scan_date": "2026-03-14",
-  "scan_timestamp": "2026-03-14T12:00:00Z",
-  "scanner_version": "1.0.0",
-  "num_returned": 5,
+  "scan_date": "2026-03-15",
+  "total_companies": 5,
   "companies": [
     {
-      "company_name": "Coca-Cola",
+      "company_name": "AB InBev",
       "sector": "Beverages & FMCG",
-      "headquarters": "USA",
-      "estimated_revenue_usd_bn": 47.9,
+      "estimated_revenue_usd_bn": 59,
+      "headquarters": "Leuven, Belgium",
+      "decision_maker_title": "Chief Marketing Officer / VP Global Sponsorships",
       "signals": [
         {
-          "signal_id": "leadership_change",
-          "signal_label": "CEO Transition - New Strategic Direction",
-          "signal_icon": "👤",
-          "description": "Henrique Braun, COO, becomes CEO effective March 31, 2026, replacing James Quincey after 9 years. Braun brings 30-year tenure, focus on international growth, consumer engagement, and emerging market innovation.",
-          "news_headline": "The Coca-Cola Company Names Henrique Braun as Next CEO, Effective March 31, 2026",
-          "news_source": "Coca-Cola Investor Relations / Reuters",
-          "news_date": "2025-12-10",
-          "strength": 9
+          "signal_id": "sports_sponsorship",
+          "signal_label": "Sports Sponsorship",
+          "description": "AB InBev has entered exclusive negotiations with UEFA to become the official beer partner for all men's club competitions — Champions League, Europa League, Conference League — from 2027 to 2033 in a deal worth an estimated €1.2bn. This more than doubles Heineken's current contract and signals an enormous, active football sponsorship budget. LFC, as a perennial Champions League club, sits directly within AB InBev's strategic target for activation partnerships.",
+          "news_headline": "AB InBev set to pour into Champions League with €1.2bn beer sponsorship",
+          "news_source": "Inside World Football",
+          "news_date": "2025-10-30",
+          "news_url": "https://www.insideworldfootball.com/2025/10/30/ab-inbev-set-pour-champions-league-e1-2bn-beer-sponsorship/"
         }
-      ],
-      "overall_score": 8.5,
-      "lfc_fit_summary": "Coca-Cola is the world's most aggressive sports sponsor (938+ deals in 2023), with a 70-year football legacy. New CEO prioritises consumer connection and innovation. Perfect timing for LFC sleeve/beverage partnership discussion as leadership signals strategic refresh.",
-      "recommended_asset": "Official Beverage Partner or Sleeve Partner",
-      "priority": "HIGH",
-      "decision_maker_title": "Chief Marketing Officer / Chief Commercial Officer",
-      "notes": "Braun's mandate includes leveraging technology and getting closer to consumer needs. Coca-Cola's Copa América and World Cup partnerships show commitment to football globally. LFC's Asian fanbase and premium positioning align with Coca-Cola's growth strategy in emerging markets."
+      ]
     },
     {
-      "company_name": "Samsung Electronics",
-      "sector": "Consumer Electronics & Smartphones",
-      "headquarters": "South Korea",
-      "estimated_revenue_usd_bn": 233.3,
+      "company_name": "Diageo",
+      "sector": "Spirits & Beverages",
+      "estimated_revenue_usd_bn": 20,
+      "headquarters": "London, UK",
+      "decision_maker_title": "Chief Marketing Officer / Head of Global Partnerships",
       "signals": [
         {
-          "signal_id": "product_launch",
-          "signal_label": "Galaxy S26 Series Launch - Consumer AI Flagship",
-          "signal_icon": "🚀",
-          "description": "Samsung launched Galaxy S26 series on March 11, 2026, featuring next-gen AI (Galaxy AI 3.0) and 'Privacy Display.' Massive consumer marketing push targeting global audiences with emphasis on innovation leadership.",
-          "news_headline": "Samsung Unveils Galaxy S26 Series: The Most Intuitive Galaxy AI Phone Yet",
-          "news_source": "Samsung Global Newsroom",
-          "news_date": "2026-03-11",
-          "strength": 9
+          "signal_id": "sports_sponsorship",
+          "signal_label": "Sports Sponsorship",
+          "description": "Diageo has become the first spirits company ever to partner with FIFA, signing as Official Spirits Supporter for the FIFA World Cup 2026 across North, Central, and South America, activating Johnnie Walker, Don Julio, Buchanan's, Casamigos, and Smirnoff across all 16 host cities. This marks a step-change in Diageo's sports marketing ambition. As a UK-headquartered group already investing in global football, an LFC club partnership would extend that presence into European club football — a logical next step.",
+          "news_headline": "Diageo named Official Spirits Supporter in North, Central and South America for FIFA World Cup 26",
+          "news_source": "FIFA / BusinessWire",
+          "news_date": "2025-05-08",
+          "news_url": "https://inside.fifa.com/tournament-organisation/commercial/media-releases/diageo-official-spirits-supporter-world-cup-26-north-central-south-america"
         }
-      ],
-      "overall_score": 8.8,
-      "lfc_fit_summary": "Samsung is seeking premium brand associations for its flagship Galaxy line. The S26 needs global B2C visibility across Asia (key LFC market), Americas, Europe. Samsung has proven football activation playbook (Galaxy 11 campaign, 150M+ views, FA partnership). LFC front-of-shirt or sleeve placement reaches 750M+ passionate global fanbase during Galaxy launch peak.",
-      "recommended_asset": "Official Smartphone Partner or Sleeve Partner",
-      "priority": "HIGH",
-      "decision_maker_title": "Global CMO / Chief Marketing Officer",
-      "notes": "Samsung's previous football campaigns (Galaxy 11 with Ronaldo/Messi, FA England partnership, Saudi Pro League sponsorship) show strategic commitment. Galaxy S26 launch timing (March 11) coincides with peak marketing spend. LFC fanbase in Indonesia, Thailand, China aligns with Samsung's growth priorities."
+      ]
     },
     {
-      "company_name": "Netflix",
-      "sector": "Streaming Media & Entertainment",
-      "headquarters": "USA",
-      "estimated_revenue_usd_bn": 45.2,
+      "company_name": "General Motors",
+      "sector": "Automotive",
+      "estimated_revenue_usd_bn": 187,
+      "headquarters": "Detroit, USA",
+      "decision_maker_title": "Chief Marketing Officer / VP Global Brand Marketing",
       "signals": [
         {
-          "signal_id": "major_partnership",
-          "signal_label": "Live Sports Strategy Pivot - Major Sports Content Deals",
-          "signal_icon": "🤝",
-          "description": "Netflix announced MLB Opening Day exclusive (March 26, 2026 - Yankees vs Giants), World Baseball Classic exclusive, FIFA World Cup 2026 partnership with Gary Lineker daily show, and multiple live sports rights acquisitions signalling major pivot to premium sports content.",
-          "news_headline": "Netflix Expands into Live Sports: MLB Opening Day, World Baseball Classic, World Cup Coverage Announced for 2026",
-          "news_source": "Netflix Investor Relations / Sports Business",
-          "news_date": "2026-03-13",
-          "strength": 8
+          "signal_id": "global_expansion",
+          "signal_label": "Global Expansion",
+          "description": "General Motors launched the Cadillac Formula 1 Team in March 2026 as the championship's 11th team, paying a $450m entry fee to gain access to a global premium audience. The F1 programme is explicitly designed to build Cadillac's European and international brand visibility — a market where GM has historically been weak. F1 gives GM reach into the same premium, global sports audience that LFC commands. A football partnership would directly complement their ongoing European brand-building push.",
+          "news_headline": "Cadillac Formula 1 Team Unveils Special Edition Livery for Barcelona Shakedown",
+          "news_source": "GM Newsroom",
+          "news_date": "2026-01-13",
+          "news_url": "https://news.gm.com/home.detail.html/Pages/news/us/en/2026/jan/0113-f1.html"
         }
-      ],
-      "overall_score": 8.2,
-      "lfc_fit_summary": "Netflix is aggressively building sports content portfolio and seeking premium sport partnerships for brand association and sponsorship activation. Football/soccer content is critical for 2026 World Cup strategy. LFC partnership provides exclusive content opportunities (player access, behind-the-scenes), hospitality integration, and global marketing platform across 325M+ subscribers in LFC's key markets (Asia, Americas, MENA).",
-      "recommended_asset": "Content Partnership / Digital Media Rights Partner or Premium Hospitality",
-      "priority": "HIGH",
-      "decision_maker_title": "Chief Content Officer / Chief Marketing Officer",
-      "notes": "Netflix's live sports expansion is core 2026 strategy. World Cup (2026 in USA) and football focus aligns with LFC's global appeal. LFC can offer exclusive documentary series, match day experiences, player interviews as part of broader content deal. Timing is critical as Netflix finalizes sports sponsorship strategy."
+      ]
     },
     {
-      "company_name": "Apple",
-      "sector": "Consumer Electronics & Technology",
-      "headquarters": "USA",
-      "estimated_revenue_usd_bn": 416.0,
+      "company_name": "HSBC",
+      "sector": "Banking & Financial Services",
+      "estimated_revenue_usd_bn": 65,
+      "headquarters": "London, UK",
+      "decision_maker_title": "Group Chief Marketing Officer / Head of Global Sponsorships",
       "signals": [
         {
-          "signal_id": "product_launch",
-          "signal_label": "Massive iPhone & Mac Product Portfolio Launch Week",
-          "signal_icon": "🚀",
-          "description": "Apple announced iPhone 17e (entry $599), MacBook Neo ($599 low-cost laptop), MacBook Air M5, iPad Air M4, new displays on March 11, 2026. Record Q1 FY2026 revenue of $143.8B (+16% YoY). iPhone revenue alone at $85.3B (+23% YoY).",
-          "news_headline": "Apple's Biggest Week of 2026: iPhone 17e, MacBook Neo, and Complete Product Refresh Launches March 11",
-          "news_source": "MacRumors / Apple Newsroom",
-          "news_date": "2026-03-11",
-          "strength": 8
+          "signal_id": "sports_sponsorship",
+          "signal_label": "Sports Sponsorship",
+          "description": "HSBC has returned to Formula 1 team sponsorship for the first time in 21 years, placing its logo on the Racing Bulls car, while simultaneously becoming the title sponsor of F1 coverage on Channel 4 in the UK. This dual investment is the clearest signal in two decades that HSBC is re-engaging with premium global sports as a brand-building tool. Their international customer base — spanning Asia, Europe, and the Americas — maps almost identically to Liverpool FC's global fanbase, making an LFC partnership a natural companion to the F1 play.",
+          "news_headline": "HSBC returns to F1 after 21 years",
+          "news_source": "SportBusiness",
+          "news_date": "2025-03-14",
+          "news_url": "https://www.sportbusiness.com/news/exclusive-hsbc-returns-to-f1-after-21-years/"
         }
-      ],
-      "overall_score": 7.8,
-      "lfc_fit_summary": "Apple is in peak launch cycle with consumer hardware targeting global markets (iPhone 17e at accessible price point $599 drives mass-market appeal). Apple TV+ and sports partnerships (exclusive F1 rights, MLB, rugby technology partnerships) show commitment to premium content integration. LFC partnership provides device visibility through stadium tech, app integrations, and premium hospitality experiences for high-net-worth customers.",
-      "recommended_asset": "Technology Partner / Digital Experience Partner or Premium Hospitality",
-      "priority": "MEDIUM-HIGH",
-      "decision_maker_title": "Chief Marketing Officer / SVP Services Marketing",
-      "notes": "Apple's approach is ecosystem integration, not traditional kit sponsorship. LFC can negotiate exclusive Apple Watch/iPhone app experiences, stadium connectivity, or premium hospitality tied to Apple services. Apple's F1 exclusivity and rugby RFU partnership show sports positioning. Peak launch timing (March 11) means marketing budgets active."
+      ]
     },
     {
-      "company_name": "Levi Strauss & Co.",
-      "sector": "Apparel & Fashion",
-      "headquarters": "USA",
-      "estimated_revenue_usd_bn": 6.3,
+      "company_name": "Heineken",
+      "sector": "Beverages & FMCG",
+      "estimated_revenue_usd_bn": 36,
+      "headquarters": "Amsterdam, Netherlands",
+      "decision_maker_title": "Chief Commercial Officer / Global Head of Sponsorships",
       "signals": [
         {
-          "signal_id": "global_awareness",
-          "signal_label": "Global 'Behind Every Original' Campaign Launch in Asia",
-          "signal_icon": "📣",
-          "description": "Levi's launched global 2026 campaign 'Behind Every Original' in India on March 13, 2026, starring Global Brand Ambassador Alia Bhatt. Campaign celebrates authenticity, originality, individuality targeting Gen-Z/millennial audience. Strategic focus on women's denim expansion in India and Asia-Pacific.",
-          "news_headline": "Levi's Brings 'Behind Every Original' Global Campaign to India with Alia Bhatt as Global Brand Ambassador",
-          "news_source": "Business Standard / PR Newswire",
-          "news_date": "2026-03-13",
-          "strength": 7
+          "signal_id": "rebrand",
+          "signal_label": "Rebrand",
+          "description": "Heineken has confirmed it will end its 30-year UEFA Champions League sponsorship in August 2027, citing a strategic shift toward higher-ROI partnerships. Critically, the budget is not disappearing — Heineken is actively redirecting it: retaining Formula 1, signing a global Premier Padel deal, and renewing UEFA Women's Champions League. This creates a rare, direct window. Heineken has an open football sponsorship slot from 2027 and is in the market for premium club partnerships right now. LFC should be an immediate priority outreach.",
+          "news_headline": "Heineken to end UEFA Champions League sponsorship in 2027 amid strategic marketing shift",
+          "news_source": "The Grocer",
+          "news_date": "2025-10-30",
+          "news_url": "https://www.foodbusinessmea.com/heineken-to-end-uefa-champions-league-sponsorship-in-2027-amid-strategic-marketing-shift/"
         }
-      ],
-      "overall_score": 6.8,
-      "lfc_fit_summary": "Levi's is below the $10bn revenue threshold but shows strong momentum in Asia where LFC has massive fanbase (Indonesia, Thailand, India expansion). Global brand campaign launch timing (March 13) signals active marketing budget. Consumer-facing apparel brand seeking premium brand association. LFC partnership could drive Asia market penetration, particularly India, and provide lifestyle/premium positioning vs. pure denim category.",
-      "recommended_asset": "Asia Regional Partner or Lifestyle Partner",
-      "priority": "MEDIUM",
-      "decision_maker_title": "Chief Marketing Officer / Asia-Pacific Regional Director",
-      "notes": "Levi's focus on women's denim and Gen-Z/millennial authenticity narrative aligns with LFC's progressive brand positioning. Alia Bhatt partnership shows investment in Asia-specific talent. While below $10bn threshold, strong Asia expansion momentum and March 13 campaign launch make timing opportune. Potential for regional kit or lifestyle partnership in India/Southeast Asia."
+      ]
     }
   ]
 }
