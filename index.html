@@ -28,8 +28,6 @@
   .header-right { display: flex; align-items: center; gap: 10px; }
   .scan-badge { background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.2); color: white; padding: 4px 12px; border-radius: 20px; font-size: .78rem; font-weight: 500; }
   .hbtn { border: none; padding: 8px 14px; border-radius: 8px; font-weight: 700; font-size: .8rem; cursor: pointer; transition: all .15s; display: flex; align-items: center; gap: 5px; }
-  .hbtn.primary { background: var(--gold); color: var(--red-dark); }
-  .hbtn.primary:hover { background: #e6b800; }
   .hbtn.ghost { background: rgba(255,255,255,.15); color: white; border: 1px solid rgba(255,255,255,.25); }
   .hbtn.ghost:hover { background: rgba(255,255,255,.25); }
   .loading-bar { height: 3px; background: var(--gold); position: fixed; top: 64px; left: 0; z-index: 99; transition: width .4s ease; }
@@ -46,7 +44,7 @@
   /* ── TOOLBAR ── */
   .toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
   .search-wrap { position: relative; }
-  .search-wrap input { background: white; border: 1.5px solid var(--grey-200); border-radius: 8px; padding: 8px 12px 8px 34px; font-size: .84rem; width: 240px; outline: none; transition: border .15s; }
+  .search-wrap input { background: white; border: 1.5px solid var(--grey-200); border-radius: 8px; padding: 8px 12px 8px 34px; font-size: .84rem; width: 260px; outline: none; transition: border .15s; }
   .search-wrap input:focus { border-color: var(--red); }
   .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--grey-400); font-size: 13px; pointer-events: none; }
 
@@ -71,9 +69,6 @@
   .card-top-bar { height: 4px; background: var(--red); }
 
   .card-header { padding: 16px 18px 14px; display: flex; align-items: center; gap: 13px; border-bottom: 1px solid var(--grey-100); }
-  .company-logo { width: 44px; height: 44px; border-radius: 10px; overflow: hidden; flex-shrink: 0; border: 1px solid var(--grey-200); background: var(--grey-100); display: flex; align-items: center; justify-content: center; }
-  .company-logo img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
-  .company-logo .initials { font-size: 15px; font-weight: 800; color: var(--grey-500); }
   .card-identity { flex: 1; min-width: 0; }
   .card-identity h3 { font-size: .97rem; font-weight: 700; color: var(--grey-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 5px; }
   .tags { display: flex; gap: 5px; flex-wrap: wrap; }
@@ -111,9 +106,6 @@
   .overlay.open .modal { transform: translateY(0); }
   .modal-hdr { padding: 22px 22px 16px; border-bottom: 1px solid var(--grey-200); display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; position: sticky; top: 0; background: white; z-index: 1; }
   .modal-hdr-left { display: flex; align-items: center; gap: 13px; }
-  .modal-logo { width: 48px; height: 48px; border-radius: 10px; overflow: hidden; border: 1px solid var(--grey-200); background: var(--grey-100); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .modal-logo img { width: 100%; height: 100%; object-fit: contain; padding: 5px; }
-  .modal-logo .initials { font-size: 16px; font-weight: 800; color: var(--grey-500); }
   .modal-hdr h2 { font-size: 1.1rem; font-weight: 800; color: var(--grey-900); margin-bottom: 5px; }
   .close-btn { width: 30px; height: 30px; background: var(--grey-100); border: none; border-radius: 50%; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--grey-500); transition: all .15s; flex-shrink: 0; }
   .close-btn:hover { background: var(--red); color: white; }
@@ -156,7 +148,6 @@
   <div class="header-right">
     <span class="scan-badge" id="scanBadge">Loading…</span>
     <button class="hbtn ghost" onclick="fetchData()">↻ Refresh</button>
-    <button class="hbtn primary" onclick="document.getElementById('fileInput').click()">📂 Load file</button>
   </div>
 </header>
 
@@ -188,20 +179,18 @@
     <div class="empty">
       <div class="empty-icon">⚽</div>
       <h3>Loading today's signals…</h3>
-      <p>Fetching the latest scan from GitHub. If this takes more than a few seconds, use Load file to open a local scan result.</p>
+      <p>Fetching the latest scan from GitHub. Refresh the page if this takes more than a few seconds.</p>
     </div>
   </div>
 
 </main>
-
-<input type="file" id="fileInput" accept=".json" onchange="loadFile(event)" style="display:none" />
 
 <!-- Modal -->
 <div class="overlay" id="overlay" onclick="if(event.target===this)closeModal()">
   <div class="modal">
     <div class="modal-hdr">
       <div class="modal-hdr-left">
-        <div class="modal-logo" id="mLogo"></div>
+        <div id="mAvatar"></div>
         <div>
           <h2 id="mTitle"></h2>
           <div id="mTags" style="display:flex;gap:5px;flex-wrap:wrap;"></div>
@@ -220,54 +209,48 @@
 const DATA_URL = 'https://fletchert131-sudo.github.io/lfc-signals/scan_results/signals_latest.json';
 
 const SIGNAL_TYPES = [
-  { id: 'leadership_change',    icon: '👤', label: 'Leadership Change' },
-  { id: 'strong_financials',    icon: '📊', label: 'Strong Financials' },
-  { id: 'major_funding',        icon: '💰', label: 'Major Funding' },
-  { id: 'market_expansion',     icon: '🌍', label: 'Market Expansion' },
-  { id: 'global_expansion',     icon: '🌐', label: 'Global Expansion' },
-  { id: 'product_launch',       icon: '🚀', label: 'Product Launch' },
-  { id: 'rebrand',              icon: '🔄', label: 'Rebrand' },
-  { id: 'sports_sponsorship',   icon: '🏅', label: 'Sports Sponsorship' },
-  { id: 'esg_sustainability',   icon: '🌿', label: 'ESG / Sustainability' },
-  { id: 'stock_listing',        icon: '🏛️', label: 'Stock Market Listing' },
-  // Legacy IDs for backward compat with existing scan data
-  { id: 'financial_performance',icon: '📊', label: 'Strong Financials' },
-  { id: 'funding_announcement', icon: '💰', label: 'Major Funding' },
-  { id: 'major_global_expansion',icon:'🌐', label: 'Global Expansion' },
-  { id: 'global_awareness',     icon: '📣', label: 'Brand Campaign' },
-  { id: 'major_partnership',    icon: '🤝', label: 'Major Partnership' },
-  { id: 'competitor_sponsorship',icon:'🏆', label: 'Competitor Activity' },
-  { id: 'sports_affinity',      icon: '⚽', label: 'Sports Affinity' },
+  { id: 'leadership_change',     icon: '👤', label: 'Leadership Change' },
+  { id: 'strong_financials',     icon: '📊', label: 'Strong Financials' },
+  { id: 'major_funding',         icon: '💰', label: 'Major Funding' },
+  { id: 'market_expansion',      icon: '🌍', label: 'Market Expansion' },
+  { id: 'global_expansion',      icon: '🌐', label: 'Global Expansion' },
+  { id: 'product_launch',        icon: '🚀', label: 'Product Launch' },
+  { id: 'rebrand',               icon: '🔄', label: 'Rebrand' },
+  { id: 'sports_sponsorship',    icon: '🏅', label: 'Sports Sponsorship' },
+  { id: 'esg_sustainability',    icon: '🌿', label: 'ESG / Sustainability' },
+  { id: 'stock_listing',         icon: '🏛️', label: 'Stock Market Listing' },
+  // Legacy IDs for backward compat
+  { id: 'financial_performance', icon: '📊', label: 'Strong Financials' },
+  { id: 'funding_announcement',  icon: '💰', label: 'Major Funding' },
+  { id: 'major_global_expansion',icon: '🌐', label: 'Global Expansion' },
+  { id: 'global_awareness',      icon: '📣', label: 'Brand Campaign' },
+  { id: 'major_partnership',     icon: '🤝', label: 'Major Partnership' },
+  { id: 'competitor_sponsorship',icon: '🏆', label: 'Competitor Activity' },
+  { id: 'sports_affinity',       icon: '⚽', label: 'Sports Affinity' },
 ];
 
 // ── STATE ─────────────────────────────────────────────────────────────────
 let allCompanies = [];
 let activeFilters = new Set();
 
-// ── LOGO ──────────────────────────────────────────────────────────────────
-const DOMAIN_MAP = {
-  'samsung': 'samsung.com', 'coca-cola': 'coca-cola.com', 'netflix': 'netflix.com',
-  'apple': 'apple.com', 'levi': 'levi.com', 'nike': 'nike.com', 'adidas': 'adidas.com',
-  'amazon': 'amazon.com', 'microsoft': 'microsoft.com', 'google': 'google.com',
-  'alibaba': 'alibaba.com', 'hyundai': 'hyundai.com', 'toyota': 'toyota.com',
-  'pepsi': 'pepsi.com', 'pepsico': 'pepsico.com', 'hsbc': 'hsbc.com',
-  'reliance': 'ril.com', 'grab': 'grab.com', 'aramco': 'aramco.com',
-};
-
-function getDomain(name) {
-  const lower = name.toLowerCase();
-  for (const [k, v] of Object.entries(DOMAIN_MAP)) {
-    if (lower.includes(k)) return v;
-  }
-  // Generic guess: first word + .com
-  return lower.split(/[\s&,]/)[0].replace(/[^a-z0-9]/g,'') + '.com';
+// ── AVATAR ────────────────────────────────────────────────────────────────
+const AVATAR_PALETTE = [
+  ['#dbeafe','#1d4ed8'], ['#fce7f3','#be185d'], ['#d1fae5','#065f46'],
+  ['#fef3c7','#92400e'], ['#ede9fe','#5b21b6'], ['#fee2e2','#991b1b'],
+  ['#e0f2fe','#0369a1'], ['#f0fdf4','#166534'], ['#fef9c3','#854d0e'],
+  ['#f3e8ff','#7e22ce'],
+];
+function avatarColor(name) {
+  let h = 0;
+  for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) | 0;
+  return AVATAR_PALETTE[Math.abs(h) % AVATAR_PALETTE.length];
 }
-
-function logoHTML(companyName, size = 44) {
-  const domain = getDomain(companyName);
-  const inits = companyName.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
-  return `<img src="https://logo.clearbit.com/${domain}" alt="" style="width:${size}px;height:${size}px;object-fit:contain;padding:4px"
-    onerror="this.parentElement.innerHTML='<span class=\\"initials\\">${inits}</span>'" />`;
+function avatarHTML(name, size = 44) {
+  const inits = name.split(/\s+/).slice(0,2).map(w => w[0] || '').join('').toUpperCase();
+  const [bg, fg] = avatarColor(name);
+  const fs = Math.round(size * 0.36);
+  const r = size >= 46 ? '10px' : '8px';
+  return `<div style="width:${size}px;height:${size}px;border-radius:${r};background:${bg};color:${fg};display:flex;align-items:center;justify-content:center;font-size:${fs}px;font-weight:800;flex-shrink:0;">${inits}</div>`;
 }
 
 // ── DATA ──────────────────────────────────────────────────────────────────
@@ -284,28 +267,42 @@ async function fetchData() {
       <div class="empty">
         <div class="empty-icon">📡</div>
         <h3>Could not load signals</h3>
-        <p>Use <strong>Load file</strong> to open a local <code>signals_latest.json</code> instead.</p>
+        <p>The daily scan runs at 7am weekdays. Check back then or ask your admin to run a manual scan.</p>
       </div>`;
     document.getElementById('scanBadge').textContent = 'Not connected';
   }
 }
 
-function loadFile(e) {
-  const file = e.target.files[0]; if (!file) return;
-  const r = new FileReader();
-  r.onload = ev => { try { loadData(JSON.parse(ev.target.result)); toast('✓ ' + file.name); } catch { toast('❌ Invalid JSON'); } };
-  r.readAsText(file); e.target.value = '';
+function normalise(raw) {
+  // Accept both the new schema (signals[].company / .industry / .hq / .revenue_bn)
+  // and the old schema (companies[].company_name / .sector / .headquarters / .estimated_revenue_usd_bn)
+  const rows = raw.companies || raw.signals || [];
+  return rows.map(c => ({
+    company_name:            c.company_name || c.company || 'Unknown',
+    sector:                  c.sector || c.industry || '',
+    headquarters:            c.headquarters || c.hq || '',
+    estimated_revenue_usd_bn: c.estimated_revenue_usd_bn || c.revenue_bn || null,
+    decision_maker_title:    c.decision_maker_title || '',
+    notes:                   c.notes || '',
+    signals: (c.signals || []).map(s => ({
+      signal_id:    s.signal_id || '',
+      signal_label: s.signal_label || s.title || '',
+      description:  s.description || '',
+      news_headline: s.news_headline || '',
+      news_source:  s.news_source || '',
+      news_date:    s.news_date || '',
+      news_url:     s.news_url || '',
+    })),
+  }));
 }
 
 function loadData(data) {
-  allCompanies = data.companies || [];
+  allCompanies = normalise(data);
   activeFilters.clear();
-  document.getElementById('scanBadge').textContent = '📅 ' + (data.scan_date || 'Unknown');
-  // Stats
-  const sigs = allCompanies.reduce((s,c)=>s+(c.signals||[]).length, 0);
+  document.getElementById('scanBadge').textContent = '📅 ' + (data.scan_date || 'Latest');
+  const sigs = allCompanies.reduce((s,c) => s + (c.signals||[]).length, 0);
   document.getElementById('statCompanies').textContent = allCompanies.length;
   document.getElementById('statSignals').textContent = sigs;
-  // Show UI
   document.getElementById('statsRow').style.display = 'flex';
   document.getElementById('toolbar').style.display = 'flex';
   buildSigBtns();
@@ -324,16 +321,17 @@ function buildSigBtns() {
   allCompanies.forEach(c => (c.signals||[]).forEach(s => {
     if (!s.signal_id) return;
     if (!map.has(s.signal_id)) {
-      const meta = SIGNAL_TYPES.find(t=>t.id===s.signal_id);
-      map.set(s.signal_id, { icon: meta?.icon||s.signal_icon||'📌', label: meta?.label||s.signal_label||s.signal_id, count:0 });
+      const meta = SIGNAL_TYPES.find(t => t.id === s.signal_id);
+      map.set(s.signal_id, { icon: meta?.icon || '📌', label: meta?.label || s.signal_label || s.signal_id, count: 0 });
     }
     map.get(s.signal_id).count++;
   }));
-  const sorted = [...map.entries()].sort((a,b)=>{
-    const ai=SIGNAL_TYPES.findIndex(t=>t.id===a[0]), bi=SIGNAL_TYPES.findIndex(t=>t.id===b[0]);
-    return (ai<0?99:ai)-(bi<0?99:bi);
+  const sorted = [...map.entries()].sort((a,b) => {
+    const ai = SIGNAL_TYPES.findIndex(t=>t.id===a[0]);
+    const bi = SIGNAL_TYPES.findIndex(t=>t.id===b[0]);
+    return (ai<0?99:ai) - (bi<0?99:bi);
   });
-  document.getElementById('sigBtns').innerHTML = sorted.map(([id,m])=>
+  document.getElementById('sigBtns').innerHTML = sorted.map(([id,m]) =>
     `<button class="sig-btn" data-id="${id}" onclick="toggleSig(this,'${id}')">${m.icon} ${m.label}<span class="n">${m.count}</span></button>`
   ).join('');
 }
@@ -346,7 +344,7 @@ function toggleSig(btn, id) {
 
 function clearFilters() {
   activeFilters.clear();
-  document.querySelectorAll('.sig-btn').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.sig-btn').forEach(b => b.classList.remove('on'));
   document.getElementById('clearBtn').disabled = true;
   render();
 }
@@ -356,7 +354,7 @@ function render() {
   const q = document.getElementById('searchInput').value.toLowerCase();
   let list = allCompanies.filter(c => {
     if (activeFilters.size > 0 && ![...activeFilters].every(id=>(c.signals||[]).some(s=>s.signal_id===id))) return false;
-    if (q && !([c.company_name,c.sector,c.headquarters].join(' ').toLowerCase().includes(q) ||
+    if (q && !([c.company_name, c.sector, c.headquarters].join(' ').toLowerCase().includes(q) ||
                (c.signals||[]).some(s=>(s.signal_label||'').toLowerCase().includes(q)||(s.description||'').toLowerCase().includes(q)))) return false;
     return true;
   });
@@ -375,8 +373,8 @@ function cardHTML(c) {
   const enc = encodeURIComponent(JSON.stringify(c));
 
   const sigsHTML = sigs.slice(0,3).map(s => {
-    const meta = SIGNAL_TYPES.find(t=>t.id===s.signal_id);
-    const icon = meta?.icon || s.signal_icon || '📌';
+    const meta = SIGNAL_TYPES.find(t => t.id === s.signal_id);
+    const icon = meta?.icon || '📌';
     const link = s.news_url
       ? `<a class="sig-link" href="${s.news_url}" target="_blank" onclick="event.stopPropagation()">↗ Read article</a>`
       : '';
@@ -384,8 +382,8 @@ function cardHTML(c) {
       <div class="signal-chip">
         <div class="sig-icon">${icon}</div>
         <div class="sig-body">
-          <div class="sig-type">${s.signal_label||''}</div>
-          <div class="sig-desc">${s.description||''}</div>
+          <div class="sig-type">${s.signal_label || ''}</div>
+          <div class="sig-desc">${s.description || ''}</div>
           <div class="sig-meta">
             ${s.news_source ? `<span class="sig-source">📰 ${s.news_source}${s.news_date?' · '+s.news_date:''}</span>` : ''}
             ${link}
@@ -394,13 +392,15 @@ function cardHTML(c) {
       </div>`;
   }).join('');
 
-  const more = sigs.length > 3 ? `<div class="more-signals">+${sigs.length-3} more signal${sigs.length-3>1?'s':''} — click to see all</div>` : '';
+  const more = sigs.length > 3
+    ? `<div class="more-signals">+${sigs.length-3} more signal${sigs.length-3>1?'s':''} — click to see all</div>`
+    : '';
 
   return `
     <div class="card" onclick="openModal('${enc}')">
       <div class="card-top-bar"></div>
       <div class="card-header">
-        <div class="company-logo">${logoHTML(c.company_name)}</div>
+        ${avatarHTML(c.company_name)}
         <div class="card-identity">
           <h3>${c.company_name}</h3>
           <div class="tags">
@@ -424,10 +424,7 @@ function openModal(enc) {
   const sigs = c.signals || [];
   const rev = c.estimated_revenue_usd_bn ? `$${c.estimated_revenue_usd_bn}bn` : null;
 
-  // Logo
-  document.getElementById('mLogo').innerHTML = logoHTML(c.company_name, 48);
-
-  // Title + tags
+  document.getElementById('mAvatar').innerHTML = avatarHTML(c.company_name, 48);
   document.getElementById('mTitle').textContent = c.company_name;
   document.getElementById('mTags').innerHTML = [
     c.sector && `<span class="tag sector">${c.sector}</span>`,
@@ -435,7 +432,6 @@ function openModal(enc) {
     rev && `<span class="tag rev">💰 ${rev}</span>`,
   ].filter(Boolean).join('');
 
-  // Body
   const infoHTML = `
     <div class="modal-section">
       <div class="modal-section-title">Company Details</div>
@@ -452,16 +448,16 @@ function openModal(enc) {
     <div class="modal-section">
       <div class="modal-section-title">Buy Signals (${sigs.length})</div>
       ${sigs.map(s => {
-        const meta = SIGNAL_TYPES.find(t=>t.id===s.signal_id);
-        const icon = meta?.icon || s.signal_icon || '📌';
+        const meta = SIGNAL_TYPES.find(t => t.id === s.signal_id);
+        const icon = meta?.icon || '📌';
         const articleLink = s.news_url
           ? `<a class="article-link" href="${s.news_url}" target="_blank">↗ Read article</a>`
           : '';
         return `
           <div class="modal-signal">
-            <div class="modal-signal-hdr">${icon} ${s.signal_label||''}</div>
-            <div class="modal-signal-desc">${s.description||''}</div>
-            ${(s.news_headline||s.news_source) ? `
+            <div class="modal-signal-hdr">${icon} ${s.signal_label || ''}</div>
+            <div class="modal-signal-desc">${s.description || ''}</div>
+            ${(s.news_headline || s.news_source) ? `
               <div class="modal-signal-news">
                 ${s.news_headline ? `<div class="headline">"${s.news_headline}"</div>` : ''}
                 <div class="source-row">
