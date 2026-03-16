@@ -1,103 +1,94 @@
 {
-  "scan_date": "2026-03-15",
+  "scan_date": "2026-03-16",
   "total_companies": 5,
   "companies": [
     {
-      "company_name": "NVIDIA",
-      "sector": "Technology & AI",
-      "estimated_revenue_usd_bn": 215.9,
-      "headquarters": "Santa Clara, USA",
-      "decision_maker_title": "CMO Alison Wagonfeld (new) / CEO Jensen Huang",
+      "company_name": "Coca-Cola",
+      "sector": "Beverages & FMCG",
+      "estimated_revenue_usd_bn": 47.9,
+      "headquarters": "Atlanta, USA",
+      "decision_maker_title": "CEO Henrique Braun (from March 31) / CMO Manolo Arroyo (expanded role)",
       "signals": [
         {
           "signal_id": "leadership_change",
-          "signal_label": "First-Ever CMO Hired — Full Brand Review Underway",
-          "description": "NVIDIA appointed Alison Wagonfeld as its first-ever Chief Marketing Officer in January 2026, reporting directly to Jensen Huang. Wagonfeld is a 10-year Google Cloud marketing veteran who built Google Cloud from startup to a $60bn business. NVIDIA hiring their first CMO ever signals a fundamental shift from B2B chipmaker to consumer-facing AI brand. A new CMO's first 100 days = reviewing every partnership opportunity. NVIDIA has never done sports sponsorship — this is a completely greenfield opportunity with the world's most valuable company.",
-          "news_headline": "Nvidia Enlists Google Cloud Executive as Its Marketing Chief",
-          "news_source": "Bloomberg",
-          "news_date": "2026-01-09",
-          "news_url": "https://www.bloomberg.com/news/articles/2026-01-09/nvidia-enlists-google-cloud-executive-as-its-marketing-chief"
-        },
+          "signal_label": "Three New C-Suite Leaders in 15 Days — Total Brand Overhaul",
+          "description": "On March 31 — just 15 days from now — Coca-Cola gets a new CEO (Henrique Braun, replacing Quincey after 9 years), an expanded CMO (Manolo Arroyo absorbs all commercial leadership from the CFO), and a brand-new Chief Digital Officer (Sedef Salingan Sahin). Three C-suite changes on one day. Braun's stated priorities are 'getting closer to consumer needs' and 'leveraging technology.' Every single brand partnership at the world's biggest beverage company is being re-evaluated RIGHT NOW. This is the definition of a window. Pick up the phone before March 31.",
+          "news_headline": "Coca-Cola expands CMO role amid leadership reshuffle",
+          "news_source": "Marketing Week",
+          "news_date": "2025-12-11",
+          "news_url": "https://www.marketingweek.com/coca-cola-expanded-cmo-remit/"
+        }
+      ]
+    },
+    {
+      "company_name": "Spotify",
+      "sector": "Digital Entertainment & Streaming",
+      "estimated_revenue_usd_bn": 17.2,
+      "headquarters": "Stockholm, Sweden",
+      "decision_maker_title": "Co-CEO / Chief Marketing Officer",
+      "signals": [
         {
           "signal_id": "strong_financials",
-          "signal_label": "Record $68bn Quarter — Cash to Spend",
-          "description": "NVIDIA posted $68.1bn in Q4 revenue (up 73% YoY), closing fiscal 2026 at $215.9bn total revenue. They are flush with cash and looking to build brand awareness beyond the tech industry. The new CMO has an enormous budget to work with. When you have $215bn in revenue and have never done a sports partnership, the question isn't whether to start — it's where.",
-          "news_headline": "Nvidia smashes Q4 2026 with $68 billion in revenue",
-          "news_source": "Fortune",
-          "news_date": "2026-02-25",
-          "news_url": "https://fortune.com/2026/02/25/nvidia-nvda-earnings-q4-results-jensen-huang/"
+          "signal_label": "Record 751M Users — 'Year of Raising Ambition'",
+          "description": "Spotify smashed every record in Q4 2025: 751M monthly users (biggest quarterly gain ever at 38M new users), 290M premium subscribers, stock surged 15% in a day. New co-CEO publicly declared 2026 the 'year of raising ambition.' They're expanding beyond music into events, video, and experiences. Spotify already has 100% overlap with LFC's fanbase — young, global, digitally-engaged. With record profits and a CEO who just announced they want to be bolder, this is the moment to pitch a premium content partnership. LFC player playlists, matchday audio experiences, exclusive podcasts — the integration points are obvious.",
+          "news_headline": "Spotify Adds Record Monthly Users and Hits 290 Million Paid Subscribers; New Co-CEO Says 2026 Will Be 'Year of Raising Ambition'",
+          "news_source": "Variety",
+          "news_date": "2026-02-10",
+          "news_url": "https://variety.com/2026/digital/news/spotify-q4-2025-earnings-record-monthly-users-year-of-raising-ambition-1236657863/"
         }
       ]
     },
     {
-      "company_name": "The Walt Disney Company",
-      "sector": "Entertainment & Media",
-      "estimated_revenue_usd_bn": 103,
-      "headquarters": "Burbank, USA",
-      "decision_maker_title": "CEO Josh D'Amaro (from March 18) / Chief Brand Officer",
+      "company_name": "AMD",
+      "sector": "Semiconductors & Technology",
+      "estimated_revenue_usd_bn": 23,
+      "headquarters": "Santa Clara, USA",
+      "decision_maker_title": "CMO Ariel Kelman (new) / CEO Lisa Su",
       "signals": [
         {
           "signal_id": "leadership_change",
-          "signal_label": "New CEO Takes Over THIS WEEK — March 18",
-          "description": "Josh D'Amaro becomes Disney CEO on March 18, 2026, replacing Bob Iger. D'Amaro is an experiences-first leader who grew Disney Experiences to $36bn in revenue and is the architect of Disney's $60bn global expansion including new international resorts (Abu Dhabi, etc.). New CEO = all strategic partnerships under review. D'Amaro's expansion strategy targets Asia and Middle East — exactly the markets where LFC has its strongest fanbase. ESPN is already in sports; D'Amaro could push Disney brands into football sponsorship territory.",
-          "news_headline": "Josh D'Amaro Named Next Chief Executive Officer of Disney",
-          "news_source": "The Walt Disney Company",
-          "news_date": "2026-02-03",
-          "news_url": "https://thewaltdisneycompany.com/news/disney-ceo-announcement/"
+          "signal_label": "New CMO Hired to Elevate the Brand — February 9",
+          "description": "AMD hired Ariel Kelman as its new Chief Marketing Officer on February 9, 2026 — poached from Salesforce where he was President and CMO. His mandate is explicit: 'elevate the AMD brand and deepen engagement.' AMD makes the chips powering AI but NVIDIA gets all the consumer recognition. Kelman's job is to close that gap. A new CMO's first priority is always new partnerships that put the brand in front of consumers. AMD has never done sports sponsorship — just like NVIDIA hadn't before this year. LFC offers the global consumer audience AMD desperately needs to compete for mindshare.",
+          "news_headline": "AMD Hires Ariel Kelman as Chief Marketing Officer",
+          "news_source": "AMD Newsroom / GlobeNewsWire",
+          "news_date": "2026-02-09",
+          "news_url": "https://www.amd.com/en/newsroom/press-releases/2026-2-9-amd-hires-ariel-kelman-as-chief-marketing-officer.html"
         }
       ]
     },
     {
-      "company_name": "Toyota Motor Corporation",
-      "sector": "Automotive",
-      "estimated_revenue_usd_bn": 315,
-      "headquarters": "Toyota City, Japan",
-      "decision_maker_title": "CEO Kenta Kon (from April 1) / Global CMO",
-      "signals": [
-        {
-          "signal_id": "leadership_change",
-          "signal_label": "New CEO April 1 — Second Change in 3 Years",
-          "description": "Toyota's CFO Kenta Kon becomes CEO on April 1, 2026 — the second CEO change in three years, signalling urgency at the world's largest automaker. Toyota is fighting to stay relevant against EV competitors (Tesla, BYD) and needs to connect with younger, global consumers. A new CEO will reassess every brand partnership. Toyota has a fleet of 150 million vehicles globally but is losing brand momentum. LFC's young, global, digitally-engaged fanbase is exactly the audience Toyota needs to reach as they pivot to a mobility and EV future.",
-          "news_headline": "Toyota promotes finance chief Kenta Kon as CEO in second leadership change in 3 years",
-          "news_source": "CNBC",
-          "news_date": "2026-02-06",
-          "news_url": "https://www.cnbc.com/2026/02/06/toyota-ceo-koji-sato-to-step-down-and-be-replaced-by-cfo-kenta-kon-profit-forecast.html"
-        }
-      ]
-    },
-    {
-      "company_name": "PayPal",
-      "sector": "Fintech & Payments",
-      "estimated_revenue_usd_bn": 32,
-      "headquarters": "San Jose, USA",
-      "decision_maker_title": "CEO Enrique Lores (from March 1) / Chief Marketing Officer",
-      "signals": [
-        {
-          "signal_id": "leadership_change",
-          "signal_label": "New CEO Brought In to Fix the Brand — March 1",
-          "description": "PayPal appointed Enrique Lores as CEO effective March 1, 2026, replacing Alex Chriss after branded checkout performance deteriorated sharply in Q4. Lores previously led HP through a complete brand transformation. His explicit mandate is to reinvigorate the PayPal consumer brand and rebuild branded checkout. This is the definition of a company that needs visibility partnerships RIGHT NOW. PayPal has 400M+ active accounts globally, operates in every LFC market, and the new CEO is actively looking for ways to put the PayPal brand back in front of consumers.",
-          "news_headline": "PayPal Appoints Enrique Lores as Chief Executive Officer",
-          "news_source": "PayPal Newsroom / TechCrunch",
-          "news_date": "2026-02-03",
-          "news_url": "https://techcrunch.com/2026/02/03/paypal-hires-hps-enrique-lores-as-its-new-ceo/"
-        }
-      ]
-    },
-    {
-      "company_name": "Diageo",
-      "sector": "Spirits & Beverages",
-      "estimated_revenue_usd_bn": 20,
-      "headquarters": "London, UK",
-      "decision_maker_title": "Chief Marketing Officer / Global Head of Partnerships",
+      "company_name": "Uber",
+      "sector": "Mobility & Delivery",
+      "estimated_revenue_usd_bn": 43,
+      "headquarters": "San Francisco, USA",
+      "decision_maker_title": "Chief Marketing Officer / Head of European Partnerships",
       "signals": [
         {
           "signal_id": "sports_sponsorship",
-          "signal_label": "First-Ever FIFA Sponsorship — Football Budget Is Active",
-          "description": "Diageo signed as Official Spirits Supporter for the FIFA World Cup 2026 — the first spirits company ever to partner with FIFA. They're activating Johnnie Walker, Don Julio, Buchanan's, Casamigos, and Smirnoff across all 16 host cities. This tells you everything: Diageo has decided that football is their marketing channel of choice, they've committed significant budget, and they're building a football portfolio from scratch. As a UK-headquartered company already investing in global football, an LFC club partnership is the logical next asset to complete their football strategy — and the timing is perfect with the World Cup months away.",
-          "news_headline": "Diageo named Official Spirits Supporter for FIFA World Cup 26",
-          "news_source": "FIFA / BusinessWire",
-          "news_date": "2025-05-08",
-          "news_url": "https://inside.fifa.com/tournament-organisation/commercial/media-releases/diageo-official-spirits-supporter-world-cup-26-north-central-south-america"
+          "signal_label": "Building a European Football Empire — No Premier League Club Yet",
+          "description": "Uber is systematically assembling a European football sponsorship portfolio: Uber Eats is title partner of LaLiga (through 2027), sponsor of the French Football Federation (through 2028 Euros), has Sky Sports Premier League broadcast idents, and Uber's ride-hailing brand has a shirt deal with Como in Serie A. They clearly believe in football as a marketing channel. But there is a glaring gap: they have NO Premier League club partnership. With the betting ban creating 11 open shirt sponsor slots from 2026-27, the Premier League market is about to be flooded with opportunities. LFC should be first in the door before Uber fills that gap with a rival.",
+          "news_headline": "Uber splits strategy in new deals with LaLiga, Como",
+          "news_source": "SportBusiness",
+          "news_date": "2025-10-15",
+          "news_url": "https://www.sportbusiness.com/news/uber-splits-strategy-in-new-deals-with-laliga-como/"
+        }
+      ]
+    },
+    {
+      "company_name": "Qualcomm",
+      "sector": "Semiconductors & Technology",
+      "estimated_revenue_usd_bn": 49,
+      "headquarters": "San Diego, USA",
+      "decision_maker_title": "CEO Cristiano Amon / Chief Marketing Officer",
+      "signals": [
+        {
+          "signal_id": "strong_financials",
+          "signal_label": "Record $12.3bn Quarter + Already Validated Football",
+          "description": "Qualcomm posted a record $12.3bn quarterly revenue, beating forecasts. Their Snapdragon brand is expanding from smartphones into automotive, XR headsets, and IoT — they need broader brand awareness beyond phone enthusiasts. Critically, Qualcomm has ALREADY validated football as a marketing channel through the Snapdragon Stadium naming rights deal and Man Utd shirt sponsorship. They know it works. With record cash and a brand expanding into new categories, the pitch writes itself: 'You've proven football delivers for Snapdragon. LFC gives you access to 750M fans in Asia-Pacific — your fastest-growing chip market — where Man Utd alone doesn't reach.'",
+          "news_headline": "Qualcomm exceeds Q1 2026 earnings expectations with record revenue",
+          "news_source": "MLQ.ai / Qualcomm Investor Relations",
+          "news_date": "2026-02-05",
+          "news_url": "https://mlq.ai/news/qualcomm-exceeds-q1-2026-earnings-expectations-with-record-revenue/"
         }
       ]
     }
