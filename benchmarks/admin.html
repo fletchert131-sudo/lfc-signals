@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campaign Benchmarks â Admin</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#C8102E;--red-dark:#9e0c24;--red-light:#f8e9ec;
+  --g50:#f9fafb;--g100:#f3f4f6;--g200:#e5e7eb;
+  --g400:#9ca3af;--g500:#6b7280;--g600:#4b5563;
+  --g800:#1f2937;--g900:#111827;
+  --shsm:0 1px 3px rgba(0,0,0,.07),0 1px 2px rgba(0,0,0,.04);
+  --r:12px;--rsm:8px;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--g100);color:var(--g800);min-height:100vh}
+
+/* NAV */
+.nav{background:var(--red);height:56px;padding:0 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(200,16,46,.3)}
+.nav-left{display:flex;align-items:center;gap:10px}
+.nav-badge{background:var(--red-dark);border-radius:7px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:800;color:white;flex-shrink:0}
+.nav-title{font-size:.9rem;font-weight:700;color:white}
+.nav-tag{background:rgba(0,0,0,.2);color:rgba(255,255,255,.9);font-size:.68rem;font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.03em}
+.nav-right{display:flex;align-items:center;gap:8px}
+.btn-gen{background:white;color:var(--red);border:none;border-radius:8px;padding:7px 16px;font-size:.8rem;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .15s;display:flex;align-items:center;gap:6px}
+.btn-gen:hover{opacity:.9}
+.btn-gen:active{opacity:.8}
+
+/* LAYOUT */
+.main{max-width:1100px;margin:0 auto;padding:24px 24px 60px}
+
+/* STATS STRIP */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat-card{background:white;border-radius:var(--r);box-shadow:var(--shsm);padding:16px 20px}
+.stat-val{font-size:2rem;font-weight:800;color:var(--g900);line-height:1}
+.stat-lbl{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--g400);margin-top:5px}
+
+/* FORM CARD */
+.card{background:white;border-radius:var(--r);box-shadow:var(--shsm);padding:24px 26px;margin-bottom:20px}
+.card-title{font-size:.9rem;font-weight:700;color:var(--g900);margin-bottom:4px}
+.card-sub{font-size:.78rem;color:var(--g500);margin-bottom:20px}
+
+/* FORM FIELDS */
+.field-row{display:grid;gap:14px;margin-bottom:14px}
+.field-row.cols-3{grid-template-columns:repeat(3,1fr)}
+.field-row.cols-4{grid-template-columns:repeat(4,1fr)}
+.field-row.cols-1{grid-template-columns:1fr}
+.field label{display:block;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--g500);margin-bottom:5px}
+.req{color:var(--red)}
+.field input,.field select{width:100%;background:var(--g50);border:1.5px solid var(--g200);border-radius:var(--rsm);padding:8px 11px;font-size:.84rem;color:var(--g800);outline:none;transition:border-color .15s;font-family:inherit}
+.field input:focus,.field select:focus{border-color:var(--red)}
+.field input::placeholder{color:var(--g400)}
+
+/* BUTTONS */
+.btn-save{background:var(--red);color:white;border:none;border-radius:10px;padding:10px 28px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .15s}
+.btn-save:hover{opacity:.9}
+.btn-save:active{opacity:.8}
+.btn-clear{background:none;border:1.5px solid var(--g200);color:var(--g500);border-radius:10px;padding:10px 20px;font-size:.85rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s}
+.btn-clear:hover{border-color:var(--g400);color:var(--g800)}
+.msg{font-size:.8rem;font-weight:600;display:none;align-items:center;gap:5px}
+.msg-ok{color:#059669}
+.msg-err{color:var(--red)}
+
+/* TABLE CARD */
+.table-card{background:white;border-radius:var(--r);box-shadow:var(--shsm);overflow:hidden}
+.table-hdr{padding:14px 20px;border-bottom:1px solid var(--g200);display:flex;align-items:center;justify-content:space-between}
+.table-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--g400)}
+.table-meta{display:flex;align-items:center;gap:10px;font-size:.73rem;color:var(--g400)}
+table{width:100%;border-collapse:collapse}
+th{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--g400);padding:9px 14px;text-align:left;border-bottom:1px solid var(--g200);white-space:nowrap;background:white}
+th.r{text-align:right}
+th.sort{cursor:pointer}
+th.sort:hover{color:var(--g600)}
+td{padding:9px 14px;font-size:.82rem;color:var(--g800);border-bottom:1px solid var(--g50);vertical-align:middle}
+td.r{text-align:right;font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:var(--g50)}
+.bdg{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:.7rem;font-weight:700}
+.bdg-l{background:#fee2e2;color:#991b1b}
+.bdg-c{background:#dbeafe;color:#1d4ed8}
+.bdg-m{background:var(--g200);color:var(--g600)}
+.del-btn{background:none;border:none;color:var(--g400);cursor:pointer;font-size:.8rem;padding:2px 6px;border-radius:4px;font-family:inherit;transition:all .15s}
+.del-btn:hover{background:#fee2e2;color:var(--red)}
+
+/* SEARCH */
+.srch-wrap{position:relative}
+.srch-wrap input{background:var(--g50);border:1.5px solid var(--g200);border-radius:var(--rsm);padding:5px 9px 5px 26px;font-size:.77rem;color:var(--g800);outline:none;width:160px;font-family:inherit}
+.srch-wrap input:focus{border-color:var(--red)}
+.srch-ico{position:absolute;left:8px;top:50%;transform:translateY(-50%);color:var(--g400);pointer-events:none}
+
+/* EMPTY */
+.empty{text-align:center;padding:50px 20px}
+.empty p{font-size:.9rem;font-weight:600;color:var(--g500);margin-bottom:4px}
+.empty span{font-size:.78rem;color:var(--g400)}
+
+.scroll{overflow-x:auto}
+.sec{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--g400);margin:24px 0 12px}
+
+/* PUBLISH BANNER */
+.pub-banner{background:white;border:2px solid var(--g200);border-radius:var(--r);padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.pub-text p{font-size:.85rem;font-weight:600;color:var(--g900);margin-bottom:2px}
+.pub-text span{font-size:.77rem;color:var(--g500)}
+.pub-steps{display:flex;gap:6px;align-items:center}
+.step{font-size:.72rem;color:var(--g400);background:var(--g50);border:1px solid var(--g200);border-radius:6px;padding:4px 10px}
+.step-arrow{color:var(--g400);font-size:.8rem}
+
+@media(max-width:700px){.field-row.cols-3,.field-row.cols-4{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-left">
+    <div class="nav-badge">SM</div>
+    <span class="nav-title">Campaign Benchmarks</span>
+    <span class="nav-tag">Admin</span>
+  </div>
+  <div class="nav-right">
+    <button class="btn-gen" onclick="generateDashboard()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.88 18.09A5 5 0 0018 9h-1.26A8 8 0 104 16.29"/></svg>
+      Publish Dashboard
+    </button>
+  </div>
+</nav>
+
+<div class="main">
+
+  <!-- Stats -->
+  <div class="stats-row" id="stats-row"></div>
+
+  <!-- Publish workflow hint -->
+  <div class="pub-banner">
+    <div class="pub-text">
+      <p>Publishing workflow</p>
+      <span>Enter data below, then publish the dashboard to share with external stakeholders.</span>
+    </div>
+    <div class="pub-steps">
+      <span class="step">1. Add entries</span>
+      <span class="step-arrow">&#8594;</span>
+      <span class="step">2. Click Publish Dashboard</span>
+      <span class="step-arrow">&#8594;</span>
+      <span class="step">3. Replace file on GitHub</span>
+      <span class="step-arrow">&#8594;</span>
+      <span class="step">4. Link updates live</span>
+    </div>
+  </div>
+
+  <!-- Entry Form -->
+  <div class="card">
+    <p class="card-title">Add Entry</p>
+    <p class="card-sub">Partner and type are remembered between saves for quick batch entry.</p>
+
+    <div class="field-row cols-3">
+      <div class="field">
+        <label>Date <span class="req">*</span></label>
+        <input type="date" id="e-date">
+      </div>
+      <div class="field">
+        <label>Partner <span class="req">*</span></label>
+        <input type="text" id="e-partner" list="partner-list" placeholder="e.g. Nike">
+        <datalist id="partner-list"></datalist>
+      </div>
+      <div class="field">
+        <label>Type <span class="req">*</span></label>
+        <select id="e-type">
+          <option value="">Select type&hellip;</option>
+          <option value="launch">Launch</option>
+          <option value="campaign">Campaign</option>
+          <option value="misc">Misc</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field-row cols-4">
+      <div class="field">
+        <label># Posts <span class="req">*</span></label>
+        <input type="number" id="e-posts" placeholder="e.g. 5" min="1">
+      </div>
+      <div class="field">
+        <label>Impressions</label>
+        <input type="number" id="e-imps" placeholder="e.g. 100000" min="0">
+      </div>
+      <div class="field">
+        <label>Views</label>
+        <input type="number" id="e-views" placeholder="e.g. 50000" min="0">
+      </div>
+      <div class="field">
+        <label>Engagements</label>
+        <input type="number" id="e-engs" placeholder="e.g. 5000" min="0">
+      </div>
+    </div>
+
+    <div class="field-row cols-1" style="margin-bottom:18px">
+      <div class="field">
+        <label>Campaign Name <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--g400)">(optional)</span></label>
+        <input type="text" id="e-notes" placeholder="e.g. Summer Kit Launch&hellip;">
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="btn-save" onclick="save()">Save Entry</button>
+      <button class="btn-clear" onclick="clearForm()">Clear</button>
+      <span id="msg-ok"  class="msg msg-ok">&#10003; Saved</span>
+      <span id="msg-err" class="msg msg-err"></span>
+    </div>
+  </div>
+
+  <!-- Data Table -->
+  <p class="sec">All Entries</p>
+  <div class="table-card">
+    <div class="table-hdr">
+      <span class="table-title">Entries</span>
+      <div class="table-meta">
+        <div class="srch-wrap">
+          <svg class="srch-ico" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="search" placeholder="Search&hellip;" oninput="renderTable()">
+        </div>
+        <span id="tbl-count"></span>
+      </div>
+    </div>
+    <div class="scroll">
+      <table>
+        <thead><tr>
+          <th class="sort" onclick="sortBy('date')">Date <span id="sd"></span></th>
+          <th class="sort" onclick="sortBy('partner')">Partner <span id="sp"></span></th>
+          <th>Type</th>
+          <th class="r sort" onclick="sortBy('posts')">Posts <span id="sps"></span></th>
+          <th class="r sort" onclick="sortBy('impressions')">Impressions <span id="si"></span></th>
+          <th class="r sort" onclick="sortBy('views')">Views <span id="sv"></span></th>
+          <th class="r sort" onclick="sortBy('engagements')">Engagements <span id="se"></span></th>
+          <th class="r">Imp/Post</th>
+          <th>Campaign Name</th>
+          <th></th>
+        </tr></thead>
+        <tbody id="tbl-body"></tbody>
+      </table>
+    </div>
+    <div id="empty-state" class="empty" style="display:none">
+      <p>No entries yet</p>
+      <span>Use the form above to add your first campaign entry</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- âââ JS âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ -->
+<script>
+// ââ STATE âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+var all = [];
+var sortF = 'date', sortD = 'desc';
+
+var TL  = { launch:'Launch', campaign:'Campaign', misc:'Misc' };
+var BDG = { launch:'bdg bdg-l', campaign:'bdg bdg-c', misc:'bdg bdg-m' };
+
+// ââ DEMO SEED (remove this block once you start entering real data) ââ
+var SEED = [
+  {id:'d01',date:'2025-01-15',partner:'Nike',type:'launch',posts:8,impressions:3200000,views:1850000,engagements:245000,notes:'25/26 Home Kit Reveal'},
+  {id:'d02',date:'2025-02-10',partner:'Standard Chartered',type:'launch',posts:5,impressions:1450000,views:720000,engagements:98000,notes:'Banking App Launch'},
+  {id:'d03',date:'2025-03-01',partner:'AXA',type:'launch',posts:4,impressions:980000,views:510000,engagements:72000,notes:'Health Programme Launch'},
+  {id:'d04',date:'2025-01-20',partner:'Carlsberg',type:'launch',posts:6,impressions:2100000,views:1100000,engagements:185000,notes:'Matchday Lager Drop'},
+  {id:'d05',date:'2025-04-05',partner:'Expedia',type:'launch',posts:3,impressions:870000,views:420000,engagements:58000,notes:'Travel Rewards Launch'},
+  {id:'d06',date:'2025-02-20',partner:'EA Sports',type:'launch',posts:7,impressions:2800000,views:1600000,engagements:310000,notes:'FC 26 Cover Reveal'},
+  {id:'d07',date:'2025-05-12',partner:'Google Pixel',type:'launch',posts:4,impressions:1250000,views:680000,engagements:115000,notes:'Pixel 10 Partnership'},
+  {id:'d08',date:'2025-03-18',partner:'Quorn',type:'launch',posts:3,impressions:620000,views:290000,engagements:41000,notes:'Matchday Menu Launch'},
+  {id:'d09',date:'2025-06-01',partner:'Peloton',type:'launch',posts:5,impressions:1050000,views:540000,engagements:89000,notes:'Pre-season Fitness'},
+  {id:'d10',date:'2025-04-22',partner:'Western Union',type:'launch',posts:3,impressions:540000,views:250000,engagements:35000,notes:'Digital Wallet Launch'},
+  {id:'d11',date:'2025-01-25',partner:'Nike',type:'campaign',posts:12,impressions:2400000,views:1200000,engagements:195000,notes:'Just Do It x LFC'},
+  {id:'d12',date:'2025-03-15',partner:'Nike',type:'campaign',posts:6,impressions:1800000,views:920000,engagements:142000,notes:'Spring Collection'},
+  {id:'d13',date:'2025-05-20',partner:'Nike',type:'campaign',posts:8,impressions:2100000,views:1050000,engagements:168000,notes:'Academy Kit Push'},
+  {id:'d14',date:'2025-02-14',partner:'Standard Chartered',type:'campaign',posts:4,impressions:780000,views:380000,engagements:52000,notes:'Sustainability Series'},
+  {id:'d15',date:'2025-04-10',partner:'Standard Chartered',type:'campaign',posts:5,impressions:920000,views:460000,engagements:67000,notes:'Community Fund Drive'},
+  {id:'d16',date:'2025-02-28',partner:'AXA',type:'campaign',posts:3,impressions:650000,views:310000,engagements:43000,notes:'Player Wellness'},
+  {id:'d17',date:'2025-05-08',partner:'AXA',type:'campaign',posts:4,impressions:710000,views:340000,engagements:49000,notes:'Injury Prevention'},
+  {id:'d18',date:'2025-03-10',partner:'Carlsberg',type:'campaign',posts:5,impressions:1350000,views:680000,engagements:112000,notes:'Matchday Moments'},
+  {id:'d19',date:'2025-05-25',partner:'Carlsberg',type:'campaign',posts:4,impressions:1100000,views:550000,engagements:91000,notes:'Summer Sessions'},
+  {id:'d20',date:'2025-03-28',partner:'EA Sports',type:'campaign',posts:6,impressions:1950000,views:1100000,engagements:228000,notes:'TOTS Promo'},
+  {id:'d21',date:'2025-06-05',partner:'EA Sports',type:'campaign',posts:5,impressions:1700000,views:920000,engagements:195000,notes:'Pre-order Push'},
+  {id:'d22',date:'2025-04-15',partner:'Google Pixel',type:'campaign',posts:4,impressions:890000,views:450000,engagements:78000,notes:'Matchday Photography'},
+  {id:'d23',date:'2025-05-30',partner:'Expedia',type:'campaign',posts:3,impressions:580000,views:280000,engagements:39000,notes:'Away Day Travel'},
+  {id:'d24',date:'2025-04-20',partner:'Peloton',type:'campaign',posts:4,impressions:720000,views:360000,engagements:62000,notes:'Train Like A Red'},
+  {id:'d25',date:'2025-06-10',partner:'Quorn',type:'campaign',posts:3,impressions:450000,views:210000,engagements:32000,notes:'Plant-Based Matchday'},
+  {id:'d26',date:'2025-05-15',partner:'Western Union',type:'campaign',posts:3,impressions:380000,views:180000,engagements:26000,notes:'Global Reds Network'}
+];
+
+// ââ INIT ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+function init() {
+  try { all = JSON.parse(localStorage.getItem('smb_v1') || '[]'); } catch(e) { all=[]; }
+  if (!all.length && SEED.length) { all = SEED.slice(); persist(); }
+  document.getElementById('e-date').value = today();
+  updateDatalist();
+  renderStats();
+  renderTable();
+}
+
+function persist() { localStorage.setItem('smb_v1', JSON.stringify(all)); }
+
+// ââ SAVE / DELETE âââââââââââââââââââââââââââââââââââââââââââââââââââââ
+function save() {
+  var date    = document.getElementById('e-date').value;
+  var partner = document.getElementById('e-partner').value.trim();
+  var type    = document.getElementById('e-type').value;
+  var posts   = parseInt(document.getElementById('e-posts').value)  || 0;
+  var imps    = parseInt(document.getElementById('e-imps').value)   || 0;
+  var views   = parseInt(document.getElementById('e-views').value)  || 0;
+  var engs    = parseInt(document.getElementById('e-engs').value)   || 0;
+  var notes   = document.getElementById('e-notes').value.trim();
+
+  var missing = [];
+  if (!date)     missing.push('Date');
+  if (!partner)  missing.push('Partner');
+  if (!type)     missing.push('Type');
+  if (posts < 1) missing.push('Posts (min 1)');
+  if (missing.length) { flash('msg-err', '\u26a0 Missing: ' + missing.join(', ')); return; }
+
+  all.push({
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2),
+    date:date, partner:partner, type:type, posts:posts,
+    impressions:imps, views:views, engagements:engs, notes:notes
+  });
+  persist();
+  flash('msg-ok', '\u2713 Saved');
+  ['e-posts','e-imps','e-views','e-engs','e-notes'].forEach(function(id){ document.getElementById(id).value=''; });
+  updateDatalist();
+  renderStats();
+  renderTable();
+}
+
+function del(id) {
+  if (!confirm('Delete this entry? This cannot be undone.')) return;
+  all = all.filter(function(e){ return e.id!==id; });
+  persist();
+  renderStats();
+  renderTable();
+}
+
+function clearForm() {
+  document.getElementById('e-date').value    = today();
+  document.getElementById('e-partner').value = '';
+  document.getElementById('e-type').value    = '';
+  ['e-posts','e-imps','e-views','e-engs','e-notes'].forEach(function(id){ document.getElementById(id).value=''; });
+}
+
+// ââ SORT ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+function sortBy(f) {
+  sortD = sortF===f ? (sortD==='asc'?'desc':'asc') : 'desc';
+  sortF = f;
+  var cols = ['date:sd','partner:sp','posts:sps','impressions:si','views:sv','engagements:se'];
+  for (var i=0; i<cols.length; i++) {
+    var parts=cols[i].split(':');
+    var el=document.getElementById(parts[1]);
+    if (el) el.textContent = parts[0]===sortF ? (sortD==='asc'?'\u2191':'\u2193') : '';
+  }
+  renderTable();
+}
+
+// ââ RENDER ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+function renderStats() {
+  var partners = {};
+  var launches = 0, campaigns = 0;
+  for (var i=0; i<all.length; i++) { partners[all[i].partner]=1; if(all[i].type==='launch')launches++; if(all[i].type==='campaign')campaigns++; }
+  var pCount = Object.keys(partners).length;
+  var data = [
+    { val: all.length,  lbl: 'Total Entries' },
+    { val: pCount,      lbl: 'Partners' },
+    { val: launches,    lbl: 'Launches' },
+    { val: campaigns,   lbl: 'Campaigns' }
+  ];
+  var html='';
+  for (var j=0; j<data.length; j++) {
+    html += '<div class="stat-card"><div class="stat-val">'+data[j].val+'</div><div class="stat-lbl">'+data[j].lbl+'</div></div>';
+  }
+  document.getElementById('stats-row').innerHTML = html;
+}
+
+function renderTable() {
+  var query=(document.getElementById('search').value||'').toLowerCase();
+  var rows=all.filter(function(e){
+    return !query||e.partner.toLowerCase().indexOf(query)>-1||(e.notes||'').toLowerCase().indexOf(query)>-1;
+  });
+  rows=rows.slice().sort(function(a,b){
+    var av=a[sortF],bv=b[sortF];
+    if(typeof av==='string'){av=av.toLowerCase();bv=bv.toLowerCase();}
+    return (sortD==='asc'?1:-1)*(av<bv?-1:av>bv?1:0);
+  });
+
+  document.getElementById('tbl-count').textContent = rows.length+' entr'+(rows.length===1?'y':'ies');
+  var tbody=document.getElementById('tbl-body');
+  var empty=document.getElementById('empty-state');
+
+  if (!rows.length) { tbody.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+
+  var html='';
+  for (var i=0; i<rows.length; i++) {
+    var e=rows[i];
+    var ipp=e.posts?Math.round(e.impressions/e.posts):0;
+    var bdgCls = BDG[e.type]||'bdg bdg-m';
+    html += '<tr>';
+    html += '<td>'+e.date+'</td>';
+    html += '<td style="font-weight:600">'+esc(e.partner)+'</td>';
+    html += '<td><span class="'+bdgCls+'">'+(TL[e.type]||e.type)+'</span></td>';
+    html += '<td class="r">'+e.posts+'</td>';
+    html += '<td class="r">'+full(e.impressions)+'</td>';
+    html += '<td class="r">'+full(e.views)+'</td>';
+    html += '<td class="r">'+full(e.engagements)+'</td>';
+    html += '<td class="r" style="color:var(--g500)">'+fmt(ipp)+'</td>';
+    html += '<td style="color:var(--g500);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+esc(e.notes||'')+'">'+esc(e.notes||'\u2014')+'</td>';
+    html += '<td><button class="del-btn" onclick="del(\''+e.id+'\')">&#10005;</button></td>';
+    html += '</tr>';
+  }
+  tbody.innerHTML = html;
+}
+
+function updateDatalist() {
+  var partners={};
+  for (var i=0; i<all.length; i++) partners[all[i].partner]=1;
+  var list=Object.keys(partners).sort();
+  var html='';
+  for (var j=0; j<list.length; j++) html+='<option value="'+esc(list[j])+'">';
+  document.getElementById('partner-list').innerHTML=html;
+}
+
+// ââ HELPERS âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+function fmt(n) {
+  if (!n&&n!==0) return '\u2014';
+  if (n>=1e6) return (n/1e6).toFixed(1)+'M';
+  if (n>=1e4) return (n/1e3).toFixed(1)+'K';
+  if (n>=1e3) return (n/1e3).toFixed(2)+'K';
+  return Math.round(n).toLocaleString();
+}
+function full(n) { return (n||0).toLocaleString(); }
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function today() { return new Date().toISOString().split('T')[0]; }
+
+function flash(id, msg) {
+  ['msg-ok','msg-err'].forEach(function(i){ var el=document.getElementById(i); el.style.display='none'; });
+  var el=document.getElementById(id);
+  el.textContent=msg; el.style.display='flex';
+  setTimeout(function(){ el.style.display='none'; }, 3000);
+}
+
+// ââ GENERATE DASHBOARD ââââââââââââââââââââââââââââââââââââââââââââââââ
+function generateDashboard() {
+  if (!all.length) {
+    if (!confirm('No entries have been added yet. Generate an empty dashboard?')) return;
+  }
+  var data = JSON.stringify(all);
+  var html = getDashboardHTML(data);
+  var blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  var url  = URL.createObjectURL(blob);
+  var a    = document.createElement('a');
+  a.href   = url;
+  a.download = 'sm-dashboard.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// ââ DASHBOARD TEMPLATE ââââââââââââââââââââââââââââââââââââââââââââââââ
+// Split at the data injection point: PART_A + JSON_DATA + PART_B
+// The dashboard JS uses no backticks so this template literal is safe.
+
+var TMPL_A = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campaign Benchmarks</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"><\/script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#C8102E;--red-dark:#9e0c24;--red-light:#f8e9ec;
+  --g50:#f9fafb;--g100:#f3f4f6;--g200:#e5e7eb;
+  --g400:#9ca3af;--g500:#6b7280;--g600:#4b5563;
+  --g800:#1f2937;--g900:#111827;
+  --shsm:0 1px 3px rgba(0,0,0,.07),0 1px 2px rgba(0,0,0,.04);
+  --r:12px;--rsm:8px;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--g100);color:var(--g800);min-height:100vh}
+.nav{background:var(--red);height:56px;padding:0 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(200,16,46,.3)}
+.nav-left{display:flex;align-items:center;gap:10px}
+.nav-badge{background:var(--red-dark);border-radius:7px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:800;color:white;flex-shrink:0}
+.nav-title{font-size:.9rem;font-weight:700;color:white}
+.nav-sep{color:rgba(255,255,255,.35);margin:0 4px}
+.nav-sub{font-size:.9rem;color:rgba(255,255,255,.75)}
+.nav-date{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:white;font-size:.73rem;font-weight:600;padding:4px 10px;border-radius:6px}
+.main{max-width:1300px;margin:0 auto;padding:24px 24px 60px}
+.filter-bar{background:white;border-radius:var(--r);box-shadow:var(--shsm);padding:14px 18px;margin-bottom:20px;display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.fg label{display:block;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--g400);margin-bottom:5px}
+.fg select,.fg input[type=date]{background:var(--g50);border:1.5px solid var(--g200);border-radius:var(--rsm);padding:7px 10px;font-size:.83rem;color:var(--g800);outline:none;transition:border-color .15s;font-family:inherit}
+.fg select:focus,.fg input:focus{border-color:var(--red)}
+.filter-clear{background:none;border:none;font-size:.8rem;font-weight:600;color:var(--red);cursor:pointer;padding:0 0 1px;font-family:inherit}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.kpi-card{background:white;border-radius:var(--r);box-shadow:var(--shsm);padding:20px 22px}
+.kpi-val{font-size:2.3rem;font-weight:800;line-height:1;color:var(--g900)}
+.kpi-lbl{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--g400);margin-top:7px}
+.kpi-sub{font-size:.73rem;color:var(--g500);margin-top:3px}
+.sec{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--g400);margin:24px 0 12px}
+.chart-card{background:white;border-radius:var(--r);box-shadow:var(--shsm);padding:20px 22px}
+.chart-title{font-size:.73rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.chart-sub{font-size:.77rem;color:var(--g500);margin-bottom:16px}
+.chart-empty{text-align:center;padding:36px 0;font-size:.83rem;color:var(--g400)}
+.table-card{background:white;border-radius:var(--r);box-shadow:var(--shsm);overflow:hidden}
+.table-hdr{padding:14px 20px;border-bottom:1px solid var(--g200);display:flex;align-items:center;justify-content:space-between}
+.table-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--g400)}
+.table-meta{font-size:.73rem;color:var(--g400);display:flex;align-items:center;gap:10px}
+table{width:100%;border-collapse:collapse}
+th{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--g400);padding:9px 14px;text-align:left;border-bottom:1px solid var(--g200);white-space:nowrap;background:white}
+th.r{text-align:right}
+th.sort{cursor:pointer}
+th.sort:hover{color:var(--g600)}
+td{padding:10px 14px;font-size:.83rem;color:var(--g800);border-bottom:1px solid var(--g50);vertical-align:middle}
+td.r{text-align:right;font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:var(--g50)}
+.bdg{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:.7rem;font-weight:700}
+.bdg-l{background:#fee2e2;color:#991b1b}
+.bdg-c{background:#dbeafe;color:#1d4ed8}
+.srch-wrap{position:relative}
+.srch-wrap input{background:var(--g50);border:1.5px solid var(--g200);border-radius:var(--rsm);padding:5px 9px 5px 26px;font-size:.77rem;color:var(--g800);outline:none;width:170px;font-family:inherit}
+.srch-wrap input:focus{border-color:var(--red)}
+.srch-ico{position:absolute;left:8px;top:50%;transform:translateY(-50%);color:var(--g400);pointer-events:none}
+.ci{color:#1d4ed8}.cv{color:#6d28d9}.ce{color:#047857}
+.empty{text-align:center;padding:50px 20px}
+.empty p{font-size:.9rem;font-weight:600;color:var(--g500);margin-bottom:4px}
+.empty span{font-size:.78rem;color:var(--g400)}
+.scroll{overflow-x:auto}
+@media(max-width:900px){.kpi-row{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:580px){.kpi-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-left">
+    <div class="nav-badge">SM</div>
+    <span class="nav-title">Campaign Benchmarks</span>
+    <span class="nav-sep">/</span>
+    <span class="nav-sub">Partner Performance</span>
+  </div>
+  <div id="nav-date" class="nav-date"></div>
+</nav>
+<div class="main">
+  <div id="no-data" style="display:none;text-align:center;padding:80px 20px">
+    <p style="font-size:1rem;font-weight:600;color:var(--g500);margin-bottom:6px">No data available</p>
+    <p style="font-size:.83rem;color:var(--g400)">This dashboard has not yet been published with data.</p>
+  </div>
+  <div id="dash-content" style="display:none">
+  <div class="filter-bar">
+    <div class="fg"><label>Date from</label><input type="date" id="f-from" onchange="applyFilters()"></div>
+    <div class="fg"><label>Date to</label><input type="date" id="f-to" onchange="applyFilters()"></div>
+    <div class="fg"><label>Partner</label>
+      <select id="f-partner" onchange="applyFilters()"><option value="">All Partners</option></select>
+    </div>
+    <div class="fg"><label>Type</label>
+      <select id="f-type" onchange="applyFilters()">
+        <option value="">All Types</option>
+        <option value="launch">Launch</option>
+        <option value="campaign">Campaign</option>
+      </select>
+    </div>
+    <button class="filter-clear" onclick="clearFilters()">Clear filters</button>
+  </div>
+  <div class="kpi-row" id="kpi-row"></div>
+  <p class="sec">Campaign Average Performance by Partner</p>
+  <div class="chart-card" style="margin-bottom:14px">
+    <p class="chart-title ci">Avg Impressions &mdash; Campaign</p>
+    <p class="chart-sub">Sorted highest to lowest</p>
+    <div id="w-ci" style="position:relative;height:300px"><canvas id="c-ci"></canvas></div>
+    <div id="e-ci" class="chart-empty" style="display:none">No campaign data</div>
+  </div>
+  <div class="chart-card" style="margin-bottom:14px">
+    <p class="chart-title cv">Avg Views &mdash; Campaign</p>
+    <p class="chart-sub">Sorted highest to lowest</p>
+    <div id="w-cv" style="position:relative;height:300px"><canvas id="c-cv"></canvas></div>
+    <div id="e-cv" class="chart-empty" style="display:none">No campaign data</div>
+  </div>
+  <div class="chart-card" style="margin-bottom:20px">
+    <p class="chart-title ce">Avg Engagements &mdash; Campaign</p>
+    <p class="chart-sub">Sorted highest to lowest</p>
+    <div id="w-ce" style="position:relative;height:300px"><canvas id="c-ce"></canvas></div>
+    <div id="e-ce" class="chart-empty" style="display:none">No campaign data</div>
+  </div>
+  <p class="sec">Launch Performance by Partner</p>
+  <div class="chart-card" style="margin-bottom:14px">
+    <p class="chart-title" style="color:var(--red)">Avg Impressions &mdash; Launch</p>
+    <p class="chart-sub">Sorted highest to lowest</p>
+    <div id="w-li" style="position:relative;height:300px"><canvas id="c-li"></canvas></div>
+    <div id="e-li" class="chart-empty" style="display:none">No launch entries in current filters</div>
+  </div>
+  <div class="chart-card" style="margin-bottom:14px">
+    <p class="chart-title cv">Avg Views &mdash; Launch</p>
+    <p class="chart-sub">Sorted highest to lowest</p>
+    <div id="w-lv" style="position:relative;height:300px"><canvas id="c-lv"></canvas></div>
+    <div id="e-lv" class="chart-empty" style="display:none">No launch entries in current filters</div>
+  </div>
+  <div class="chart-card" style="margin-bottom:20px">
+    <p class="chart-title ce">Avg Engagements &mdash; Launch</p>
+    <p class="chart-sub">Sorted highest to lowest</p>
+    <div id="w-le" style="position:relative;height:300px"><canvas id="c-le"></canvas></div>
+    <div id="e-le" class="chart-empty" style="display:none">No launch entries in current filters</div>
+  </div>
+  <div id="pp-row" class="kpi-row" style="margin-bottom:20px"></div>
+  <p class="sec">Summary Averages</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px">
+    <div class="table-card">
+      <div class="table-hdr"><span class="table-title">By Content Type</span></div>
+      <table><thead><tr>
+        <th>Type</th><th class="r">Entries</th>
+        <th class="r">Avg Impressions</th><th class="r">Avg Views</th><th class="r">Avg Eng</th>
+      </tr></thead><tbody id="tbl-type"></tbody></table>
+    </div>
+    <div class="table-card">
+      <div class="table-hdr"><span class="table-title">By Partner</span></div>
+      <table><thead><tr>
+        <th>Partner</th><th class="r">Entries</th>
+        <th class="r">Avg Impressions</th><th class="r">Avg Views</th><th class="r">Avg Eng</th>
+      </tr></thead><tbody id="tbl-partner"></tbody></table>
+    </div>
+  </div>
+  <p class="sec">All Entries</p>
+  <div class="table-card">
+    <div class="table-hdr">
+      <span class="table-title">Data</span>
+      <div class="table-meta">
+        <div class="srch-wrap">
+          <svg class="srch-ico" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="search" placeholder="Search partner&hellip;" oninput="renderEntries()">
+        </div>
+        <span id="entry-count"></span>
+      </div>
+    </div>
+    <div class="scroll">
+      <table>
+        <thead><tr>
+          <th class="sort" onclick="sortBy('date')">Date <span id="sd"></span></th>
+          <th class="sort" onclick="sortBy('partner')">Partner <span id="sp"></span></th>
+          <th>Type</th>
+          <th class="r sort" onclick="sortBy('posts')">Posts <span id="sps"></span></th>
+          <th class="r sort" onclick="sortBy('impressions')">Impressions <span id="si"></span></th>
+          <th class="r sort" onclick="sortBy('views')">Views <span id="sv"></span></th>
+          <th class="r sort" onclick="sortBy('engagements')">Engagements <span id="se"></span></th>
+          <th class="r">Imp/Post</th>
+          <th class="r">Eng Rate</th>
+          <th>Campaign Name</th>
+        </tr></thead>
+        <tbody id="tbl-entries"></tbody>
+      </table>
+    </div>
+    <div id="empty-entries" class="empty" style="display:none">
+      <p>No entries match filters</p><span>Try adjusting the date range or partner selection</span>
+    </div>
+  </div>
+  </div><!-- /dash-content -->
+</div>
+<script>
+var DATA = `;
+
+var TMPL_B = `;
+var filtered=[],sortF='date',sortD='desc',CC={};
+var TL={launch:'Launch',campaign:'Campaign',misc:'Misc'};
+function init(){
+  Chart.defaults.color='#9ca3af';Chart.defaults.borderColor='#e5e7eb';
+  document.getElementById('nav-date').textContent=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+  if(!DATA.length){document.getElementById('no-data').style.display='block';return;}
+  document.getElementById('dash-content').style.display='block';
+  var partners=[],seen={};
+  for(var i=0;i<DATA.length;i++){var e=DATA[i];if(e.type!=='misc'&&!seen[e.partner]){seen[e.partner]=1;partners.push(e.partner);}}
+  partners.sort();
+  var sel=document.getElementById('f-partner');
+  for(var j=0;j<partners.length;j++){var opt=document.createElement('option');opt.value=partners[j];opt.textContent=partners[j];sel.appendChild(opt);}
+  applyFilters();
+}
+function applyFilters(){
+  var df=document.getElementById('f-from').value,dt=document.getElementById('f-to').value,fp=document.getElementById('f-partner').value,ft=document.getElementById('f-type').value;
+  filtered=DATA.filter(function(e){return e.type!=='misc'&&(!df||e.date>=df)&&(!dt||e.date<=dt)&&(!fp||e.partner===fp)&&(!ft||e.type===ft);});
+  filtered.sort(function(a,b){var av=a[sortF],bv=b[sortF];if(typeof av==='string'){av=av.toLowerCase();bv=bv.toLowerCase();}return(sortD==='asc'?1:-1)*(av<bv?-1:av>bv?1:0);});
+  render();
+}
+function clearFilters(){document.getElementById('f-from').value='';document.getElementById('f-to').value='';document.getElementById('f-partner').value='';document.getElementById('f-type').value='';applyFilters();}
+function sortBy(field){sortD=sortF===field?(sortD==='asc'?'desc':'asc'):'desc';sortF=field;var cols=['date:sd','partner:sp','posts:sps','impressions:si','views:sv','engagements:se'];for(var i=0;i<cols.length;i++){var parts=cols[i].split(':');var el=document.getElementById(parts[1]);if(el)el.textContent=parts[0]===sortF?(sortD==='asc'?'\u2191':'\u2193'):'';}applyFilters();}
+function metrics(arr){var n=arr.length;if(!n)return{n:0,avgImp:0,avgViews:0,avgEng:0,er:0,totalPosts:0,totalImp:0,totalViews:0,totalEng:0};var ti=0,tv=0,te=0,tp=0;for(var i=0;i<arr.length;i++){ti+=arr[i].impressions;tv+=arr[i].views;te+=arr[i].engagements;tp+=arr[i].posts;}return{n:n,totalPosts:tp,totalImp:ti,totalViews:tv,totalEng:te,avgImp:ti/n,avgViews:tv/n,avgEng:te/n,er:ti?te/ti*100:0};}
+function fmt(n){if(!n&&n!==0)return'\u2014';if(n>=1e6)return(n/1e6).toFixed(1)+'M';if(n>=1e4)return(n/1e3).toFixed(1)+'K';if(n>=1e3)return(n/1e3).toFixed(2)+'K';return Math.round(n).toLocaleString();}
+function full(n){return(n||0).toLocaleString();}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function render(){renderKPI();renderCharts();renderPerPost();renderTypeTable();renderPartnerTable();renderEntries();}
+function renderPerPost(){var m=metrics(filtered);var ipp=m.totalPosts?m.totalImp/m.totalPosts:0;var vpp=m.totalPosts?m.totalViews/m.totalPosts:0;var epp=m.totalPosts?m.totalEng/m.totalPosts:0;var html='';html+='<div class="kpi-card"><div class="kpi-val ci">'+fmt(ipp)+'</div><div class="kpi-lbl">Impressions / Post</div><div class="kpi-sub">'+full(m.totalImp)+' impressions \u00b7 '+full(m.totalPosts)+' posts</div></div>';html+='<div class="kpi-card"><div class="kpi-val cv">'+fmt(vpp)+'</div><div class="kpi-lbl">Views / Post</div><div class="kpi-sub">'+full(m.totalViews)+' views \u00b7 '+full(m.totalPosts)+' posts</div></div>';html+='<div class="kpi-card"><div class="kpi-val ce">'+fmt(epp)+'</div><div class="kpi-lbl">Engagements / Post</div><div class="kpi-sub">'+full(m.totalEng)+' engagements \u00b7 '+full(m.totalPosts)+' posts</div></div>';document.getElementById('pp-row').innerHTML=html;}
+function renderKPI(){var m=metrics(filtered);var html='';html+='<div class="kpi-card"><div class="kpi-val ci">'+fmt(m.avgImp)+'</div><div class="kpi-lbl">Avg Impressions</div><div class="kpi-sub">'+full(m.totalImp)+' total across '+m.n+' entries</div></div>';html+='<div class="kpi-card"><div class="kpi-val cv">'+fmt(m.avgViews)+'</div><div class="kpi-lbl">Avg Views</div><div class="kpi-sub">'+full(m.totalViews)+' total across '+m.n+' entries</div></div>';html+='<div class="kpi-card"><div class="kpi-val ce">'+fmt(m.avgEng)+'</div><div class="kpi-lbl">Avg Engagements</div><div class="kpi-sub">'+full(m.totalEng)+' total across '+m.n+' entries</div></div>';html+='<div class="kpi-card"><div class="kpi-val" style="color:var(--g900)">'+m.er.toFixed(2)+'%</div><div class="kpi-lbl">Engagement Rate</div><div class="kpi-sub">'+m.n+' entr'+(m.n===1?'y':'ies')+' \u00b7 '+full(m.totalPosts)+' posts tracked</div></div>';document.getElementById('kpi-row').innerHTML=html;}
+function renderCharts(){var lP=[],lS={};for(var i=0;i<filtered.length;i++){var e=filtered[i];if(e.type==='launch'&&!lS[e.partner]){lS[e.partner]=1;lP.push(e.partner);}}var launchD=[];for(var j=0;j<lP.length;j++){var p=lP[j];var m=metrics(filtered.filter(function(e){return e.type==='launch'&&e.partner===p;}));launchD.push({label:p,imp:m.avgImp,views:m.avgViews,eng:m.avgEng});}var lByImp=launchD.slice().sort(function(a,b){return b.imp-a.imp;});var lByViews=launchD.slice().sort(function(a,b){return b.views-a.views;});var lByEng=launchD.slice().sort(function(a,b){return b.eng-a.eng;});bar('c-li','w-li','e-li',lByImp.map(function(d){return{label:d.label,val:d.imp};}),'#C8102E',function(v){return fmt(v)+' avg impressions';});bar('c-lv','w-lv','e-lv',lByViews.map(function(d){return{label:d.label,val:d.views};}),'#7c3aed',function(v){return fmt(v)+' avg views';});bar('c-le','w-le','e-le',lByEng.map(function(d){return{label:d.label,val:d.eng};}),'#059669',function(v){return fmt(v)+' avg eng';});var cP=[],cS={};for(var k=0;k<filtered.length;k++){var ec=filtered[k];if(ec.type==='campaign'&&!cS[ec.partner]){cS[ec.partner]=1;cP.push(ec.partner);}}var campD=[];for(var l=0;l<cP.length;l++){var cp=cP[l];var cm=metrics(filtered.filter(function(e){return e.type==='campaign'&&e.partner===cp;}));campD.push({label:cp,imp:cm.avgImp,views:cm.avgViews,eng:cm.avgEng});}var byImp=campD.slice().sort(function(a,b){return b.imp-a.imp;});var byViews=campD.slice().sort(function(a,b){return b.views-a.views;});var byEng=campD.slice().sort(function(a,b){return b.eng-a.eng;});bar('c-ci','w-ci','e-ci',byImp.map(function(d){return{label:d.label,val:d.imp};}),'#2563eb',function(v){return fmt(v)+' avg imp';});bar('c-cv','w-cv','e-cv',byViews.map(function(d){return{label:d.label,val:d.views};}),'#7c3aed',function(v){return fmt(v)+' avg views';});bar('c-ce','w-ce','e-ce',byEng.map(function(d){return{label:d.label,val:d.eng};}),'#059669',function(v){return fmt(v)+' avg eng';});}
+function bar(cid,wid,eid,data,color,tipFn){if(CC[cid]){CC[cid].destroy();CC[cid]=null;}var w=document.getElementById(wid),e=document.getElementById(eid);if(!data.length){w.style.display='none';e.style.display='block';return;}w.style.display='';e.style.display='none';CC[cid]=new Chart(document.getElementById(cid),{type:'bar',data:{labels:data.map(function(d){return d.label;}),datasets:[{data:data.map(function(d){return d.val;}),backgroundColor:color+'28',borderColor:color,borderWidth:2,borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){return' '+tipFn(ctx.raw);}}}},scales:{x:{grid:{color:'#f3f4f6'},ticks:{color:'#9ca3af',font:{size:10},maxRotation:45,minRotation:45}},y:{grid:{color:'#f3f4f6'},ticks:{color:'#9ca3af',font:{size:10},callback:function(v){return fmt(v);}}}}}});}
+function renderTypeTable(){var types=['launch','campaign'],html='';for(var i=0;i<types.length;i++){var t=types[i],arr=filtered.filter(function(e){return e.type===t;});if(!arr.length)continue;var m=metrics(arr);html+='<tr><td><span class="bdg bdg-'+(t==='launch'?'l':'c')+'">'+(t==='launch'?'Launch':'Campaign')+'</span></td><td class="r">'+m.n+'</td><td class="r ci">'+fmt(m.avgImp)+'</td><td class="r cv">'+fmt(m.avgViews)+'</td><td class="r ce">'+fmt(m.avgEng)+'</td></tr>';}document.getElementById('tbl-type').innerHTML=html||'<tr><td colspan="5" style="text-align:center;color:var(--g400);padding:18px">No data</td></tr>';}
+function renderPartnerTable(){var partners=[],seen={};for(var i=0;i<filtered.length;i++){if(!seen[filtered[i].partner]){seen[filtered[i].partner]=1;partners.push(filtered[i].partner);}}partners.sort();var html='';for(var j=0;j<partners.length;j++){var p=partners[j],m=metrics(filtered.filter(function(e){return e.partner===p;}));html+='<tr><td style="font-weight:600">'+esc(p)+'</td><td class="r">'+m.n+'</td><td class="r ci">'+fmt(m.avgImp)+'</td><td class="r cv">'+fmt(m.avgViews)+'</td><td class="r ce">'+fmt(m.avgEng)+'</td></tr>';}document.getElementById('tbl-partner').innerHTML=html||'<tr><td colspan="5" style="text-align:center;color:var(--g400);padding:18px">No data</td></tr>';}
+function renderEntries(){var query=(document.getElementById('search').value||'').toLowerCase(),rows=filtered.filter(function(e){return!query||e.partner.toLowerCase().indexOf(query)>-1||(e.notes||'').toLowerCase().indexOf(query)>-1;});document.getElementById('entry-count').textContent=rows.length+' entr'+(rows.length===1?'y':'ies');var tbody=document.getElementById('tbl-entries'),empty=document.getElementById('empty-entries');if(!rows.length){tbody.innerHTML='';empty.style.display='block';return;}empty.style.display='none';var html='';for(var i=0;i<rows.length;i++){var e=rows[i],ipp=e.posts?e.impressions/e.posts:0,er=e.impressions?e.engagements/e.impressions*100:0;html+='<tr><td>'+e.date+'</td><td style="font-weight:600">'+esc(e.partner)+'</td><td><span class="bdg bdg-'+(e.type==='launch'?'l':'c')+'">'+(TL[e.type]||e.type)+'</span></td><td class="r">'+e.posts+'</td><td class="r ci">'+full(e.impressions)+'</td><td class="r cv">'+full(e.views)+'</td><td class="r ce">'+full(e.engagements)+'</td><td class="r" style="color:var(--g600)">'+fmt(ipp)+'</td><td class="r" style="color:var(--g600)">'+er.toFixed(2)+'%</td><td style="color:var(--g500);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+esc(e.notes||'')+'">'+esc(e.notes||'\u2014')+'</td></tr>';}tbody.innerHTML=html;}
+document.addEventListener('DOMContentLoaded',init);
+<\/script>
+</body>
+</html>`;
+
+function getDashboardHTML(dataJSON) {
+  return TMPL_A + dataJSON + TMPL_B;
+}
+
+// ââ START âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campaign Benchmarks â Admin</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#C8102E;--red-dark:#9e0c24;--red-light:#f8e9ec;
+  --g50:#f9fafb;--g100:#f3f4f6;--g200:#e5e7eb;
+  --g400:#9ca3af;--g500:#6b7280;--g600:#4b5563;
+  --g800:#1f2937;--g900:#111827;
+  --shsm:0 1px 3px rgba(0,0,0,.07),0 1px 2px rgba(0,0,0,.04);
+  --r:12px;--rsm:8px;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--g100);color:var(--g800);min-height:100vh}
+
+/* NAV */
+.nav{background:var(--red);height:56px;padding:0 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(200,16,46,.3)}
+.nav-left{display:flex;align-items:center;gap:10px}
+.nav-badge{background:var(--red-dark);border-radius:7px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:800;color:white;flex-shrink:0}
+.nav-title{font-size:.9rem;font-weight:700;color:white}
+.nav-tag{background:rgba(0,0,0,.2);color:rgba(255,255,255,.9);font-size:.68rem;font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.03em}
+.nav-right{display:flex;align-items:center;gap:8px}
+.btn-gen{background:white;color:var(--red);border:none;border-radius:8px;padding:7px 16px;font-size:.8rem;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .15s;display:flex;align-items:center;gap:6px}
+.btn-gen:hover{opacity:.9}
+.btn-gen:active{opacity:.8}
+
+/* LAYOUT */
+.main{max-width:1100px;margin:0 auto;padding:24px 24px 60px}
+
+/* STATS STRIP */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat-card{background:white;border-radius:var(--r);box-shadow:var(--shsm);padding:16px 20px}
+.stat-val{font-size:2rem;font-weight:800;color:var(--g900);line-height:1}
+.stat-lbl{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--g400);margin-top:5px}
+
+/* FORM CARD */
+.card{background:white;border-radius:var(--r);box-shadow:var(--shsm);padding:24px 26px;margin-bottom:20px}
+.card-title{font-size:.9rem;font-weight:700;color:var(--g900);margin-bottom:4px}
+.card-sub{font-size:.78rem;color:var(--g500);margin-bottom:20px}
+
+/* FORM FIELDS */
+.field-row{display:grid;gap:14px;margin-bottom:14px}
+.field-row.cols-3{grid-template-columns:repeat(3,1fr)}
+.field-row.cols-4{grid-template-columns:repeat(4,1fr)}
+.field-row.cols-1{grid-template-columns:1fr}
+.field label{display:block;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--g500);margin-bottom:5px}
+.req{color:var(--red)}
+.field input,.field select{width:100%;background:var(--g50);border:1.5px solid var(--g200);border-radius:var(--rsm);padding:8px 11px;font-size:.84rem;color:var(--g800);outline:none;transition:border-color .15s;font-family:inherit}
+.field input:focus,.field select:focus{border-color:var(--red)}
+.field input::placeholder{color:var(--g400)}
+
+/* BUTTONS */
+.btn-save{background:var(--red);color:white;border:none;border-radius:10px;padding:10px 28px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .15s}
+.btn-save:hover{opacity:.9}
+.btn-save:active{opacity:.8}
+.btn-clear{background:none;border:1.5px solid var(--g200);color:var(--g500);border-radius:10px;padding:10px 20px;font-size:.85rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s}
+.btn-clear:hover{border-color:var(--g400);color:var(--g800)}
+.msg{font-size:.8rem;font-weight:600;display:none;align-items:center;gap:5px}
+.msg-ok{color:#059669}
+.msg-err{color:var(--red)}
+
+/* TABLE CARD */
+.table-card{background:white;border-radius:var(--r);box-shadow:var(--shsm);overflow:hidden}
+.table-hdr{padding:14px 20px;border-bottom:1px solid var(--g200);display:flex;align-items:center;justify-content:space-between}
+.table-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--g400)}
+.table-meta{display:flex;align-items:center;gap:10px;font-size:.73rem;color:var(--g400)}
+table{width:100%;border-collapse:collapse}
+th{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--g400);padding:9px 14px;text-align:left;border-bottom:1px solid var(--g200);white-space:nowrap;background:white}
+th.r{text-align:right}
+th.sort{cursor:pointer}
+th.sort:hover{color:var(--g600)}
+td{padding:9px 14px;font-size:.82rem;color:var(--g800);border-bottom:1px solid var(--g50);vertical-align:middle}
+td.r{text-align:right;font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:var(--g50)}
+.bdg{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:.7rem;font-weight:700}
+.bdg-l{background:#fee2e2;color:#991b1b}
+.bdg-c{background:#dbeafe;color:#1d4ed8}
+.bdg-m{background:var(--g200);color:var(--g600)}
+.del-btn{background:none;border:none;color:var(--g400);cursor:pointer;font-size:.8rem;padding:2px 6px;border-radius:4px;font-family:inherit;transition:all .15s}
+.del-btn:hover{background:#fee2e2;color:var(--red)}
+
+/* SEARCH */
+.srch-wrap{position:relative}
+.srch-wrap input{background:var(--g50);border:1.5px solid var(--g200);border-radius:var(--rsm);padding:5px 9px 5px 26px;font-size:.77rem;color:var(--g800);outline:none;width:160px;font-family:inherit}
+.srch-wrap input:focus{border-color:var(--red)}
+.srch-ico{position:absolute;left:8px;top:50%;transform:translateY(-50%);color:var(--g400);pointer-events:none}
+
+/* EMPTY */
+.empty{text-align:center;padding:50px 20px}
+.empty p{font-size:.9rem;font-weight:600;color:var(--g500);margin-bottom:4px}
+.empty span{font-size:.78rem;color:var(--g400)}
+
+.scroll{overflow-x:auto}
+.sec{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--g400);margin:24px 0 12px}
+
+/* PUBLISH BANNER */
+.pub-banner{background:white;border:2px solid var(--g200);border-radius:var(--r);padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.pub-text p{font-size:.85rem;font-weight:600;color:var(--g900);margin-bottom:2px}
+.pub-text span{font-size:.77rem;color:var(--g500)}
+.pub-steps{display:flex;gap:6px;align-items:center}
+.step{font-size:.72rem;color:var(--g400);background:var(--g50);border:1px solid var(--g200);border-radius:6px;padding:4px 10px}
+.step-arrow{color:var(--g400);font-size:.8rem}
+
+@media(max-width:700px){.field-row.cols-3,.field-row.cols-4{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-left">
+    <div class="nav-badge">SM</div>
+    <span class="nav-title">Campaign Benchmarks</span>
+    <span class="nav-tag">Admin</span>
+  </div>
+  <div class="nav-right">
+    <button class="btn-gen" onclick="generateDashboard()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.88 18.09A5 5 0 0018 9h-1.26A8 8 0 104 16.29"/></svg>
+      Publish Dashboard
+    </button>
+  </div>
+</nav>
+
+<div class="main">
+
+  <!-- Stats -->
+  <div class="stats-row" id="stats-row"></div>
+
+  <!-- Publish workflow hint -->
+  <div class="pub-banner">
+    <div class="pub-text">
+      <p>Publishing workflow</p>
+      <span>Enter data below, then publish the dashboard to share with external stakeholders.</span>
+    </div>
+    <div class="pub-steps">
+      <span class="step">1. Add entries</span>
+      <span class="step-arrow">&#8594;</span>
+      <span class="step">2. Click Publish Dashboard</span>
+      <span class="step-arrow">&#8594;</span>
+      <span class="step">3. Replace file on GitHub</span>
+      <span class="step-arrow">&#8594;</span>
+      <span class="step">4. Link updates live</span>
+    </div>
+  </div>
+
+  <!-- Entry Form -->
+  <div class="card">
+    <p class="card-title">Add Entry</p>
+    <p class="card-sub">Partner and type are remembered between saves for quick batch entry.</p>
+
+    <div class="field-row cols-3">
+      <div class="field">
+        <label>Date <span class="req">*</span></label>
+        <input type="date" id="e-date">
+      </div>
+      <div class="field">
+        <label>Partner <span class="req">*</span></label>
+        <input type="text" id="e-partner" list="partner-list" placeholder="e.g. Nike">
+        <datalist id="partner-list"></datalist>
+      </div>
+      <div class="field">
+        <label>Type <span class="req">*</span></label>
+        <select id="e-type">
+          <option value="">Select type&hellip;</option>
+          <option value="launch">Launch</option>
+          <option value="campaign">Campaign</option>
+          <option value="misc">Misc</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field-row cols-4">
+      <div class="field">
+        <label># Posts <span class="req">*</span></label>
+        <input type="number" id="e-posts" placeholder="e.g. 5" min="1">
+      </div>
+      <div class="field">
+        <label>Impressions</label>
+        <input type="number" id="e-imps" placeholder="e.g. 100000" min="0">
+      </div>
+      <div class="field">
+        <label>Views</label>
+        <input type="number" id="e-views" placeholder="e.g. 50000" min="0">
+      </div>
+      <div class="field">
+        <label>Engagements</label>
+        <input type="number" id="e-engs" placeholder="e.g. 5000" min="0">
+      </div>
+    </div>
+
+    <div class="field-row cols-1" style="margin-bottom:18px">
+      <div class="field">
+        <label>Campaign Name <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--g400)">(optional)</span></label>
+        <input type="text" id="e-notes" placeholder="e.g. Summer Kit Launch&hellip;">
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="btn-save" onclick="save()">Save Entry</button>
+      <button class="btn-clear" onclick="clearForm()">Clear</button>
+      <span id="msg-ok"  class="msg msg-ok">&#10003; Saved</span>
+      <span id="msg-err" class="msg msg-err"></span>
+    </div>
+  </div>
+
+  <!-- Data Table -->
+  <p class="sec">All Entries</p>
+  <div class="table-card">
+    <div class="table-hdr">
+      <span class="table-title">Entries</span>
+      <div class="table-meta">
+        <div class="srch-wrap">
+          <svg class="srch-ico" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="search" placeholder="Search&hellip;" oninput="renderTable()">
+        </div>
+        <span id="tbl-count"></span>
+      </div>
+    </div>
+    <div class="scroll">
+      <table>
+        <thead><tr>
+          <th class="sort" onclick="sortBy('date')">Date <span id="sd"></span></th>
+          <th class="sort" onclick="sortBy('partner')">Partner <span id="sp"></span></th>
+          <th>Type</th>
+          <th class="r sort" onclick="sortBy('posts')">Posts <span id="sps"></span></th>
+          <th class="r sort" onclick="sortBy('impressions')">Impressions <span id="si"></span></th>
+          <th class="r sort" onclick="sortBy('views')">Views <span id="sv"></span></th>
+          <th class="r sort" onclick="sortBy('engagements')">Engagements <span id="se"></span></th>
+          <th class="r">Imp/Post</th>
+          <th>Campaign Name</th>
+          <th></th>
+        </tr></thead>
+        <tbody id="tbl-body"></tbody>
+      </table>
+    </div>
+    <div id="empty-state" class="empty" style="display:none">
+      <p>No entries yet</p>
+      <span>Use the form above to add your first campaign entry</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- âââ JS âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ -->
+<script>
+// ââ STATE âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+var all = [];
+var sortF = 'date', sortD = 'desc';
+
+var TL  = { launch:'Launch', campaign:'Campaign', misc:'Misc' };
+var BDG = { launch:'bdg bdg-l', campaign:'bdg bdg-c', misc:'bdg bdg-m' };
+
+// ââ DEMO SEED (remove this block once you start entering real data) ââ
+var SEED = [
+  {id:'d01',date:'2025-01-15',partner:'Nike',type:'launch',posts:8,impressions:3200000,views:1850000,engagements:245000,notes:'25/26 Home Kit Reveal'},
+  {id:'d02',date:'2025-02-10',partner:'Standard Chartered',type:'launch',posts:5,impressions:1450000,views:720000,engagements:98000,notes:'Banking App Launch'},
+  {id:'d03',date:'2025-03-01',partner:'AXA',type:'launch',posts:4,impressions:980000,views:510000,engagements:72000,notes:'Health Programme Launch'},
+  {id:'d04',date:'2025-01-20',partner:'Carlsberg',type:'launch',posts:6,impressions:2100000,views:1100000,engagements:185000,notes:'Matchday Lager Drop'},
+  {id:'d05',date:'2025-04-05',partner:'Expedia',type:'launch',posts:3,impressions:870000,views:420000,engagements:58000,notes:'Travel Rewards Launch'},
+  {id:'d06',date:'2025-02-20',partner:'EA Sports',type:'launch',posts:7,impressions:2800000,views:1600000,engagements:310000,notes:'FC 26 Cover Reveal'},
+  {id:'d07',date:'2025-05-12',partner:'Google Pixel',type:'launch',posts:4,impressions:1250000,views:680000,engagements:115000,notes:'Pixel 10 Partnership'},
+  {id:'d08',date:'2025-03-18',partner:'Quorn',type:'launch',posts:3,impressions:620000,views:290000,engagements:41000,notes:'Matchday Menu Launch'},
+  {id:'d09',date:'2025-06-01',partner:'Peloton',type:'launch',posts:5,impressions:1050000,views:540000,engagements:89000,notes:'Pre-season Fitness'},
+  {id:'d10',date:'2025-04-22',partner:'Western Union',type:'launch',posts:3,impressions:540000,views:250000,engagements:35000,notes:'Digital Wallet Launch'},
+  {id:'d11',date:'2025-01-25',partner:'Nike',type:'campaign',posts:12,impressions:2400000,views:1200000,engagements:195000,notes:'Just Do It x LFC'},
+  {id:'d12',date:'2025-03-15',partner:'Nike',type:'campaign',posts:6,impressions:1800000,views:920000,engagements:142000,notes:'Spring Collection'},
+  {id:'d13',date:'2025-05-20',partner:'Nike',type:'campaign',posts:8,impressions:2100000,views:1050000,engagements:168000,notes:'Academy Kit Push'},
+  {id:'d14',date:'2025-02-14',partner:'Standard Chartered',type:'campaign',posts:4,impressions:780000,views:380000,engagements:52000,notes:'Sustainability Series'},
+  {id:'d15',date:'2025-04-10',partner:'Standard Chartered',type:'campaign',posts:5,impressions:920000,views:460000,engagements:67000,notes:'Community Fund Drive'},
+  {id:'d16',date:'2025-02-28',partner:'AXA',type:'campaign',posts:3,impressions:650000,views:310000,engagements:43000,notes:'Player Wellness'},
+  {id:'d17',date:'2025-05-08',partner:'AXA',type:'campaign',posts:4,impressions:710000,views:340000,engagements:49000,notes:'Injury Prevention'},
+  {id:'d18',date:'2025-03-10',partner:'Carlsberg',type:'campaign',posts:5,impressions:1350000,views:680000,engagements:112000,notes:'Matchday Moments'},
+  {id:'d19',date:'2025-05-25',partner:'Carlsberg',type:'campaign',posts:4,impressions:1100000,views:550000,engagements:91000,notes:'Summer Sessions'},
+  {id:'d20',date:'2025-03-28',partner:'EA Sports',type:'campaign',posts:6,impressions:1950000,views:1100000,engagements:228000,notes:'TOTS Promo'},
+  {id:'d21',date:'2025-06-05',partner:'EA Sports',type:'campaign',posts:5,impressions:1700000,views:920000,engagements:195000,notes:'Pre-order Push'},
+  {id:'d22',date:'2025-04-15',partner:'Google Pixel',type:'campaign',posts:4,impressions:890000,views:450000,engagements:78000,notes:'Matchday Photography'},
+  {id:'d23',date:'2025-05-30',partner:'Expedia',type:'campaign',posts:3,impressions:580000,views:280000,engagements:39000,notes:'Away Day Travel'},
+  {id:'d24',date:'2025-04-20',partner:'Peloton',type:'campaign',posts:4,impressions:720000,views:360000,engagements:62000,notes:'Train Like A Red'},
+  {id:'d25',date:'2025-06-10',partner:'Quorn',type:'campaign',posts:3,impressions:450000,views:210000,engagements:32000,notes:'Plant-Based Matchday'},
+  {id:'d26',date:'2025-05-15',partner:'Western Union',type:'campaign',posts:3,impressions:380000,views:180000,engagements:26000,notes:'Global Reds Network'}
+];
+
+// ââ INIT ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+function init() {
+  try { all = JSON.parse(localStorage.getItem('smb_v1') || '[]'); } catch(e) { all=[]; }
+  if (!all.length && SEED.length) { all = SEED.slice(); persist(); }
+  document.getElementById('e-date').value = today();
+  updateDatalist();
+  renderStats();
+  renderTable();
+}
+
+function persist() { localStorage.setItem('smb_v1', JSON.stringify(all)); }
+
+// ââ SAVE / DELETE âââââââââââââââââââââââââââââââââââââââââââââââââââââ
+function save() {
+  var date    = document.getElementById('e-date').value;
+  var partner = document.getElementById('e-partner').value.trim();
+  var type    = document.getElementById('e-type').value;
+  var posts   = parseInt(document.getElementById('e-posts').value)  || 0;
+  var imps    = parseInt(document.getElementById('e-imps').value)   || 0;
+  var views   = parseInt(document.getElementById('e-views').value)  || 0;
+  var engs    = parseInt(document.getElementById('e-engs').value)   || 0;
+  var notes   = document.getElementById('e-notes').value.trim();
+
+  var missing = [];
+  if (!date)     missing.push('Date');
+  if (!partner)  missing.push('Partner');
+  if (!type)     missing.push('Type');
+  if (posts < 1) missing.push('Posts (min 1)');
+  if (missing.length) { flash('msg-err', '\u26a0 Missing: ' + missing.join(', ')); return; }
+
+  all.push({
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2),
+    date:date, partner:partner, type:type, posts:posts,
+    impressions:imps, views:views, engagements:engs, notes:notes
+  });
+  persist();
+  flash('msg-ok', '\u2713 Saved');
+  ['e-posts','e-imps','e-views','e-engs','e-notes'].forEach(function(id){ document.getElementById(id).value=''; });
+  updateDatalist();
+  renderStats();
+  renderTable();
+}
+
+function del(id) {
+  if (!confirm('Delete this entry? This cannot be undone.')) return;
+  all = all.filter(function(e){ return e.id!==id; });
+  persist();
+  renderStats();
+  renderTable();
+}
+
+function clearForm() {
+  document.getElementById('e-date').value    = today();
+  document.getElementById('e-partner').value = '';
+  document.getElementById('e-type').value    = '';
+  ['e-posts','e-imps','e-views','e-engs','e-notes'].forEach(function(id){ document.getElementById(id).value=''; });
+}
+
+// ââ SORT ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+function sortBy(f) {
+  sortD = sortF===f ? (sortD==='asc'?'desc':'asc') : 'desc';
+  sortF = f;
+  var cols = ['date:sd','partner:sp','posts:sps','impressions:si','views:sv','engagements:se'];
+  for (var i=0; i<cols.length; i++) {
+    var parts=cols[i].split(':');
+    var el=document.getElementById(parts[1]);
+    if (el) el.textContent = parts[0]===sortF ? (sortD==='asc'?'\u2191':'\u2193') : '';
+  }
+  renderTable();
+}
+
+// ââ RENDER ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+function renderStats() {
+  var partners = {};
+  var launches = 0, campaigns = 0;
+  for (var i=0; i<all.length; i++) { partners[all[i].partner]=1; if(all[i].type==='launch')launches++; if(all[i].type==='campaign')campaigns++; }
+  var pCount = Object.keys(partners).length;
+  var data = [
+    { val: all.length,  lbl: 'Total Entries' },
+    { val: pCount,      lbl: 'Partners' },
+    { val: launches,    lbl: 'Launches' },
+    { val: campaigns,   lbl: 'Campaigns' }
+  ];
+  var html='';
+  for (var j=0; j<data.length; j++) {
+    html += '<div class="stat-card"><div class="stat-val">'+data[j].val+'</div><div class="stat-lbl">'+data[j].lbl+'</div></div>';
+  }
+  document.getElementById('stats-row').innerHTML = html;
+}
+
+function renderTable() {
+  var query=(document.getElementById('search').value||'').toLowerCase();
+  var rows=all.filter(function(e){
+    return !query||e.partner.toLowerCase().indexOf(query)>-1||(e.notes||'').toLowerCase().indexOf(query)>-1;
+  });
+  rows=rows.slice().sort(function(a,b){
+    var av=a[sortF],bv=b[sortF];
+    if(typeof av==='string'){av=av.toLowerCase();bv=bv.toLowerCase();}
+    return (sortD==='asc'?1:-1)*(av<bv?-1:av>bv?1:0);
+  });
+
+  document.getElementById('tbl-count').textContent = rows.length+' entr'+(rows.length===1?'y':'ies');
+  var tbody=document.getElementById('tbl-body');
+  var empty=document.getElementById('empty-state');
+
+  if (!rows.length) { tbody.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+
+  var html='';
+  for (var i=0; i<rows.length; i++) {
+    var e=rows[i];
+    var ipp=e.posts?Math.round(e.impressions/e.posts):0;
+    var bdgCls = BDG[e.type]||'bdg bdg-m';
+    html += '<tr>';
+    html += '<td>'+e.date+'</td>';
+    html += '<td style="font-weight:600">'+esc(e.partner)+'</td>';
+    html += '<td><span class="'+bdgCls+'">'+(TL[e.type]||e.type)+'</span></td>';
+    html += '<td class="r">'+e.posts+'</td>';
+    html += '<td class="r">'+full(e.impressions)+'</td>';
+    html += '<td class="r">'+full(e.views)+'</td>';
+    html += '<td class="r">'+full(e.engagements)+'</td>';
+    html += '<td class="r" style="color:var(--g500)">'+fmt(ipp)+'</td>';
+    html += '<td style="color:var(--g500);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+esc(e.notes||'')+'">'+esc(e.notes||'\u2014')+'</td>';
+    html += '<td><button class="del-btn" onclick="del(\''+e.id+'\')">&#10005;</button></td>';
+    html += '</tr>';
+  }
+  tbody.innerHTML = html;
+}
+
+function updateDatalist() {
+  var partners={};
+  for (var i=0; i<all.length; i++) partners[all[i].partner]=1;
+  var list=Object.keys(partners).sort();
+  var html='';
+  for (var j=0; j<list.length; j++) html+='<option value="'+esc(list[j])+'">';
+  document.getElementById('partner-list').innerHTML=html;
+}
+
+// ââ HELPERS âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+function fmt(n) {
+  if (!n&&n!==0) return '\u2014';
+  if (n>=1e6) return (n/1e6).toFixed(1)+'M';
+  if (n>=1e4) return (n/1e3).toFixed(1)+'K';
+  if (n>=1e3) return (n/1e3).toFixed(2)+'K';
+  return Math.round(n).toLocaleString();
+}
+function full(n) { return (n||0).toLocaleString(); }
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function today() { return new Date().toISOString().split('T')[0]; }
+
+function flash(id, msg) {
+  ['msg-ok','msg-err'].forEach(function(i){ var el=document.getElementById(i); el.style.display='none'; });
+  var el=document.getElementById(id);
+  el.textContent=msg; el.style.display='flex';
+  setTimeout(function(){ el.style.display='none'; }, 3000);
+}
+
+// ââ GENERATE DASHBOARD ââââââââââââââââââââââââââââââââââââââââââââââââ
+function generateDashboard() {
+  if (!all.length) {
+    if (!confirm('No entries have been added yet. Generate an empty dashboard?')) return;
+  }
+  var data = JSON.stringify(all);
+  var html = getDashboardHTML(data);
+  var blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  var url  = URL.createObjectURL(blob);
+  var a    = document.createElement('a');
+  a.href   = url;
+  a.download = 'sm-dashboard.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// ââ DASHBOARD TEMPLATE ââââââââââââââââââââââââââââââââââââââââââââââââ
+// Split at the data injection point: PART_A + JSON_DATA + PART_B
+// The dashboard JS uses no backticks so this template literal is safe.
+
+var TMPL_A = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campaign Benchmarks</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"><\/script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#C8102E;--red-dark:#9e0c24;--red-light:#f8e9ec;
+  --g50:#f9fafb;--g100:#f3f4f6;--g200:#e5e7eb;
+  --g400:#9ca3af;--g500:#6b7280;--g600:#4b5563;
+  --g800:#1f2937;--g900:#111827;
+  --shsm:0 1px 3px rgba(0,0,0,.07),0 1px 2px rgba(0,0,0,.04);
+  --r:12px;--rsm:8px;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--g100);color:var(--g800);min-height:100vh}
+.nav{background:var(--red);height:56px;padding:0 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(200,16,46,.3)}
+.nav-left{display:flex;align-items:center;gap:10px}
+.nav-badge{background:var(--red-dark);border-radius:7px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:800;color:white;flex-shrink:0}
+.nav-title{font-size:.9rem;font-weight:700;color:white}
+.nav-sep{color:rgba(255,255,255,.35);margin:0 4px}
+.nav-sub{font-size:.9rem;color:rgba(255,255,255,.75)}
+.nav-date{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:white;font-size:.73rem;font-weight:600;padding:4px 10px;border-radius:6px}
+.main{max-width:1300px;margin:0 auto;padding:24px 24px 60px}
+.filter-bar{background:white;border-radius:var(--r);box-shadow:var(--shsm);padding:14px 18px;margin-bottom:20px;display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.fg label{display:block;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--g400);margin-bottom:5px}
+.fg select,.fg input[type=date]{background:var(--g50);border:1.5px solid var(--g200);border-radius:var(--rsm);padding:7px 10px;font-size:.83rem;color:var(--g800);outline:none;transition:border-color .15s;font-family:inherit}
+.fg select:focus,.fg input:focus{border-color:var(--red)}
+.filter-clear{background:none;border:none;font-size:.8rem;font-weight:600;color:var(--red);cursor:pointer;padding:0 0 1px;font-family:inherit}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.kpi-card{background:white;border-radius:var(--r);box-shadow:var(--shsm);padding:20px 22px}
+.kpi-val{font-size:2.3rem;font-weight:800;line-height:1;color:var(--g900)}
+.kpi-lbl{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--g400);margin-top:7px}
+.kpi-sub{font-size:.73rem;color:var(--g500);margin-top:3px}
+.sec{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--g400);margin:24px 0 12px}
+.chart-card{background:white;border-radius:var(--r);box-shadow:var(--shsm);padding:20px 22px}
+.chart-title{font-size:.73rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.chart-sub{font-size:.77rem;color:var(--g500);margin-bottom:16px}
+.chart-empty{text-align:center;padding:36px 0;font-size:.83rem;color:var(--g400)}
+.table-card{background:white;border-radius:var(--r);box-shadow:var(--shsm);overflow:hidden}
+.table-hdr{padding:14px 20px;border-bottom:1px solid var(--g200);display:flex;align-items:center;justify-content:space-between}
+.table-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--g400)}
+.table-meta{font-size:.73rem;color:var(--g400);display:flex;align-items:center;gap:10px}
+table{width:100%;border-collapse:collapse}
+th{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--g400);padding:9px 14px;text-align:left;border-bottom:1px solid var(--g200);white-space:nowrap;background:white}
+th.r{text-align:right}
+th.sort{cursor:pointer}
+th.sort:hover{color:var(--g600)}
+td{padding:10px 14px;font-size:.83rem;color:var(--g800);border-bottom:1px solid var(--g50);vertical-align:middle}
+td.r{text-align:right;font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:var(--g50)}
+.bdg{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:.7rem;font-weight:700}
+.bdg-l{background:#fee2e2;color:#991b1b}
+.bdg-c{background:#dbeafe;color:#1d4ed8}
+.srch-wrap{position:relative}
+.srch-wrap input{background:var(--g50);border:1.5px solid var(--g200);border-radius:var(--rsm);padding:5px 9px 5px 26px;font-size:.77rem;color:var(--g800);outline:none;width:170px;font-family:inherit}
+.srch-wrap input:focus{border-color:var(--red)}
+.srch-ico{position:absolute;left:8px;top:50%;transform:translateY(-50%);color:var(--g400);pointer-events:none}
+.ci{color:#1d4ed8}.cv{color:#6d28d9}.ce{color:#047857}
+.empty{text-align:center;padding:50px 20px}
+.empty p{font-size:.9rem;font-weight:600;color:var(--g500);margin-bottom:4px}
+.empty span{font-size:.78rem;color:var(--g400)}
+.scroll{overflow-x:auto}
+@media(max-width:900px){.kpi-row{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:580px){.kpi-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-left">
+    <div class="nav-badge">SM</div>
+    <span class="nav-title">Campaign Benchmarks</span>
+    <span class="nav-sep">/</span>
+    <span class="nav-sub">Partner Performance</span>
+  </div>
+  <div id="nav-date" class="nav-date"></div>
+</nav>
+<div class="main">
+  <div id="no-data" style="display:none;text-align:center;padding:80px 20px">
+    <p style="font-size:1rem;font-weight:600;color:var(--g500);margin-bottom:6px">No data available</p>
+    <p style="font-size:.83rem;color:var(--g400)">This dashboard has not yet been published with data.</p>
+  </div>
+  <div id="dash-content" style="display:none">
+  <div class="filter-bar">
+    <div class="fg"><label>Date from</label><input type="date" id="f-from" onchange="applyFilters()"></div>
+    <div class="fg"><label>Date to</label><input type="date" id="f-to" onchange="applyFilters()"></div>
+    <div class="fg"><label>Partner</label>
+      <select id="f-partner" onchange="applyFilters()"><option value="">All Partners</option></select>
+    </div>
+    <div class="fg"><label>Type</label>
+      <select id="f-type" onchange="applyFilters()">
+        <option value="">All Types</option>
+        <option value="launch">Launch</option>
+        <option value="campaign">Campaign</option>
+      </select>
+    </div>
+    <button class="filter-clear" onclick="clearFilters()">Clear filters</button>
+  </div>
+  <div class="kpi-row" id="kpi-row"></div>
+  <p class="sec">Campaign Average Performance by Partner</p>
+  <div class="chart-card" style="margin-bottom:14px">
+    <p class="chart-title ci">Avg Impressions &mdash; Campaign</p>
+    <p class="chart-sub">Sorted highest to lowest</p>
+    <div id="w-ci" style="position:relative;height:300px"><canvas id="c-ci"></canvas></div>
+    <div id="e-ci" class="chart-empty" style="display:none">No campaign data</div>
+  </div>
+  <div class="chart-card" style="margin-bottom:14px">
+    <p class="chart-title cv">Avg Views &mdash; Campaign</p>
+    <p class="chart-sub">Sorted highest to lowest</p>
+    <div id="w-cv" style="position:relative;height:300px"><canvas id="c-cv"></canvas></div>
+    <div id="e-cv" class="chart-empty" style="display:none">No campaign data</div>
+  </div>
+  <div class="chart-card" style="margin-bottom:20px">
+    <p class="chart-title ce">Avg Engagements &mdash; Campaign</p>
+    <p class="chart-sub">Sorted highest to lowest</p>
+    <div id="w-ce" style="position:relative;height:300px"><canvas id="c-ce"></canvas></div>
+    <div id="e-ce" class="chart-empty" style="display:none">No campaign data</div>
+  </div>
+  <p class="sec">Launch Performance by Partner</p>
+  <div class="chart-card" style="margin-bottom:14px">
+    <p class="chart-title" style="color:var(--red)">Avg Impressions &mdash; Launch</p>
+    <p class="chart-sub">Sorted highest to lowest</p>
+    <div id="w-li" style="position:relative;height:300px"><canvas id="c-li"></canvas></div>
+    <div id="e-li" class="chart-empty" style="display:none">No launch entries in current filters</div>
+  </div>
+  <div class="chart-card" style="margin-bottom:14px">
+    <p class="chart-title cv">Avg Views &mdash; Launch</p>
+    <p class="chart-sub">Sorted highest to lowest</p>
+    <div id="w-lv" style="position:relative;height:300px"><canvas id="c-lv"></canvas></div>
+    <div id="e-lv" class="chart-empty" style="display:none">No launch entries in current filters</div>
+  </div>
+  <div class="chart-card" style="margin-bottom:20px">
+    <p class="chart-title ce">Avg Engagements &mdash; Launch</p>
+    <p class="chart-sub">Sorted highest to lowest</p>
+    <div id="w-le" style="position:relative;height:300px"><canvas id="c-le"></canvas></div>
+    <div id="e-le" class="chart-empty" style="display:none">No launch entries in current filters</div>
+  </div>
+  <div id="pp-row" class="kpi-row" style="margin-bottom:20px"></div>
+  <p class="sec">Summary Averages</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px">
+    <div class="table-card">
+      <div class="table-hdr"><span class="table-title">By Content Type</span></div>
+      <table><thead><tr>
+        <th>Type</th><th class="r">Entries</th>
+        <th class="r">Avg Impressions</th><th class="r">Avg Views</th><th class="r">Avg Eng</th>
+      </tr></thead><tbody id="tbl-type"></tbody></table>
+    </div>
+    <div class="table-card">
+      <div class="table-hdr"><span class="table-title">By Partner</span></div>
+      <table><thead><tr>
+        <th>Partner</th><th class="r">Entries</th>
+        <th class="r">Avg Impressions</th><th class="r">Avg Views</th><th class="r">Avg Eng</th>
+      </tr></thead><tbody id="tbl-partner"></tbody></table>
+    </div>
+  </div>
+  <p class="sec">All Entries</p>
+  <div class="table-card">
+    <div class="table-hdr">
+      <span class="table-title">Data</span>
+      <div class="table-meta">
+        <div class="srch-wrap">
+          <svg class="srch-ico" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="search" placeholder="Search partner&hellip;" oninput="renderEntries()">
+        </div>
+        <span id="entry-count"></span>
+      </div>
+    </div>
+    <div class="scroll">
+      <table>
+        <thead><tr>
+          <th class="sort" onclick="sortBy('date')">Date <span id="sd"></span></th>
+          <th class="sort" onclick="sortBy('partner')">Partner <span id="sp"></span></th>
+          <th>Type</th>
+          <th class="r sort" onclick="sortBy('posts')">Posts <span id="sps"></span></th>
+          <th class="r sort" onclick="sortBy('impressions')">Impressions <span id="si"></span></th>
+          <th class="r sort" onclick="sortBy('views')">Views <span id="sv"></span></th>
+          <th class="r sort" onclick="sortBy('engagements')">Engagements <span id="se"></span></th>
+          <th class="r">Imp/Post</th>
+          <th class="r">Eng Rate</th>
+          <th>Campaign Name</th>
+        </tr></thead>
+        <tbody id="tbl-entries"></tbody>
+      </table>
+    </div>
+    <div id="empty-entries" class="empty" style="display:none">
+      <p>No entries match filters</p><span>Try adjusting the date range or partner selection</span>
+    </div>
+  </div>
+  </div><!-- /dash-content -->
+</div>
+<script>
+var DATA = `;
+
+var TMPL_B = `;
+var filtered=[],sortF='date',sortD='desc',CC={};
+var TL={launch:'Launch',campaign:'Campaign',misc:'Misc'};
+function init(){
+  Chart.defaults.color='#9ca3af';Chart.defaults.borderColor='#e5e7eb';
+  document.getElementById('nav-date').textContent=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+  if(!DATA.length){document.getElementById('no-data').style.display='block';return;}
+  document.getElementById('dash-content').style.display='block';
+  var partners=[],seen={};
+  for(var i=0;i<DATA.length;i++){var e=DATA[i];if(e.type!=='misc'&&!seen[e.partner]){seen[e.partner]=1;partners.push(e.partner);}}
+  partners.sort();
+  var sel=document.getElementById('f-partner');
+  for(var j=0;j<partners.length;j++){var opt=document.createElement('option');opt.value=partners[j];opt.textContent=partners[j];sel.appendChild(opt);}
+  applyFilters();
+}
+function applyFilters(){
+  var df=document.getElementById('f-from').value,dt=document.getElementById('f-to').value,fp=document.getElementById('f-partner').value,ft=document.getElementById('f-type').value;
+  filtered=DATA.filter(function(e){return e.type!=='misc'&&(!df||e.date>=df)&&(!dt||e.date<=dt)&&(!fp||e.partner===fp)&&(!ft||e.type===ft);});
+  filtered.sort(function(a,b){var av=a[sortF],bv=b[sortF];if(typeof av==='string'){av=av.toLowerCase();bv=bv.toLowerCase();}return(sortD==='asc'?1:-1)*(av<bv?-1:av>bv?1:0);});
+  render();
+}
+function clearFilters(){document.getElementById('f-from').value='';document.getElementById('f-to').value='';document.getElementById('f-partner').value='';document.getElementById('f-type').value='';applyFilters();}
+function sortBy(field){sortD=sortF===field?(sortD==='asc'?'desc':'asc'):'desc';sortF=field;var cols=['date:sd','partner:sp','posts:sps','impressions:si','views:sv','engagements:se'];for(var i=0;i<cols.length;i++){var parts=cols[i].split(':');var el=document.getElementById(parts[1]);if(el)el.textContent=parts[0]===sortF?(sortD==='asc'?'\u2191':'\u2193'):'';}applyFilters();}
+function metrics(arr){var n=arr.length;if(!n)return{n:0,avgImp:0,avgViews:0,avgEng:0,er:0,totalPosts:0,totalImp:0,totalViews:0,totalEng:0};var ti=0,tv=0,te=0,tp=0;for(var i=0;i<arr.length;i++){ti+=arr[i].impressions;tv+=arr[i].views;te+=arr[i].engagements;tp+=arr[i].posts;}return{n:n,totalPosts:tp,totalImp:ti,totalViews:tv,totalEng:te,avgImp:ti/n,avgViews:tv/n,avgEng:te/n,er:ti?te/ti*100:0};}
+function fmt(n){if(!n&&n!==0)return'\u2014';if(n>=1e6)return(n/1e6).toFixed(1)+'M';if(n>=1e4)return(n/1e3).toFixed(1)+'K';if(n>=1e3)return(n/1e3).toFixed(2)+'K';return Math.round(n).toLocaleString();}
+function full(n){return(n||0).toLocaleString();}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function render(){renderKPI();renderCharts();renderPerPost();renderTypeTable();renderPartnerTable();renderEntries();}
+function renderPerPost(){var m=metrics(filtered);var ipp=m.totalPosts?m.totalImp/m.totalPosts:0;var vpp=m.totalPosts?m.totalViews/m.totalPosts:0;var epp=m.totalPosts?m.totalEng/m.totalPosts:0;var html='';html+='<div class="kpi-card"><div class="kpi-val ci">'+fmt(ipp)+'</div><div class="kpi-lbl">Impressions / Post</div><div class="kpi-sub">'+full(m.totalImp)+' impressions \u00b7 '+full(m.totalPosts)+' posts</div></div>';html+='<div class="kpi-card"><div class="kpi-val cv">'+fmt(vpp)+'</div><div class="kpi-lbl">Views / Post</div><div class="kpi-sub">'+full(m.totalViews)+' views \u00b7 '+full(m.totalPosts)+' posts</div></div>';html+='<div class="kpi-card"><div class="kpi-val ce">'+fmt(epp)+'</div><div class="kpi-lbl">Engagements / Post</div><div class="kpi-sub">'+full(m.totalEng)+' engagements \u00b7 '+full(m.totalPosts)+' posts</div></div>';document.getElementById('pp-row').innerHTML=html;}
+function renderKPI(){var m=metrics(filtered);var html='';html+='<div class="kpi-card"><div class="kpi-val ci">'+fmt(m.avgImp)+'</div><div class="kpi-lbl">Avg Impressions</div><div class="kpi-sub">'+full(m.totalImp)+' total across '+m.n+' entries</div></div>';html+='<div class="kpi-card"><div class="kpi-val cv">'+fmt(m.avgViews)+'</div><div class="kpi-lbl">Avg Views</div><div class="kpi-sub">'+full(m.totalViews)+' total across '+m.n+' entries</div></div>';html+='<div class="kpi-card"><div class="kpi-val ce">'+fmt(m.avgEng)+'</div><div class="kpi-lbl">Avg Engagements</div><div class="kpi-sub">'+full(m.totalEng)+' total across '+m.n+' entries</div></div>';html+='<div class="kpi-card"><div class="kpi-val" style="color:var(--g900)">'+m.er.toFixed(2)+'%</div><div class="kpi-lbl">Engagement Rate</div><div class="kpi-sub">'+m.n+' entr'+(m.n===1?'y':'ies')+' \u00b7 '+full(m.totalPosts)+' posts tracked</div></div>';document.getElementById('kpi-row').innerHTML=html;}
+function renderCharts(){var lP=[],lS={};for(var i=0;i<filtered.length;i++){var e=filtered[i];if(e.type==='launch'&&!lS[e.partner]){lS[e.partner]=1;lP.push(e.partner);}}var launchD=[];for(var j=0;j<lP.length;j++){var p=lP[j];var m=metrics(filtered.filter(function(e){return e.type==='launch'&&e.partner===p;}));launchD.push({label:p,imp:m.avgImp,views:m.avgViews,eng:m.avgEng});}var lByImp=launchD.slice().sort(function(a,b){return b.imp-a.imp;});var lByViews=launchD.slice().sort(function(a,b){return b.views-a.views;});var lByEng=launchD.slice().sort(function(a,b){return b.eng-a.eng;});bar('c-li','w-li','e-li',lByImp.map(function(d){return{label:d.label,val:d.imp};}),'#C8102E',function(v){return fmt(v)+' avg impressions';});bar('c-lv','w-lv','e-lv',lByViews.map(function(d){return{label:d.label,val:d.views};}),'#7c3aed',function(v){return fmt(v)+' avg views';});bar('c-le','w-le','e-le',lByEng.map(function(d){return{label:d.label,val:d.eng};}),'#059669',function(v){return fmt(v)+' avg eng';});var cP=[],cS={};for(var k=0;k<filtered.length;k++){var ec=filtered[k];if(ec.type==='campaign'&&!cS[ec.partner]){cS[ec.partner]=1;cP.push(ec.partner);}}var campD=[];for(var l=0;l<cP.length;l++){var cp=cP[l];var cm=metrics(filtered.filter(function(e){return e.type==='campaign'&&e.partner===cp;}));campD.push({label:cp,imp:cm.avgImp,views:cm.avgViews,eng:cm.avgEng});}var byImp=campD.slice().sort(function(a,b){return b.imp-a.imp;});var byViews=campD.slice().sort(function(a,b){return b.views-a.views;});var byEng=campD.slice().sort(function(a,b){return b.eng-a.eng;});bar('c-ci','w-ci','e-ci',byImp.map(function(d){return{label:d.label,val:d.imp};}),'#2563eb',function(v){return fmt(v)+' avg imp';});bar('c-cv','w-cv','e-cv',byViews.map(function(d){return{label:d.label,val:d.views};}),'#7c3aed',function(v){return fmt(v)+' avg views';});bar('c-ce','w-ce','e-ce',byEng.map(function(d){return{label:d.label,val:d.eng};}),'#059669',function(v){return fmt(v)+' avg eng';});}
+function bar(cid,wid,eid,data,color,tipFn){if(CC[cid]){CC[cid].destroy();CC[cid]=null;}var w=document.getElementById(wid),e=document.getElementById(eid);if(!data.length){w.style.display='none';e.style.display='block';return;}w.style.display='';e.style.display='none';CC[cid]=new Chart(document.getElementById(cid),{type:'bar',data:{labels:data.map(function(d){return d.label;}),datasets:[{data:data.map(function(d){return d.val;}),backgroundColor:color+'28',borderColor:color,borderWidth:2,borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){return' '+tipFn(ctx.raw);}}}},scales:{x:{grid:{color:'#f3f4f6'},ticks:{color:'#9ca3af',font:{size:10},maxRotation:45,minRotation:45}},y:{grid:{color:'#f3f4f6'},ticks:{color:'#9ca3af',font:{size:10},callback:function(v){return fmt(v);}}}}}});}
+function renderTypeTable(){var types=['launch','campaign'],html='';for(var i=0;i<types.length;i++){var t=types[i],arr=filtered.filter(function(e){return e.type===t;});if(!arr.length)continue;var m=metrics(arr);html+='<tr><td><span class="bdg bdg-'+(t==='launch'?'l':'c')+'">'+(t==='launch'?'Launch':'Campaign')+'</span></td><td class="r">'+m.n+'</td><td class="r ci">'+fmt(m.avgImp)+'</td><td class="r cv">'+fmt(m.avgViews)+'</td><td class="r ce">'+fmt(m.avgEng)+'</td></tr>';}document.getElementById('tbl-type').innerHTML=html||'<tr><td colspan="5" style="text-align:center;color:var(--g400);padding:18px">No data</td></tr>';}
+function renderPartnerTable(){var partners=[],seen={};for(var i=0;i<filtered.length;i++){if(!seen[filtered[i].partner]){seen[filtered[i].partner]=1;partners.push(filtered[i].partner);}}partners.sort();var html='';for(var j=0;j<partners.length;j++){var p=partners[j],m=metrics(filtered.filter(function(e){return e.partner===p;}));html+='<tr><td style="font-weight:600">'+esc(p)+'</td><td class="r">'+m.n+'</td><td class="r ci">'+fmt(m.avgImp)+'</td><td class="r cv">'+fmt(m.avgViews)+'</td><td class="r ce">'+fmt(m.avgEng)+'</td></tr>';}document.getElementById('tbl-partner').innerHTML=html||'<tr><td colspan="5" style="text-align:center;color:var(--g400);padding:18px">No data</td></tr>';}
+function renderEntries(){var query=(document.getElementById('search').value||'').toLowerCase(),rows=filtered.filter(function(e){return!query||e.partner.toLowerCase().indexOf(query)>-1||(e.notes||'').toLowerCase().indexOf(query)>-1;});document.getElementById('entry-count').textContent=rows.length+' entr'+(rows.length===1?'y':'ies');var tbody=document.getElementById('tbl-entries'),empty=document.getElementById('empty-entries');if(!rows.length){tbody.innerHTML='';empty.style.display='block';return;}empty.style.display='none';var html='';for(var i=0;i<rows.length;i++){var e=rows[i],ipp=e.posts?e.impressions/e.posts:0,er=e.impressions?e.engagements/e.impressions*100:0;html+='<tr><td>'+e.date+'</td><td style="font-weight:600">'+esc(e.partner)+'</td><td><span class="bdg bdg-'+(e.type==='launch'?'l':'c')+'">'+(TL[e.type]||e.type)+'</span></td><td class="r">'+e.posts+'</td><td class="r ci">'+full(e.impressions)+'</td><td class="r cv">'+full(e.views)+'</td><td class="r ce">'+full(e.engagements)+'</td><td class="r" style="color:var(--g600)">'+fmt(ipp)+'</td><td class="r" style="color:var(--g600)">'+er.toFixed(2)+'%</td><td style="color:var(--g500);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+esc(e.notes||'')+'">'+esc(e.notes||'\u2014')+'</td></tr>';}tbody.innerHTML=html;}
+document.addEventListener('DOMContentLoaded',init);
+<\/script>
+</body>
+</html>`;
+
+function getDashboardHTML(dataJSON) {
+  return TMPL_A + dataJSON + TMPL_B;
+}
+
+// ââ START âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
