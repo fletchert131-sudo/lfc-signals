@@ -97,13 +97,22 @@ tbody tr:hover td{background:var(--g50)}
 .scroll{overflow-x:auto}
 .sec{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--g400);margin:24px 0 12px}
 
-/* PUBLISH BANNER */
-.pub-banner{background:white;border:2px solid var(--g200);border-radius:var(--r);padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-.pub-text p{font-size:.85rem;font-weight:600;color:var(--g900);margin-bottom:2px}
-.pub-text span{font-size:.77rem;color:var(--g500)}
-.pub-steps{display:flex;gap:6px;align-items:center}
-.step{font-size:.72rem;color:var(--g400);background:var(--g50);border:1px solid var(--g200);border-radius:6px;padding:4px 10px}
-.step-arrow{color:var(--g400);font-size:.8rem}
+/* PUBLISH OVERLAY */
+.pub-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.35);z-index:200;display:none;align-items:center;justify-content:center}
+.pub-overlay.show{display:flex}
+.pub-modal{background:white;border-radius:var(--r);box-shadow:0 20px 60px rgba(0,0,0,.2);padding:28px 30px;width:440px;max-width:92vw}
+.pub-modal h3{font-size:1rem;font-weight:700;color:var(--g900);margin-bottom:6px}
+.pub-modal p{font-size:.82rem;color:var(--g500);margin-bottom:16px;line-height:1.5}
+.pub-modal label{display:block;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--g500);margin-bottom:5px}
+.pub-modal input{width:100%;background:var(--g50);border:1.5px solid var(--g200);border-radius:var(--rsm);padding:8px 11px;font-size:.84rem;color:var(--g800);outline:none;font-family:inherit;margin-bottom:16px}
+.pub-modal input:focus{border-color:var(--red)}
+.pub-btns{display:flex;gap:10px;justify-content:flex-end}
+.pub-status{font-size:.82rem;padding:10px 0;text-align:center;display:none}
+.pub-status.ok{color:#059669;display:block}
+.pub-status.err{color:var(--red);display:block}
+.pub-status.working{color:var(--g500);display:block}
+.btn-settings{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:white;border-radius:8px;padding:6px 10px;cursor:pointer;font-family:inherit;transition:opacity .15s;display:flex;align-items:center}
+.btn-settings:hover{opacity:.8}
 
 @media(max-width:700px){.field-row.cols-3,.field-row.cols-4{grid-template-columns:1fr 1fr}}
 </style>
@@ -117,8 +126,11 @@ tbody tr:hover td{background:var(--g50)}
     <span class="nav-tag">Admin</span>
   </div>
   <div class="nav-right">
-    <button class="btn-gen" onclick="generateDashboard()">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.88 18.09A5 5 0 0018 9h-1.26A8 8 0 104 16.29"/></svg>
+    <button class="btn-settings" onclick="showSettings()" title="GitHub settings">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+    </button>
+    <button class="btn-gen" id="pub-btn" onclick="publishDashboard()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/></svg>
       Publish Dashboard
     </button>
   </div>
@@ -128,23 +140,6 @@ tbody tr:hover td{background:var(--g50)}
 
   <!-- Stats -->
   <div class="stats-row" id="stats-row"></div>
-
-  <!-- Publish workflow hint -->
-  <div class="pub-banner">
-    <div class="pub-text">
-      <p>Publishing workflow</p>
-      <span>Enter data below, then publish the dashboard to share with external stakeholders.</span>
-    </div>
-    <div class="pub-steps">
-      <span class="step">1. Add entries</span>
-      <span class="step-arrow">&#8594;</span>
-      <span class="step">2. Click Publish Dashboard</span>
-      <span class="step-arrow">&#8594;</span>
-      <span class="step">3. Replace file on GitHub</span>
-      <span class="step-arrow">&#8594;</span>
-      <span class="step">4. Link updates live</span>
-    </div>
-  </div>
 
   <!-- Entry Form -->
   <div class="card">
@@ -242,6 +237,31 @@ tbody tr:hover td{background:var(--g50)}
     </div>
   </div>
 
+</div>
+
+<!-- Settings Modal -->
+<div class="pub-overlay" id="settings-overlay" onclick="if(event.target===this)closeSettings()">
+  <div class="pub-modal">
+    <h3>GitHub Publishing Settings</h3>
+    <p>Enter a GitHub Personal Access Token with <strong>Contents: Read and write</strong> permission for the <code>lfc-signals</code> repo. This token is stored only in your browser.</p>
+    <label>GitHub Token</label>
+    <input type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+    <div class="pub-btns">
+      <button class="btn-clear" onclick="closeSettings()">Cancel</button>
+      <button class="btn-save" onclick="saveToken()">Save Token</button>
+    </div>
+  </div>
+</div>
+
+<!-- Publish Status Modal -->
+<div class="pub-overlay" id="pub-status-overlay" onclick="if(event.target===this)closePubStatus()">
+  <div class="pub-modal">
+    <h3 id="pub-title">Publishing Dashboard</h3>
+    <div id="pub-msg" class="pub-status working">Pushing to GitHub Pages&hellip;</div>
+    <div class="pub-btns" id="pub-close-btns" style="display:none">
+      <button class="btn-save" onclick="closePubStatus()">Close</button>
+    </div>
+  </div>
 </div>
 
 <!-- âââ JS âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ -->
@@ -440,22 +460,344 @@ function flash(id, msg) {
   setTimeout(function(){ el.style.display='none'; }, 3000);
 }
 
-// ââ GENERATE DASHBOARD ââââââââââââââââââââââââââââââââââââââââââââââââ
-function generateDashboard() {
-  if (!all.length) {
-    if (!confirm('No entries have been added yet. Generate an empty dashboard?')) return;
+// ââ GITHUB SETTINGS ââââââââââââââââââââââââââââââââââââââââââââââââââ
+var GH_OWNER = 'fletchert131-sudo';
+var GH_REPO  = 'lfc-signals';
+var GH_PATH  = 'benchmarks/index.html';
+var GH_TOKEN_KEY = 'smb_gh_token';
+
+function showSettings() {
+  var token = localStorage.getItem(GH_TOKEN_KEY) || '';
+  document.getElementById('gh-token').value = token;
+  document.getElementById('settings-overlay').classList.add('show');
+}
+function closeSettings() {
+  document.getElementById('settings-overlay').classList.remove('show');
+}
+function saveToken() {
+  var token = document.getElementById('gh-token').value.trim();
+  if (token) {
+    localStorage.setItem(GH_TOKEN_KEY, token);
+    flash('msg-ok', '\u2713 Token saved');
+  } else {
+    localStorage.removeItem(GH_TOKEN_KEY);
   }
-  var data = JSON.stringify(all);
-  var html = getDashboardHTML(data);
-  var blob = new Blob([html], { type: 'text/html;charset=utf-8' });
-  var url  = URL.createObjectURL(blob);
-  var a    = document.createElement('a');
-  a.href   = url;
-  a.download = 'sm-dashboard.html';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  closeSettings();
+}
+
+// ââ PUBLISH DASHBOARD ââââââââââââââââââââââââââââââââââââââââââââââââ
+function publishDashboard() {
+  var token = localStorage.getItem(GH_TOKEN_KEY);
+  if (!token) {
+    showSettings();
+    return;
+  }
+  if (!all.length) {
+    if (!confirm('No entries have been added yet. Publish an empty dashboard?')) return;
+  }
+
+  var msgEl = document.getElementById('pub-msg');
+  var titleEl = document.getElementById('pub-title');
+  var closeBtn = document.getElementById('pub-close-btns');
+  titleEl.textContent = 'Publishing Dashboard';
+  msgEl.className = 'pub-status working';
+  msgEl.textContent = 'Pushing to GitHub Pages\u2026';
+  closeBtn.style.display = 'none';
+  document.getElementById('pub-status-overlay').classList.add('show');
+
+  var dashHTML = getDashboardHTML(JSON.stringify(all));
+  var encoded  = btoa(unescape(encodeURIComponent(dashHTML)));
+  var apiUrl   = 'https://api.github.com/repos/' + GH_OWNER + '/' + GH_REPO + '/contents/' + GH_PATH;
+
+  // First GET the current file to obtain SHA
+  fetch(apiUrl, {
+    headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json' }
+  })
+  .then(function(resp) {
+    if (resp.status === 404) return { sha: null };
+    if (!resp.ok) throw new Error('GitHub GET failed: ' + resp.status);
+    return resp.json();
+  })
+  .then(function(data) {
+    var body = {
+      message: 'Update dashboard â ' + new Date().toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }),
+      content: encoded
+    };
+    if (data.sha) body.sha = data.sha;
+    return fetch(apiUrl, {
+      method: 'PUT',
+      headers: {
+        'Authorization': 'Bearer ' + token,
+        'Accept': 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+  })
+  .then(function(resp) {
+    if (!resp.ok) {
+      return resp.json().then(function(d) { throw new Error(d.message || 'GitHub PUT failed: ' + resp.status); });
+    }
+    return resp.json();
+  })
+  .then(function() {
+    titleEl.textContent = 'Published!';
+    msgEl.className = 'pub-status ok';
+    msgEl.innerHTML = '\u2713 Dashboard updated successfully.<br><a href="https://' + GH_OWNER + '.github.io/' + GH_REPO + '/benchmarks/" target="_blank" style="color:#059669;font-weight:600">View live dashboard \u2192</a>';
+    closeBtn.style.display = 'flex';
+  })
+  .catch(function(err) {
+    titleEl.textContent = 'Publish Failed';
+    msgEl.className = 'pub-status err';
+    msgEl.textContent = '\u26a0 ' + err.message;
+    if (err.message.indexOf('Bad credentials') > -1 || err.message.indexOf('401') > -1) {
+      msgEl.textContent += ' â Check your GitHub token in settings.';
+    }
+    closeBtn.style.display = 'flex';
+  });
+}
+
+function closePubStatus() {
+  document.getElementById('pub-status-overlay').classList.remove('show');
+}
+
+// ââ DASHBOARD TEMPLATE ââââââââââââââââââââââââââââââââââââââââââââââââocument.getElementById('e-views').value)  || 0;
+  var engs    = parseInt(document.getElementById('e-engs').value)   || 0;
+  var notes   = document.getElementById('e-notes').value.trim();
+
+  var missing = [];
+  if (!date)     missing.push('Date');
+  if (!partner)  missing.push('Partner');
+  if (!type)     missing.push('Type');
+  if (posts < 1) missing.push('Posts (min 1)');
+  if (missing.length) { flash('msg-err', '\u26a0 Missing: ' + missing.join(', ')); return; }
+
+  all.push({
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2),
+    date:date, partner:partner, type:type, posts:posts,
+    impressions:imps, views:views, engagements:engs, notes:notes
+  });
+  persist();
+  flash('msg-ok', '\u2713 Saved');
+  ['e-posts','e-imps','e-views','e-engs','e-notes'].forEach(function(id){ document.getElementById(id).value=''; });
+  updateDatalist();
+  renderStats();
+  renderTable();
+}
+
+function del(id) {
+  if (!confirm('Delete this entry? This cannot be undone.')) return;
+  all = all.filter(function(e){ return e.id!==id; });
+  persist();
+  renderStats();
+  renderTable();
+}
+
+function clearForm() {
+  document.getElementById('e-date').value    = today();
+  document.getElementById('e-partner').value = '';
+  document.getElementById('e-type').value    = '';
+  ['e-posts','e-imps','e-views','e-engs','e-notes'].forEach(function(id){ document.getElementById(id).value=''; });
+}
+
+// ââ SORT ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+function sortBy(f) {
+  sortD = sortF===f ? (sortD==='asc'?'desc':'asc') : 'desc';
+  sortF = f;
+  var cols = ['date:sd','partner:sp','posts:sps','impressions:si','views:sv','engagements:se'];
+  for (var i=0; i<cols.length; i++) {
+    var parts=cols[i].split(':');
+    var el=document.getElementById(parts[1]);
+    if (el) el.textContent = parts[0]===sortF ? (sortD==='asc'?'\u2191':'\u2193') : '';
+  }
+  renderTable();
+}
+
+// ââ RENDER ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+function renderStats() {
+  var partners = {};
+  var launches = 0, campaigns = 0;
+  for (var i=0; i<all.length; i++) { partners[all[i].partner]=1; if(all[i].type==='launch')launches++; if(all[i].type==='campaign')campaigns++; }
+  var pCount = Object.keys(partners).length;
+  var data = [
+    { val: all.length,  lbl: 'Total Entries' },
+    { val: pCount,      lbl: 'Partners' },
+    { val: launches,    lbl: 'Launches' },
+    { val: campaigns,   lbl: 'Campaigns' }
+  ];
+  var html='';
+  for (var j=0; j<data.length; j++) {
+    html += '<div class="stat-card"><div class="stat-val">'+data[j].val+'</div><div class="stat-lbl">'+data[j].lbl+'</div></div>';
+  }
+  document.getElementById('stats-row').innerHTML = html;
+}
+
+function renderTable() {
+  var query=(document.getElementById('search').value||'').toLowerCase();
+  var rows=all.filter(function(e){
+    return !query||e.partner.toLowerCase().indexOf(query)>-1||(e.notes||'').toLowerCase().indexOf(query)>-1;
+  });
+  rows=rows.slice().sort(function(a,b){
+    var av=a[sortF],bv=b[sortF];
+    if(typeof av==='string'){av=av.toLowerCase();bv=bv.toLowerCase();}
+    return (sortD==='asc'?1:-1)*(av<bv?-1:av>bv?1:0);
+  });
+
+  document.getElementById('tbl-count').textContent = rows.length+' entr'+(rows.length===1?'y':'ies');
+  var tbody=document.getElementById('tbl-body');
+  var empty=document.getElementById('empty-state');
+
+  if (!rows.length) { tbody.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+
+  var html='';
+  for (var i=0; i<rows.length; i++) {
+    var e=rows[i];
+    var ipp=e.posts?Math.round(e.impressions/e.posts):0;
+    var bdgCls = BDG[e.type]||'bdg bdg-m';
+    html += '<tr>';
+    html += '<td>'+e.date+'</td>';
+    html += '<td style="font-weight:600">'+esc(e.partner)+'</td>';
+    html += '<td><span class="'+bdgCls+'">'+(TL[e.type]||e.type)+'</span></td>';
+    html += '<td class="r">'+e.posts+'</td>';
+    html += '<td class="r">'+full(e.impressions)+'</td>';
+    html += '<td class="r">'+full(e.views)+'</td>';
+    html += '<td class="r">'+full(e.engagements)+'</td>';
+    html += '<td class="r" style="color:var(--g500)">'+fmt(ipp)+'</td>';
+    html += '<td style="color:var(--g500);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+esc(e.notes||'')+'">'+esc(e.notes||'\u2014')+'</td>';
+    html += '<td><button class="del-btn" onclick="del(\''+e.id+'\')">&#10005;</button></td>';
+    html += '</tr>';
+  }
+  tbody.innerHTML = html;
+}
+
+function updateDatalist() {
+  var partners={};
+  for (var i=0; i<all.length; i++) partners[all[i].partner]=1;
+  var list=Object.keys(partners).sort();
+  var html='';
+  for (var j=0; j<list.length; j++) html+='<option value="'+esc(list[j])+'">';
+  document.getElementById('partner-list').innerHTML=html;
+}
+
+// ââ HELPERS âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+function fmt(n) {
+  if (!n&&n!==0) return '\u2014';
+  if (n>=1e6) return (n/1e6).toFixed(1)+'M';
+  if (n>=1e4) return (n/1e3).toFixed(1)+'K';
+  if (n>=1e3) return (n/1e3).toFixed(2)+'K';
+  return Math.round(n).toLocaleString();
+}
+function full(n) { return (n||0).toLocaleString(); }
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function today() { return new Date().toISOString().split('T')[0]; }
+
+function flash(id, msg) {
+  ['msg-ok','msg-err'].forEach(function(i){ var el=document.getElementById(i); el.style.display='none'; });
+  var el=document.getElementById(id);
+  el.textContent=msg; el.style.display='flex';
+  setTimeout(function(){ el.style.display='none'; }, 3000);
+}
+
+// ââ GITHUB SETTINGS ââââââââââââââââââââââââââââââââââââââââââââââââââ
+var GH_OWNER = 'fletchert131-sudo';
+var GH_REPO  = 'lfc-signals';
+var GH_PATH  = 'benchmarks/index.html';
+var GH_TOKEN_KEY = 'smb_gh_token';
+
+function showSettings() {
+  var token = localStorage.getItem(GH_TOKEN_KEY) || '';
+  document.getElementById('gh-token').value = token;
+  document.getElementById('settings-overlay').classList.add('show');
+}
+function closeSettings() {
+  document.getElementById('settings-overlay').classList.remove('show');
+}
+function saveToken() {
+  var token = document.getElementById('gh-token').value.trim();
+  if (token) {
+    localStorage.setItem(GH_TOKEN_KEY, token);
+    flash('msg-ok', '\u2713 Token saved');
+  } else {
+    localStorage.removeItem(GH_TOKEN_KEY);
+  }
+  closeSettings();
+}
+
+// ââ PUBLISH DASHBOARD ââââââââââââââââââââââââââââââââââââââââââââââââ
+function publishDashboard() {
+  var token = localStorage.getItem(GH_TOKEN_KEY);
+  if (!token) {
+    showSettings();
+    return;
+  }
+  if (!all.length) {
+    if (!confirm('No entries have been added yet. Publish an empty dashboard?')) return;
+  }
+
+  var msgEl = document.getElementById('pub-msg');
+  var titleEl = document.getElementById('pub-title');
+  var closeBtn = document.getElementById('pub-close-btns');
+  titleEl.textContent = 'Publishing Dashboard';
+  msgEl.className = 'pub-status working';
+  msgEl.textContent = 'Pushing to GitHub Pages\u2026';
+  closeBtn.style.display = 'none';
+  document.getElementById('pub-status-overlay').classList.add('show');
+
+  var dashHTML = getDashboardHTML(JSON.stringify(all));
+  var encoded  = btoa(unescape(encodeURIComponent(dashHTML)));
+  var apiUrl   = 'https://api.github.com/repos/' + GH_OWNER + '/' + GH_REPO + '/contents/' + GH_PATH;
+
+  // First GET the current file to obtain SHA
+  fetch(apiUrl, {
+    headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json' }
+  })
+  .then(function(resp) {
+    if (resp.status === 404) return { sha: null };
+    if (!resp.ok) throw new Error('GitHub GET failed: ' + resp.status);
+    return resp.json();
+  })
+  .then(function(data) {
+    var body = {
+      message: 'Update dashboard â ' + new Date().toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }),
+      content: encoded
+    };
+    if (data.sha) body.sha = data.sha;
+    return fetch(apiUrl, {
+      method: 'PUT',
+      headers: {
+        'Authorization': 'Bearer ' + token,
+        'Accept': 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+  })
+  .then(function(resp) {
+    if (!resp.ok) {
+      return resp.json().then(function(d) { throw new Error(d.message || 'GitHub PUT failed: ' + resp.status); });
+    }
+    return resp.json();
+  })
+  .then(function() {
+    titleEl.textContent = 'Published!';
+    msgEl.className = 'pub-status ok';
+    msgEl.innerHTML = '\u2713 Dashboard updated successfully.<br><a href="https://' + GH_OWNER + '.github.io/' + GH_REPO + '/benchmarks/" target="_blank" style="color:#059669;font-weight:600">View live dashboard \u2192</a>';
+    closeBtn.style.display = 'flex';
+  })
+  .catch(function(err) {
+    titleEl.textContent = 'Publish Failed';
+    msgEl.className = 'pub-status err';
+    msgEl.textContent = '\u26a0 ' + err.message;
+    if (err.message.indexOf('Bad credentials') > -1 || err.message.indexOf('401') > -1) {
+      msgEl.textContent += ' â Check your GitHub token in settings.';
+    }
+    closeBtn.style.display = 'flex';
+  });
+}
+
+function closePubStatus() {
+  document.getElementById('pub-status-overlay').classList.remove('show');
 }
 
 // ââ DASHBOARD TEMPLATE ââââââââââââââââââââââââââââââââââââââââââââââââ
@@ -561,153 +903,6 @@ tbody tr:hover td{background:var(--g50)}
         <option value="campaign">Campaign</option>
       </select>
     </div>
-    <button class="filter-clear" onclick="clearFilters()">Clear filters</button>
-  </div>
-  <div class="kpi-row" id="kpi-row"></div>
-  <p class="sec">Campaign Average Performance by Partner</p>
-  <div class="chart-card" style="margin-bottom:14px">
-    <p class="chart-title ci">Avg Impressions &mdash; Campaign</p>
-    <p class="chart-sub">Sorted highest to lowest</p>
-    <div id="w-ci" style="position:relative;height:300px"><canvas id="c-ci"></canvas></div>
-    <div id="e-ci" class="chart-empty" style="display:none">No campaign data</div>
-  </div>
-  <div class="chart-card" style="margin-bottom:14px">
-    <p class="chart-title cv">Avg Views &mdash; Campaign</p>
-    <p class="chart-sub">Sorted highest to lowest</p>
-    <div id="w-cv" style="position:relative;height:300px"><canvas id="c-cv"></canvas></div>
-    <div id="e-cv" class="chart-empty" style="display:none">No campaign data</div>
-  </div>
-  <div class="chart-card" style="margin-bottom:20px">
-    <p class="chart-title ce">Avg Engagements &mdash; Campaign</p>
-    <p class="chart-sub">Sorted highest to lowest</p>
-    <div id="w-ce" style="position:relative;height:300px"><canvas id="c-ce"></canvas></div>
-    <div id="e-ce" class="chart-empty" style="display:none">No campaign data</div>
-  </div>
-  <p class="sec">Launch Performance by Partner</p>
-  <div class="chart-card" style="margin-bottom:14px">
-    <p class="chart-title" style="color:var(--red)">Avg Impressions &mdash; Launch</p>
-    <p class="chart-sub">Sorted highest to lowest</p>
-    <div id="w-li" style="position:relative;height:300px"><canvas id="c-li"></canvas></div>
-    <div id="e-li" class="chart-empty" style="display:none">No launch entries in current filters</div>
-  </div>
-  <div class="chart-card" style="margin-bottom:14px">
-    <p class="chart-title cv">Avg Views &mdash; Launch</p>
-    <p class="chart-sub">Sorted highest to lowest</p>
-    <div id="w-lv" style="position:relative;height:300px"><canvas id="c-lv"></canvas></div>
-    <div id="e-lv" class="chart-empty" style="display:none">No launch entries in current filters</div>
-  </div>
-  <div class="chart-card" style="margin-bottom:20px">
-    <p class="chart-title ce">Avg Engagements &mdash; Launch</p>
-    <p class="chart-sub">Sorted highest to lowest</p>
-    <div id="w-le" style="position:relative;height:300px"><canvas id="c-le"></canvas></div>
-    <div id="e-le" class="chart-empty" style="display:none">No launch entries in current filters</div>
-  </div>
-  <div id="pp-row" class="kpi-row" style="margin-bottom:20px"></div>
-  <p class="sec">Summary Averages</p>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px">
-    <div class="table-card">
-      <div class="table-hdr"><span class="table-title">By Content Type</span></div>
-      <table><thead><tr>
-        <th>Type</th><th class="r">Entries</th>
-        <th class="r">Avg Impressions</th><th class="r">Avg Views</th><th class="r">Avg Eng</th>
-      </tr></thead><tbody id="tbl-type"></tbody></table>
-    </div>
-    <div class="table-card">
-      <div class="table-hdr"><span class="table-title">By Partner</span></div>
-      <table><thead><tr>
-        <th>Partner</th><th class="r">Entries</th>
-        <th class="r">Avg Impressions</th><th class="r">Avg Views</th><th class="r">Avg Eng</th>
-      </tr></thead><tbody id="tbl-partner"></tbody></table>
-    </div>
-  </div>
-  <p class="sec">All Entries</p>
-  <div class="table-card">
-    <div class="table-hdr">
-      <span class="table-title">Data</span>
-      <div class="table-meta">
-        <div class="srch-wrap">
-          <svg class="srch-ico" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" id="search" placeholder="Search partner&hellip;" oninput="renderEntries()">
-        </div>
-        <span id="entry-count"></span>
-      </div>
-    </div>
-    <div class="scroll">
-      <table>
-        <thead><tr>
-          <th class="sort" onclick="sortBy('date')">Date <span id="sd"></span></th>
-          <th class="sort" onclick="sortBy('partner')">Partner <span id="sp"></span></th>
-          <th>Type</th>
-          <th class="r sort" onclick="sortBy('posts')">Posts <span id="sps"></span></th>
-          <th class="r sort" onclick="sortBy('impressions')">Impressions <span id="si"></span></th>
-          <th class="r sort" onclick="sortBy('views')">Views <span id="sv"></span></th>
-          <th class="r sort" onclick="sortBy('engagements')">Engagements <span id="se"></span></th>
-          <th class="r">Imp/Post</th>
-          <th class="r">Eng Rate</th>
-          <th>Campaign Name</th>
-        </tr></thead>
-        <tbody id="tbl-entries"></tbody>
-      </table>
-    </div>
-    <div id="empty-entries" class="empty" style="display:none">
-      <p>No entries match filters</p><span>Try adjusting the date range or partner selection</span>
-    </div>
-  </div>
-  </div><!-- /dash-content -->
-</div>
-<script>
-var DATA = `;
-
-var TMPL_B = `;
-var filtered=[],sortF='date',sortD='desc',CC={};
-var TL={launch:'Launch',campaign:'Campaign',misc:'Misc'};
-function init(){
-  Chart.defaults.color='#9ca3af';Chart.defaults.borderColor='#e5e7eb';
-  document.getElementById('nav-date').textContent=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
-  if(!DATA.length){document.getElementById('no-data').style.display='block';return;}
-  document.getElementById('dash-content').style.display='block';
-  var partners=[],seen={};
-  for(var i=0;i<DATA.length;i++){var e=DATA[i];if(e.type!=='misc'&&!seen[e.partner]){seen[e.partner]=1;partners.push(e.partner);}}
-  partners.sort();
-  var sel=document.getElementById('f-partner');
-  for(var j=0;j<partners.length;j++){var opt=document.createElement('option');opt.value=partners[j];opt.textContent=partners[j];sel.appendChild(opt);}
-  applyFilters();
-}
-function applyFilters(){
-  var df=document.getElementById('f-from').value,dt=document.getElementById('f-to').value,fp=document.getElementById('f-partner').value,ft=document.getElementById('f-type').value;
-  filtered=DATA.filter(function(e){return e.type!=='misc'&&(!df||e.date>=df)&&(!dt||e.date<=dt)&&(!fp||e.partner===fp)&&(!ft||e.type===ft);});
-  filtered.sort(function(a,b){var av=a[sortF],bv=b[sortF];if(typeof av==='string'){av=av.toLowerCase();bv=bv.toLowerCase();}return(sortD==='asc'?1:-1)*(av<bv?-1:av>bv?1:0);});
-  render();
-}
-function clearFilters(){document.getElementById('f-from').value='';document.getElementById('f-to').value='';document.getElementById('f-partner').value='';document.getElementById('f-type').value='';applyFilters();}
-function sortBy(field){sortD=sortF===field?(sortD==='asc'?'desc':'asc'):'desc';sortF=field;var cols=['date:sd','partner:sp','posts:sps','impressions:si','views:sv','engagements:se'];for(var i=0;i<cols.length;i++){var parts=cols[i].split(':');var el=document.getElementById(parts[1]);if(el)el.textContent=parts[0]===sortF?(sortD==='asc'?'\u2191':'\u2193'):'';}applyFilters();}
-function metrics(arr){var n=arr.length;if(!n)return{n:0,avgImp:0,avgViews:0,avgEng:0,er:0,totalPosts:0,totalImp:0,totalViews:0,totalEng:0};var ti=0,tv=0,te=0,tp=0;for(var i=0;i<arr.length;i++){ti+=arr[i].impressions;tv+=arr[i].views;te+=arr[i].engagements;tp+=arr[i].posts;}return{n:n,totalPosts:tp,totalImp:ti,totalViews:tv,totalEng:te,avgImp:ti/n,avgViews:tv/n,avgEng:te/n,er:ti?te/ti*100:0};}
-function fmt(n){if(!n&&n!==0)return'\u2014';if(n>=1e6)return(n/1e6).toFixed(1)+'M';if(n>=1e4)return(n/1e3).toFixed(1)+'K';if(n>=1e3)return(n/1e3).toFixed(2)+'K';return Math.round(n).toLocaleString();}
-function full(n){return(n||0).toLocaleString();}
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function render(){renderKPI();renderCharts();renderPerPost();renderTypeTable();renderPartnerTable();renderEntries();}
-function renderPerPost(){var m=metrics(filtered);var ipp=m.totalPosts?m.totalImp/m.totalPosts:0;var vpp=m.totalPosts?m.totalViews/m.totalPosts:0;var epp=m.totalPosts?m.totalEng/m.totalPosts:0;var html='';html+='<div class="kpi-card"><div class="kpi-val ci">'+fmt(ipp)+'</div><div class="kpi-lbl">Impressions / Post</div><div class="kpi-sub">'+full(m.totalImp)+' impressions \u00b7 '+full(m.totalPosts)+' posts</div></div>';html+='<div class="kpi-card"><div class="kpi-val cv">'+fmt(vpp)+'</div><div class="kpi-lbl">Views / Post</div><div class="kpi-sub">'+full(m.totalViews)+' views \u00b7 '+full(m.totalPosts)+' posts</div></div>';html+='<div class="kpi-card"><div class="kpi-val ce">'+fmt(epp)+'</div><div class="kpi-lbl">Engagements / Post</div><div class="kpi-sub">'+full(m.totalEng)+' engagements \u00b7 '+full(m.totalPosts)+' posts</div></div>';document.getElementById('pp-row').innerHTML=html;}
-function renderKPI(){var m=metrics(filtered);var html='';html+='<div class="kpi-card"><div class="kpi-val ci">'+fmt(m.avgImp)+'</div><div class="kpi-lbl">Avg Impressions</div><div class="kpi-sub">'+full(m.totalImp)+' total across '+m.n+' entries</div></div>';html+='<div class="kpi-card"><div class="kpi-val cv">'+fmt(m.avgViews)+'</div><div class="kpi-lbl">Avg Views</div><div class="kpi-sub">'+full(m.totalViews)+' total across '+m.n+' entries</div></div>';html+='<div class="kpi-card"><div class="kpi-val ce">'+fmt(m.avgEng)+'</div><div class="kpi-lbl">Avg Engagements</div><div class="kpi-sub">'+full(m.totalEng)+' total across '+m.n+' entries</div></div>';html+='<div class="kpi-card"><div class="kpi-val" style="color:var(--g900)">'+m.er.toFixed(2)+'%</div><div class="kpi-lbl">Engagement Rate</div><div class="kpi-sub">'+m.n+' entr'+(m.n===1?'y':'ies')+' \u00b7 '+full(m.totalPosts)+' posts tracked</div></div>';document.getElementById('kpi-row').innerHTML=html;}
-function renderCharts(){var lP=[],lS={};for(var i=0;i<filtered.length;i++){var e=filtered[i];if(e.type==='launch'&&!lS[e.partner]){lS[e.partner]=1;lP.push(e.partner);}}var launchD=[];for(var j=0;j<lP.length;j++){var p=lP[j];var m=metrics(filtered.filter(function(e){return e.type==='launch'&&e.partner===p;}));launchD.push({label:p,imp:m.avgImp,views:m.avgViews,eng:m.avgEng});}var lByImp=launchD.slice().sort(function(a,b){return b.imp-a.imp;});var lByViews=launchD.slice().sort(function(a,b){return b.views-a.views;});var lByEng=launchD.slice().sort(function(a,b){return b.eng-a.eng;});bar('c-li','w-li','e-li',lByImp.map(function(d){return{label:d.label,val:d.imp};}),'#C8102E',function(v){return fmt(v)+' avg impressions';});bar('c-lv','w-lv','e-lv',lByViews.map(function(d){return{label:d.label,val:d.views};}),'#7c3aed',function(v){return fmt(v)+' avg views';});bar('c-le','w-le','e-le',lByEng.map(function(d){return{label:d.label,val:d.eng};}),'#059669',function(v){return fmt(v)+' avg eng';});var cP=[],cS={};for(var k=0;k<filtered.length;k++){var ec=filtered[k];if(ec.type==='campaign'&&!cS[ec.partner]){cS[ec.partner]=1;cP.push(ec.partner);}}var campD=[];for(var l=0;l<cP.length;l++){var cp=cP[l];var cm=metrics(filtered.filter(function(e){return e.type==='campaign'&&e.partner===cp;}));campD.push({label:cp,imp:cm.avgImp,views:cm.avgViews,eng:cm.avgEng});}var byImp=campD.slice().sort(function(a,b){return b.imp-a.imp;});var byViews=campD.slice().sort(function(a,b){return b.views-a.views;});var byEng=campD.slice().sort(function(a,b){return b.eng-a.eng;});bar('c-ci','w-ci','e-ci',byImp.map(function(d){return{label:d.label,val:d.imp};}),'#2563eb',function(v){return fmt(v)+' avg imp';});bar('c-cv','w-cv','e-cv',byViews.map(function(d){return{label:d.label,val:d.views};}),'#7c3aed',function(v){return fmt(v)+' avg views';});bar('c-ce','w-ce','e-ce',byEng.map(function(d){return{label:d.label,val:d.eng};}),'#059669',function(v){return fmt(v)+' avg eng';});}
-function bar(cid,wid,eid,data,color,tipFn){if(CC[cid]){CC[cid].destroy();CC[cid]=null;}var w=document.getElementById(wid),e=document.getElementById(eid);if(!data.length){w.style.display='none';e.style.display='block';return;}w.style.display='';e.style.display='none';CC[cid]=new Chart(document.getElementById(cid),{type:'bar',data:{labels:data.map(function(d){return d.label;}),datasets:[{data:data.map(function(d){return d.val;}),backgroundColor:color+'28',borderColor:color,borderWidth:2,borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){return' '+tipFn(ctx.raw);}}}},scales:{x:{grid:{color:'#f3f4f6'},ticks:{color:'#9ca3af',font:{size:10},maxRotation:45,minRotation:45}},y:{grid:{color:'#f3f4f6'},ticks:{color:'#9ca3af',font:{size:10},callback:function(v){return fmt(v);}}}}}});}
-function renderTypeTable(){var types=['launch','campaign'],html='';for(var i=0;i<types.length;i++){var t=types[i],arr=filtered.filter(function(e){return e.type===t;});if(!arr.length)continue;var m=metrics(arr);html+='<tr><td><span class="bdg bdg-'+(t==='launch'?'l':'c')+'">'+(t==='launch'?'Launch':'Campaign')+'</span></td><td class="r">'+m.n+'</td><td class="r ci">'+fmt(m.avgImp)+'</td><td class="r cv">'+fmt(m.avgViews)+'</td><td class="r ce">'+fmt(m.avgEng)+'</td></tr>';}document.getElementById('tbl-type').innerHTML=html||'<tr><td colspan="5" style="text-align:center;color:var(--g400);padding:18px">No data</td></tr>';}
-function renderPartnerTable(){var partners=[],seen={};for(var i=0;i<filtered.length;i++){if(!seen[filtered[i].partner]){seen[filtered[i].partner]=1;partners.push(filtered[i].partner);}}partners.sort();var html='';for(var j=0;j<partners.length;j++){var p=partners[j],m=metrics(filtered.filter(function(e){return e.partner===p;}));html+='<tr><td style="font-weight:600">'+esc(p)+'</td><td class="r">'+m.n+'</td><td class="r ci">'+fmt(m.avgImp)+'</td><td class="r cv">'+fmt(m.avgViews)+'</td><td class="r ce">'+fmt(m.avgEng)+'</td></tr>';}document.getElementById('tbl-partner').innerHTML=html||'<tr><td colspan="5" style="text-align:center;color:var(--g400);padding:18px">No data</td></tr>';}
-function renderEntries(){var query=(document.getElementById('search').value||'').toLowerCase(),rows=filtered.filter(function(e){return!query||e.partner.toLowerCase().indexOf(query)>-1||(e.notes||'').toLowerCase().indexOf(query)>-1;});document.getElementById('entry-count').textContent=rows.length+' entr'+(rows.length===1?'y':'ies');var tbody=document.getElementById('tbl-entries'),empty=document.getElementById('empty-entries');if(!rows.length){tbody.innerHTML='';empty.style.display='block';return;}empty.style.display='none';var html='';for(var i=0;i<rows.length;i++){var e=rows[i],ipp=e.posts?e.impressions/e.posts:0,er=e.impressions?e.engagements/e.impressions*100:0;html+='<tr><td>'+e.date+'</td><td style="font-weight:600">'+esc(e.partner)+'</td><td><span class="bdg bdg-'+(e.type==='launch'?'l':'c')+'">'+(TL[e.type]||e.type)+'</span></td><td class="r">'+e.posts+'</td><td class="r ci">'+full(e.impressions)+'</td><td class="r cv">'+full(e.views)+'</td><td class="r ce">'+full(e.engagements)+'</td><td class="r" style="color:var(--g600)">'+fmt(ipp)+'</td><td class="r" style="color:var(--g600)">'+er.toFixed(2)+'%</td><td style="color:var(--g500);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+esc(e.notes||'')+'">'+esc(e.notes||'\u2014')+'</td></tr>';}tbody.innerHTML=html;}
-document.addEventListener('DOMContentLoaded',init);
-<\/script>
-</body>
-</html>`;
-
-function getDashboardHTML(dataJSON) {
-  return TMPL_A + dataJSON + TMPL_B;
-}
-
-// ââ START âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
-document.addEventListener('DOMContentLoaded', init);
-</script>
-</body>
-</html>
-<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -806,13 +1001,22 @@ tbody tr:hover td{background:var(--g50)}
 .scroll{overflow-x:auto}
 .sec{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--g400);margin:24px 0 12px}
 
-/* PUBLISH BANNER */
-.pub-banner{background:white;border:2px solid var(--g200);border-radius:var(--r);padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-.pub-text p{font-size:.85rem;font-weight:600;color:var(--g900);margin-bottom:2px}
-.pub-text span{font-size:.77rem;color:var(--g500)}
-.pub-steps{display:flex;gap:6px;align-items:center}
-.step{font-size:.72rem;color:var(--g400);background:var(--g50);border:1px solid var(--g200);border-radius:6px;padding:4px 10px}
-.step-arrow{color:var(--g400);font-size:.8rem}
+/* PUBLISH OVERLAY */
+.pub-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.35);z-index:200;display:none;align-items:center;justify-content:center}
+.pub-overlay.show{display:flex}
+.pub-modal{background:white;border-radius:var(--r);box-shadow:0 20px 60px rgba(0,0,0,.2);padding:28px 30px;width:440px;max-width:92vw}
+.pub-modal h3{font-size:1rem;font-weight:700;color:var(--g900);margin-bottom:6px}
+.pub-modal p{font-size:.82rem;color:var(--g500);margin-bottom:16px;line-height:1.5}
+.pub-modal label{display:block;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--g500);margin-bottom:5px}
+.pub-modal input{width:100%;background:var(--g50);border:1.5px solid var(--g200);border-radius:var(--rsm);padding:8px 11px;font-size:.84rem;color:var(--g800);outline:none;font-family:inherit;margin-bottom:16px}
+.pub-modal input:focus{border-color:var(--red)}
+.pub-btns{display:flex;gap:10px;justify-content:flex-end}
+.pub-status{font-size:.82rem;padding:10px 0;text-align:center;display:none}
+.pub-status.ok{color:#059669;display:block}
+.pub-status.err{color:var(--red);display:block}
+.pub-status.working{color:var(--g500);display:block}
+.btn-settings{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:white;border-radius:8px;padding:6px 10px;cursor:pointer;font-family:inherit;transition:opacity .15s;display:flex;align-items:center}
+.btn-settings:hover{opacity:.8}
 
 @media(max-width:700px){.field-row.cols-3,.field-row.cols-4{grid-template-columns:1fr 1fr}}
 </style>
@@ -826,8 +1030,11 @@ tbody tr:hover td{background:var(--g50)}
     <span class="nav-tag">Admin</span>
   </div>
   <div class="nav-right">
-    <button class="btn-gen" onclick="generateDashboard()">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.88 18.09A5 5 0 0018 9h-1.26A8 8 0 104 16.29"/></svg>
+    <button class="btn-settings" onclick="showSettings()" title="GitHub settings">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+    </button>
+    <button class="btn-gen" id="pub-btn" onclick="publishDashboard()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/></svg>
       Publish Dashboard
     </button>
   </div>
@@ -837,23 +1044,6 @@ tbody tr:hover td{background:var(--g50)}
 
   <!-- Stats -->
   <div class="stats-row" id="stats-row"></div>
-
-  <!-- Publish workflow hint -->
-  <div class="pub-banner">
-    <div class="pub-text">
-      <p>Publishing workflow</p>
-      <span>Enter data below, then publish the dashboard to share with external stakeholders.</span>
-    </div>
-    <div class="pub-steps">
-      <span class="step">1. Add entries</span>
-      <span class="step-arrow">&#8594;</span>
-      <span class="step">2. Click Publish Dashboard</span>
-      <span class="step-arrow">&#8594;</span>
-      <span class="step">3. Replace file on GitHub</span>
-      <span class="step-arrow">&#8594;</span>
-      <span class="step">4. Link updates live</span>
-    </div>
-  </div>
 
   <!-- Entry Form -->
   <div class="card">
@@ -951,6 +1141,31 @@ tbody tr:hover td{background:var(--g50)}
     </div>
   </div>
 
+</div>
+
+<!-- Settings Modal -->
+<div class="pub-overlay" id="settings-overlay" onclick="if(event.target===this)closeSettings()">
+  <div class="pub-modal">
+    <h3>GitHub Publishing Settings</h3>
+    <p>Enter a GitHub Personal Access Token with <strong>Contents: Read and write</strong> permission for the <code>lfc-signals</code> repo. This token is stored only in your browser.</p>
+    <label>GitHub Token</label>
+    <input type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+    <div class="pub-btns">
+      <button class="btn-clear" onclick="closeSettings()">Cancel</button>
+      <button class="btn-save" onclick="saveToken()">Save Token</button>
+    </div>
+  </div>
+</div>
+
+<!-- Publish Status Modal -->
+<div class="pub-overlay" id="pub-status-overlay" onclick="if(event.target===this)closePubStatus()">
+  <div class="pub-modal">
+    <h3 id="pub-title">Publishing Dashboard</h3>
+    <div id="pub-msg" class="pub-status working">Pushing to GitHub Pages&hellip;</div>
+    <div class="pub-btns" id="pub-close-btns" style="display:none">
+      <button class="btn-save" onclick="closePubStatus()">Close</button>
+    </div>
+  </div>
 </div>
 
 <!-- âââ JS âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ -->
@@ -1149,22 +1364,105 @@ function flash(id, msg) {
   setTimeout(function(){ el.style.display='none'; }, 3000);
 }
 
-// ââ GENERATE DASHBOARD ââââââââââââââââââââââââââââââââââââââââââââââââ
-function generateDashboard() {
-  if (!all.length) {
-    if (!confirm('No entries have been added yet. Generate an empty dashboard?')) return;
+// ââ GITHUB SETTINGS ââââââââââââââââââââââââââââââââââââââââââââââââââ
+var GH_OWNER = 'fletchert131-sudo';
+var GH_REPO  = 'lfc-signals';
+var GH_PATH  = 'benchmarks/index.html';
+var GH_TOKEN_KEY = 'smb_gh_token';
+
+function showSettings() {
+  var token = localStorage.getItem(GH_TOKEN_KEY) || '';
+  document.getElementById('gh-token').value = token;
+  document.getElementById('settings-overlay').classList.add('show');
+}
+function closeSettings() {
+  document.getElementById('settings-overlay').classList.remove('show');
+}
+function saveToken() {
+  var token = document.getElementById('gh-token').value.trim();
+  if (token) {
+    localStorage.setItem(GH_TOKEN_KEY, token);
+    flash('msg-ok', '\u2713 Token saved');
+  } else {
+    localStorage.removeItem(GH_TOKEN_KEY);
   }
-  var data = JSON.stringify(all);
-  var html = getDashboardHTML(data);
-  var blob = new Blob([html], { type: 'text/html;charset=utf-8' });
-  var url  = URL.createObjectURL(blob);
-  var a    = document.createElement('a');
-  a.href   = url;
-  a.download = 'sm-dashboard.html';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  closeSettings();
+}
+
+// ââ PUBLISH DASHBOARD ââââââââââââââââââââââââââââââââââââââââââââââââ
+function publishDashboard() {
+  var token = localStorage.getItem(GH_TOKEN_KEY);
+  if (!token) {
+    showSettings();
+    return;
+  }
+  if (!all.length) {
+    if (!confirm('No entries have been added yet. Publish an empty dashboard?')) return;
+  }
+
+  var msgEl = document.getElementById('pub-msg');
+  var titleEl = document.getElementById('pub-title');
+  var closeBtn = document.getElementById('pub-close-btns');
+  titleEl.textContent = 'Publishing Dashboard';
+  msgEl.className = 'pub-status working';
+  msgEl.textContent = 'Pushing to GitHub Pages\u2026';
+  closeBtn.style.display = 'none';
+  document.getElementById('pub-status-overlay').classList.add('show');
+
+  var dashHTML = getDashboardHTML(JSON.stringify(all));
+  var encoded  = btoa(unescape(encodeURIComponent(dashHTML)));
+  var apiUrl   = 'https://api.github.com/repos/' + GH_OWNER + '/' + GH_REPO + '/contents/' + GH_PATH;
+
+  // First GET the current file to obtain SHA
+  fetch(apiUrl, {
+    headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github.v3+json' }
+  })
+  .then(function(resp) {
+    if (resp.status === 404) return { sha: null };
+    if (!resp.ok) throw new Error('GitHub GET failed: ' + resp.status);
+    return resp.json();
+  })
+  .then(function(data) {
+    var body = {
+      message: 'Update dashboard â ' + new Date().toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }),
+      content: encoded
+    };
+    if (data.sha) body.sha = data.sha;
+    return fetch(apiUrl, {
+      method: 'PUT',
+      headers: {
+        'Authorization': 'Bearer ' + token,
+        'Accept': 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+  })
+  .then(function(resp) {
+    if (!resp.ok) {
+      return resp.json().then(function(d) { throw new Error(d.message || 'GitHub PUT failed: ' + resp.status); });
+    }
+    return resp.json();
+  })
+  .then(function() {
+    titleEl.textContent = 'Published!';
+    msgEl.className = 'pub-status ok';
+    msgEl.innerHTML = '\u2713 Dashboard updated successfully.<br><a href="https://' + GH_OWNER + '.github.io/' + GH_REPO + '/benchmarks/" target="_blank" style="color:#059669;font-weight:600">View live dashboard \u2192</a>';
+    closeBtn.style.display = 'flex';
+  })
+  .catch(function(err) {
+    titleEl.textContent = 'Publish Failed';
+    msgEl.className = 'pub-status err';
+    msgEl.textContent = '\u26a0 ' + err.message;
+    if (err.message.indexOf('Bad credentials') > -1 || err.message.indexOf('401') > -1) {
+      msgEl.textContent += ' â Check your GitHub token in settings.';
+    }
+    closeBtn.style.display = 'flex';
+  });
+}
+
+function closePubStatus() {
+  document.getElementById('pub-status-overlay').classList.remove('show');
 }
 
 // ââ DASHBOARD TEMPLATE ââââââââââââââââââââââââââââââââââââââââââââââââ
@@ -1388,31 +1686,11 @@ function applyFilters(){
   filtered.sort(function(a,b){var av=a[sortF],bv=b[sortF];if(typeof av==='string'){av=av.toLowerCase();bv=bv.toLowerCase();}return(sortD==='asc'?1:-1)*(av<bv?-1:av>bv?1:0);});
   render();
 }
-function clearFilters(){document.getElementById('f-from').value='';document.getElementById('f-to').value='';document.getElementById('f-partner').value='';document.getElementById('f-type').value='';applyFilters();}
+function clearFilters(){document.getElementById('f-from').value='';document.getElementById('f-to').value='';document.getElentById('f-partner').value='';document.getElementById('f-type').value='';applyFilters();}
 function sortBy(field){sortD=sortF===field?(sortD==='asc'?'desc':'asc'):'desc';sortF=field;var cols=['date:sd','partner:sp','posts:sps','impressions:si','views:sv','engagements:se'];for(var i=0;i<cols.length;i++){var parts=cols[i].split(':');var el=document.getElementById(parts[1]);if(el)el.textContent=parts[0]===sortF?(sortD==='asc'?'\u2191':'\u2193'):'';}applyFilters();}
 function metrics(arr){var n=arr.length;if(!n)return{n:0,avgImp:0,avgViews:0,avgEng:0,er:0,totalPosts:0,totalImp:0,totalViews:0,totalEng:0};var ti=0,tv=0,te=0,tp=0;for(var i=0;i<arr.length;i++){ti+=arr[i].impressions;tv+=arr[i].views;te+=arr[i].engagements;tp+=arr[i].posts;}return{n:n,totalPosts:tp,totalImp:ti,totalViews:tv,totalEng:te,avgImp:ti/n,avgViews:tv/n,avgEng:te/n,er:ti?te/ti*100:0};}
 function fmt(n){if(!n&&n!==0)return'\u2014';if(n>=1e6)return(n/1e6).toFixed(1)+'M';if(n>=1e4)return(n/1e3).toFixed(1)+'K';if(n>=1e3)return(n/1e3).toFixed(2)+'K';return Math.round(n).toLocaleString();}
-function full(n){return(n||0).toLocaleString();}
+function full(n){return(n |0).toLocaleString();}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function render(){renderKPI();renderCharts();renderPerPost();renderTypeTable();renderPartnerTable();renderEntries();}
-function renderPerPost(){var m=metrics(filtered);var ipp=m.totalPosts?m.totalImp/m.totalPosts:0;var vpp=m.totalPosts?m.totalViews/m.totalPosts:0;var epp=m.totalPosts?m.totalEng/m.totalPosts:0;var html='';html+='<div class="kpi-card"><div class="kpi-val ci">'+fmt(ipp)+'</div><div class="kpi-lbl">Impressions / Post</div><div class="kpi-sub">'+full(m.totalImp)+' impressions \u00b7 '+full(m.totalPosts)+' posts</div></div>';html+='<div class="kpi-card"><div class="kpi-val cv">'+fmt(vpp)+'</div><div class="kpi-lbl">Views / Post</div><div class="kpi-sub">'+full(m.totalViews)+' views \u00b7 '+full(m.totalPosts)+' posts</div></div>';html+='<div class="kpi-card"><div class="kpi-val ce">'+fmt(epp)+'</div><div class="kpi-lbl">Engagements / Post</div><div class="kpi-sub">'+full(m.totalEng)+' engagements \u00b7 '+full(m.totalPosts)+' posts</div></div>';document.getElementById('pp-row').innerHTML=html;}
-function renderKPI(){var m=metrics(filtered);var html='';html+='<div class="kpi-card"><div class="kpi-val ci">'+fmt(m.avgImp)+'</div><div class="kpi-lbl">Avg Impressions</div><div class="kpi-sub">'+full(m.totalImp)+' total across '+m.n+' entries</div></div>';html+='<div class="kpi-card"><div class="kpi-val cv">'+fmt(m.avgViews)+'</div><div class="kpi-lbl">Avg Views</div><div class="kpi-sub">'+full(m.totalViews)+' total across '+m.n+' entries</div></div>';html+='<div class="kpi-card"><div class="kpi-val ce">'+fmt(m.avgEng)+'</div><div class="kpi-lbl">Avg Engagements</div><div class="kpi-sub">'+full(m.totalEng)+' total across '+m.n+' entries</div></div>';html+='<div class="kpi-card"><div class="kpi-val" style="color:var(--g900)">'+m.er.toFixed(2)+'%</div><div class="kpi-lbl">Engagement Rate</div><div class="kpi-sub">'+m.n+' entr'+(m.n===1?'y':'ies')+' \u00b7 '+full(m.totalPosts)+' posts tracked</div></div>';document.getElementById('kpi-row').innerHTML=html;}
-function renderCharts(){var lP=[],lS={};for(var i=0;i<filtered.length;i++){var e=filtered[i];if(e.type==='launch'&&!lS[e.partner]){lS[e.partner]=1;lP.push(e.partner);}}var launchD=[];for(var j=0;j<lP.length;j++){var p=lP[j];var m=metrics(filtered.filter(function(e){return e.type==='launch'&&e.partner===p;}));launchD.push({label:p,imp:m.avgImp,views:m.avgViews,eng:m.avgEng});}var lByImp=launchD.slice().sort(function(a,b){return b.imp-a.imp;});var lByViews=launchD.slice().sort(function(a,b){return b.views-a.views;});var lByEng=launchD.slice().sort(function(a,b){return b.eng-a.eng;});bar('c-li','w-li','e-li',lByImp.map(function(d){return{label:d.label,val:d.imp};}),'#C8102E',function(v){return fmt(v)+' avg impressions';});bar('c-lv','w-lv','e-lv',lByViews.map(function(d){return{label:d.label,val:d.views};}),'#7c3aed',function(v){return fmt(v)+' avg views';});bar('c-le','w-le','e-le',lByEng.map(function(d){return{label:d.label,val:d.eng};}),'#059669',function(v){return fmt(v)+' avg eng';});var cP=[],cS={};for(var k=0;k<filtered.length;k++){var ec=filtered[k];if(ec.type==='campaign'&&!cS[ec.partner]){cS[ec.partner]=1;cP.push(ec.partner);}}var campD=[];for(var l=0;l<cP.length;l++){var cp=cP[l];var cm=metrics(filtered.filter(function(e){return e.type==='campaign'&&e.partner===cp;}));campD.push({label:cp,imp:cm.avgImp,views:cm.avgViews,eng:cm.avgEng});}var byImp=campD.slice().sort(function(a,b){return b.imp-a.imp;});var byViews=campD.slice().sort(function(a,b){return b.views-a.views;});var byEng=campD.slice().sort(function(a,b){return b.eng-a.eng;});bar('c-ci','w-ci','e-ci',byImp.map(function(d){return{label:d.label,val:d.imp};}),'#2563eb',function(v){return fmt(v)+' avg imp';});bar('c-cv','w-cv','e-cv',byViews.map(function(d){return{label:d.label,val:d.views};}),'#7c3aed',function(v){return fmt(v)+' avg views';});bar('c-ce','w-ce','e-ce',byEng.map(function(d){return{label:d.label,val:d.eng};}),'#059669',function(v){return fmt(v)+' avg eng';});}
-function bar(cid,wid,eid,data,color,tipFn){if(CC[cid]){CC[cid].destroy();CC[cid]=null;}var w=document.getElementById(wid),e=document.getElementById(eid);if(!data.length){w.style.display='none';e.style.display='block';return;}w.style.display='';e.style.display='none';CC[cid]=new Chart(document.getElementById(cid),{type:'bar',data:{labels:data.map(function(d){return d.label;}),datasets:[{data:data.map(function(d){return d.val;}),backgroundColor:color+'28',borderColor:color,borderWidth:2,borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){return' '+tipFn(ctx.raw);}}}},scales:{x:{grid:{color:'#f3f4f6'},ticks:{color:'#9ca3af',font:{size:10},maxRotation:45,minRotation:45}},y:{grid:{color:'#f3f4f6'},ticks:{color:'#9ca3af',font:{size:10},callback:function(v){return fmt(v);}}}}}});}
-function renderTypeTable(){var types=['launch','campaign'],html='';for(var i=0;i<types.length;i++){var t=types[i],arr=filtered.filter(function(e){return e.type===t;});if(!arr.length)continue;var m=metrics(arr);html+='<tr><td><span class="bdg bdg-'+(t==='launch'?'l':'c')+'">'+(t==='launch'?'Launch':'Campaign')+'</span></td><td class="r">'+m.n+'</td><td class="r ci">'+fmt(m.avgImp)+'</td><td class="r cv">'+fmt(m.avgViews)+'</td><td class="r ce">'+fmt(m.avgEng)+'</td></tr>';}document.getElementById('tbl-type').innerHTML=html||'<tr><td colspan="5" style="text-align:center;color:var(--g400);padding:18px">No data</td></tr>';}
-function renderPartnerTable(){var partners=[],seen={};for(var i=0;i<filtered.length;i++){if(!seen[filtered[i].partner]){seen[filtered[i].partner]=1;partners.push(filtered[i].partner);}}partners.sort();var html='';for(var j=0;j<partners.length;j++){var p=partners[j],m=metrics(filtered.filter(function(e){return e.partner===p;}));html+='<tr><td style="font-weight:600">'+esc(p)+'</td><td class="r">'+m.n+'</td><td class="r ci">'+fmt(m.avgImp)+'</td><td class="r cv">'+fmt(m.avgViews)+'</td><td class="r ce">'+fmt(m.avgEng)+'</td></tr>';}document.getElementById('tbl-partner').innerHTML=html||'<tr><td colspan="5" style="text-align:center;color:var(--g400);padding:18px">No data</td></tr>';}
-function renderEntries(){var query=(document.getElementById('search').value||'').toLowerCase(),rows=filtered.filter(function(e){return!query||e.partner.toLowerCase().indexOf(query)>-1||(e.notes||'').toLowerCase().indexOf(query)>-1;});document.getElementById('entry-count').textContent=rows.length+' entr'+(rows.length===1?'y':'ies');var tbody=document.getElementById('tbl-entries'),empty=document.getElementById('empty-entries');if(!rows.length){tbody.innerHTML='';empty.style.display='block';return;}empty.style.display='none';var html='';for(var i=0;i<rows.length;i++){var e=rows[i],ipp=e.posts?e.impressions/e.posts:0,er=e.impressions?e.engagements/e.impressions*100:0;html+='<tr><td>'+e.date+'</td><td style="font-weight:600">'+esc(e.partner)+'</td><td><span class="bdg bdg-'+(e.type==='launch'?'l':'c')+'">'+(TL[e.type]||e.type)+'</span></td><td class="r">'+e.posts+'</td><td class="r ci">'+full(e.impressions)+'</td><td class="r cv">'+full(e.views)+'</td><td class="r ce">'+full(e.engagements)+'</td><td class="r" style="color:var(--g600)">'+fmt(ipp)+'</td><td class="r" style="color:var(--g600)">'+er.toFixed(2)+'%</td><td style="color:var(--g500);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+esc(e.notes||'')+'">'+esc(e.notes||'\u2014')+'</td></tr>';}tbody.innerHTML=html;}
-document.addEventListener('DOMContentLoaded',init);
-<\/script>
-</body>
-</html>`;
-
-function getDashboardHTML(dataJSON) {
-  return TMPL_A + dataJSON + TMPL_B;
-}
-
-// ââ START âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
-document.addEventListener('DOMContentLoaded', init);
-</script>
-</body>
-</html>
+function renderPerPost(){var m=metrics(filtered);var ipp=m.totalPosts?m.totalImp/m.totalPosts:0;var vpp=m.totalPosts?m.totalViews/m.totalPosts:0;var epp=m.totalPosts?m.totalEng/m.totalPosts:0;var html='';html+='<div class="kpi-card"><div class="kpi-val ci">'+fmt(ipp)+'</div><div class="kpi-lbl">Impressions / Post</div><div class="kpi-sub"#âr¶gVÆÂÒçF÷FÄ×²r×&W76öç2ÇS#rr¶gVÆÂÒçF÷FÅ÷7G2²r÷7G3ÂöFcãÂöFcâs¶FÖÂ³ÒsÆFb6Æ73Ò&·Ö6&B#ãÆFb6Æ73Ò&·×fÂ7b#âr¶f×Bg²sÂöFcãÆFb6Æ73Ò&·ÖÆ&Â#åfWw2ò÷7CÂöFcãÆFb6Æ73Ò&·×7V"#âr¶gVÆÂÒçF÷FÅfWw2²rfWw2ÇS#rr¶gVÆÂÒçF÷FÅ÷7G2²r÷7G3ÂöFcãÂöFcâs¶FÖÂ³ÒsÆFb6Æ73Ò&·Ö6&B#ãÆFb6Æ73Ò&·×fÂ6R#âr¶f×BW²sÂöFcãÆFb6Æ73Ò&·ÖÆ&Â#äVævvVÖVçG2ò÷7CÂöFcãÆFb6Æ73Ò&·×7V"#âr¶gVÆÂÒçF÷FÄVær²rVævvVÖVçG2ÇS#rr¶gVÆÂÒçF÷FÅ÷7G2²r÷7G3ÂöFcãÂöFcâs¶Fö7VÖVçBævWDVÆVÖVçD'Bw×&÷rræææW$DÔÃÖFÖÃ·Ð¦gVæ7Föâ&VæFW$µ·f"ÓÖÖWG&72fÇFW&VB·f"FÖÃÒrs¶FÖÂ³ÒsÆFb6Æ73Ò&·Ö6&B#ãÆFb6Æ73Ò&·×fÂ6#âr¶f×BÒæft×²sÂöFcãÆFb6Æ73Ò&·ÖÆ&Â#äfr×&W76öç3ÂöFcãÆFb6Æ73Ò&·×7V"#âr¶gVÆÂÒçF÷FÄ×²rF÷FÂ7&÷72r¶Òæâ²rVçG&W3ÂöFcãÂöFcâs¶FÖÂ³ÒsÆFb6Æ73Ò&·Ö6&B#ãÆFb6Æ73Ò&·×fÂ7b#âr¶f×BÒæfufWw2²sÂöFcãÆFb6Æ73Ò&·ÖÆ&Â#äfrfWw3ÂöFcãÆFb6Æ73Ò&·×7V"#âr¶gVÆÂÒçF÷FÅfWw2²rF÷FÂ7&÷72r¶Òæâ²rVçG&W3ÂöFcãÂöFcâs¶FÖÂ³ÒsÆFb6Æ73Ò&·Ö6&B#ãÆFb6Æ73Ò&·×fÂ6R#âr¶f×BÒæftVær²sÂöFcãÆFb6Æ73Ò&·ÖÆ&Â#äfrVævvVÖVçG3ÂöFcãÆFb6Æ73Ò&·×7V"#âr¶gVÆÂÒçF÷FÄVær²rF÷FÂ7&÷72r¶Òæâ²rVçG&W3ÂöFcãÂöFcâs¶FÖÂ³ÒsÆFb6Æ73Ò&·Ö6&B#ãÆFb6Æ73Ò&·×fÂ"7GÆSÒ&6öÆ÷#§f"ÒÖs#âr¶ÒæW"çFôfVB"²rSÂöFcãÆFb6Æ73Ò&·ÖÆ&Â#äVævvVÖVçB&FSÂöFcãÆFb6Æ73Ò&·×7V"#âr¶Òæâ²rVçG"r²ÒæãÓÓÓòws¢vW2r²rÇS#rr¶gVÆÂÒçF÷FÅ÷7G2²r÷7G2G&6¶VCÂöFcãÂöFcâs¶Fö7VÖVçBævWDVÆVÖVçD'Bv·×&÷rræææW$DÔÃÖFÖÃ·Ð¦gVæ7Föâ&VæFW$6'G2·f"ÅÕµÒÆÅ3×·Ó¶f÷"f"Ó¶ÆfÇFW&VBæÆVæwF¶²²·f"SÖfÇFW&VE¶Ó¶bRçGSÓÓÒvÆVæ6rbbÅ5¶Rç'FæW%Ò¶Å5¶Rç'FæW%ÓÓ¶ÅçW6Rç'FæW"·××f"ÆVæ6CÕµÓ¶f÷"f"£Ó¶£ÆÅæÆVæwF¶¢²²·f"ÖÅ¶¥Ó·f"ÓÖÖWG&72fÇFW&VBæfÇFW"gVæ7FöâR·&WGW&âRçGSÓÓÒvÆVæ6rbfRç'FæW#ÓÓ×·Ò¶ÆVæ6BçW6¶Æ&VÃ§Æ×¦Òæft×ÇfWw3¦ÒæfufWw2ÆVæs¦ÒæftVæwÒ·×f"Ä'×ÖÆVæ6Bç6Æ6Rç6÷'BgVæ7FöâÆ"·&WGW&â"æ×Öæ×·Ò·f"Ä'fWw3ÖÆVæ6Bç6Æ6Rç6÷'BgVæ7FöâÆ"·&WGW&â"çfWw2ÖçfWw3·Ò·f"Ä'VæsÖÆVæ6Bç6Æ6Rç6÷'BgVæ7FöâÆ"·&WGW&â"æVærÖæVæs·Ò¶&"v2ÖÆrÂwrÖÆrÂvRÖÆrÆÄ'×æÖgVæ7FöâB·&WGW&ç¶Æ&VÃ¦BæÆ&VÂÇfÃ¦Bæ×Ó·ÒÂr43$RrÆgVæ7Föâb·&WGW&âf×Bb²rfr×&W76öç2s·Ò¶&"v2ÖÇbrÂwrÖÇbrÂvRÖÇbrÆÄ'fWw2æÖgVæ7FöâB·&WGW&ç¶Æ&VÃ¦BæÆ&VÂÇfÃ¦BçfWw7Ó·ÒÂr3v36VBrÆgVæ7Föâb·&WGW&âf×Bb²rfrfWw2s·Ò¶&"v2ÖÆRrÂwrÖÆRrÂvRÖÆRrÆÄ'VæræÖgVæ7FöâB·&WGW&ç¶Æ&VÃ¦BæÆ&VÂÇfÃ¦BæVæwÓ·ÒÂr3SccrÆgVæ7Föâb·&WGW&âf×Bb²rfrVærs·Ò·f"5ÕµÒÆ53×·Ó¶f÷"f"³Ó¶³ÆfÇFW&VBæÆVæwF¶²²²·f"V3ÖfÇFW&VE¶µÓ¶bV2çGSÓÓÒv6×vârbb55¶V2ç'FæW%Ò¶55¶V2ç'FæW%ÓÓ¶5çW6V2ç'FæW"·××f"6×CÕµÓ¶f÷"f"ÃÓ¶ÃÆ5æÆVæwF¶Â²²·f"7Ö5¶ÅÓ·f"6ÓÖÖWG&72fÇFW&VBæfÇFW"gVæ7FöâR·&WGW&âRçGSÓÓÒv6×vârbfRç'FæW#ÓÓÖ7·Ò¶6×BçW6¶Æ&VÃ¦7Æ×¦6Òæft×ÇfWw3¦6ÒæfufWw2ÆVæs¦6ÒæftVæwÒ·×f"'×Ö6×Bç6Æ6Rç6÷'BgVæ7FöâÆ"·&WGW&â"æ×Öæ×·Ò·f"'fWw3Ö6×Bç6Æ6Rç6÷'BgVæ7FöâÆ"·&WGW&â"çfWw2ÖçfWw3·Ò·f"'VæsÖ6×Bç6Æ6Rç6÷'BgVæ7FöâÆ"·&WGW&â"æVærÖæVæs·Ò¶&"v2Ö6rÂwrÖ6rÂvRÖ6rÆ'×æÖgVæ7FöâB·&WGW&ç¶Æ&VÃ¦BæÆ&VÂÇfÃ¦Bæ×Ó·ÒÂr3#Sc6V"rÆgVæ7Föâb·&WGW&âf×Bb²rfr×s·Ò¶&"v2Ö7brÂwrÖ7brÂvRÖ7brÆ'fWw2æÖgVæ7FöâB·&WGW&ç¶Æ&VÃ¦BæÆ&VÂÇfÃ¦BçfWw7Ó·ÒÂr3v36VBrÆgVæ7Föâb·&WGW&âf×Bb²rfrfWw2s·Ò¶&"v2Ö6RrÂwrÖ6RrÂvRÖ6RrÆ'VæræÖgVæ7FöâB·&WGW&ç¶Æ&VÃ¦BæÆ&VÂÇfÃ¦BæVæwÓ·ÒÂr3SccrÆgVæ7Föâb·&WGW&âf×Bb²rfrVærs·Ò·Ð¦gVæ7Föâ&"6BÇvBÆVBÆFFÆ6öÆ÷"ÇFfâ¶b45¶6EÒ´45¶6EÒæFW7G&÷´45¶6EÓÖçVÆÃ·×f"sÖFö7VÖVçBævWDVÆVÖVçD'BvBÆSÖFö7VÖVçBævWDVÆVÖVçD'BVB¶bFFæÆVæwF·rç7GÆRæF7ÆÒvæöæRs¶Rç7GÆRæF7ÆÒv&Æö6²s·&WGW&ã·×rç7GÆRæF7ÆÒrs¶Rç7GÆRæF7ÆÒvæöæRs´45¶6EÓÖæWr6'BFö7VÖVçBævWDVÆVÖVçD'B6BÇ·GS¢v&"rÆFF§¶Æ&VÇ3¦FFæÖgVæ7FöâB·&WGW&âBæÆ&VÃ·ÒÆFF6WG3¥·¶FF¦FFæÖgVæ7FöâB·&WGW&âBçfÃ·ÒÆ&6¶w&÷VæD6öÆ÷#¦6öÆ÷"²s#rÆ&÷&FW$6öÆ÷#¦6öÆ÷"Æ&÷&FW%vGF£"Æ&÷&FW%&FW3£WÕ×ÒÆ÷Föç3§·&W7öç6fS§G'VRÆÖçFä7V7E&Fó¦fÇ6RÇÇVvç3§¶ÆVvVæC§¶F7Æ¦fÇ6WÒÇFööÇF§¶6ÆÆ&6·3§¶Æ&VÃ¦gVæ7Föâ7G·&WGW&ârr·Ffâ7Gç&r·×××ÒÇ66ÆW3§·§¶w&C§¶6öÆ÷#¢r6c6cFcbwÒÇF6·3§¶6öÆ÷#¢r366brÆföçC§·6¦S£ÒÆÖ&÷FFöã£CRÆÖå&÷FFöã£CW×ÒÇ§¶w&C§¶6öÆ÷#¢r6c6cFcbwÒÇF6·3§¶6öÆ÷#¢r366brÆföçC§·6¦S£ÒÆ6ÆÆ&6³¦gVæ7Föâb·&WGW&âf×Bb·×××××Ò·Ð¦gVæ7Föâ&VæFW%GUF&ÆR·f"GW3Õ²vÆVæ6rÂv6×vâuÒÆFÖÃÒrs¶f÷"f"Ó¶ÇGW2æÆVæwF¶²²·f"C×GW5¶ÒÆ'#ÖfÇFW&VBæfÇFW"gVæ7FöâR·&WGW&âRçGSÓÓ×C·Ò¶b'"æÆVæwF6öçFçVS·f"ÓÖÖWG&72'"¶FÖÂ³ÒsÇG#ãÇFCãÇ7â6Æ73Ò&&Fr&FrÒr²CÓÓÒvÆVæ6sòvÂs¢v2r²r#âr²CÓÓÒvÆVæ6sòtÆVæ6s¢t6×vâr²sÂ÷7ããÂ÷FCãÇFB6Æ73Ò'"#âr¶Òæâ²sÂ÷FCãÇFB6Æ73Ò'"6#âr¶f×BÒæft×²sÂ÷FCãÇFB6Æ73Ò'"7b#âr¶f×BÒæfufWw2²sÂ÷FCãÇFB6Æ73Ò'"6R#âr¶f×BÒæftVær²sÂ÷FCãÂ÷G#âs·ÖFö7VÖVçBævWDVÆVÖVçD'BwF&Â×GRræææW$DÔÃÖFÖÇÇÂsÇG#ãÇFB6öÇ7ãÒ#R"7GÆSÒ'FWBÖÆvã¦6VçFW#¶6öÆ÷#§f"ÒÖsC·FFæs£#äæòFFÂ÷FCãÂ÷G#âs·Ð¦gVæ7Föâ&VæFW%'FæW%F&ÆR·f"'FæW'3ÕµÒÇ6VVã×·Ó¶f÷"f"Ó¶ÆfÇFW&VBæÆVæwF¶²²¶b6VVå¶fÇFW&VE¶Òç'FæW%Ò·6VVå¶fÇFW&VE¶Òç'FæW%ÓÓ·'FæW'2çW6fÇFW&VE¶Òç'FæW"·××'FæW'2ç6÷'B·f"FÖÃÒrs¶f÷"f"£Ó¶£Ç'FæW'2æÆVæwF¶¢²²·f"×'FæW'5¶¥ÒÆÓÖÖWG&72fÇFW&VBæfÇFW"gVæ7FöâR·&WGW&âRç'FæW#ÓÓ×·Ò¶FÖÂ³ÒsÇG#ãÇFB7GÆSÒ&föçB×vVvC£c#âr¶W62²sÂ÷FCãÇFB6Æ73Ò'"#âr¶Òæâ²sÂ÷FCãÇFB6Æ73Ò'"6#âr¶f×BÒæft×²sÂ÷FCãÇFB6Æ73Ò'"7b#âr¶f×BÒæfufWw2²sÂ÷FCãÇFB6Æ73Ò'"6R#âr¶f×BÒæftVær²sÂ÷FCãÂ÷G#âs·ÖFö7VÖVçBævWDVÆVÖVçD'BwF&Â×'FæW"ræææW$DÔÃÖFÖÇÇÂsÇG#ãÇFB6öÇ7ãÒ#R"7GÆSÒ'FWBÖÆvã¦6VçFW#¶6öÆ÷#§f"ÒÖsC·FFæs£#äæòFFÂ÷FCãÂ÷G#âs·Ð¦gVæ7Föâ&VæFW$VçG&W2·f"VW'ÒFö7VÖVçBævWDVÆVÖVçD'Bw6V&6rçfÇVWÇÂrrçFôÆ÷vW$66RÇ&÷w3ÖfÇFW&VBæfÇFW"gVæ7FöâR·&WGW&âVW'ÇÆRç'FæW"çFôÆ÷vW$66RææFWöbVW'âÓÇÂRææ÷FW7ÇÂrrçFôÆ÷vW$66RææFWöbVW'âÓ·Ò¶Fö7VÖVçBævWDVÆVÖVçD'BvVçG'Ö6÷VçBrçFWD6öçFVçC×&÷w2æÆVæwF²rVçG"r²&÷w2æÆVæwFÓÓÓòws¢vW2r·f"F&öGÖFö7VÖVçBævWDVÆVÖVçD'BwF&ÂÖVçG&W2rÆV×GÖFö7VÖVçBævWDVÆVÖVçD'BvV×GÖVçG&W2r¶b&÷w2æÆVæwF·F&öGæææW$DÔÃÒrs¶V×Gç7GÆRæF7ÆÒv&Æö6²s·&WGW&ã·ÖV×Gç7GÆRæF7ÆÒvæöæRs·f"FÖÃÒrs¶f÷"f"Ó¶Ç&÷w2æÆVæwF¶²²·f"S×&÷w5¶ÒÆÖRç÷7G3öRæ×&W76öç2öRç÷7G3£ÆW#ÖRæ×&W76öç3öRæVævvVÖVçG2öRæ×&W76öç2££¶FÖÂ³ÒsÇG#ãÇFCâr¶RæFFR²sÂ÷FCãÇFB7GÆSÒ&föçB×vVvC£c#âr¶W62Rç'FæW"²sÂ÷FCãÇFCãÇ7â6Æ73Ò&&Fr&FrÒr²RçGSÓÓÒvÆVæ6sòvÂs¢v2r²r#âr²DÅ¶RçGU×ÇÆRçGR²sÂ÷7ããÂ÷FCãÇFB6Æ73Ò'"#âr¶Rç÷7G2²sÂ÷FCãÇFB6Æ73Ò'"6#âr¶gVÆÂRæ×&W76öç2²sÂ÷FCãÇFB6Æ73Ò'"7b#âr¶gVÆÂRçfWw2²sÂ÷FCãÇFB6Æ73Ò'"6R#âr¶gVÆÂRæVævvVÖVçG2²sÂ÷FCãÇFB6Æ73Ò'""7GÆSÒ&6öÆ÷#§f"ÒÖsc#âr¶f×B²sÂ÷FCãÇFB6Æ73Ò'""7GÆSÒ&6öÆ÷#§f"ÒÖsc#âr¶W"çFôfVB"²rSÂ÷FCãÇFB7GÆSÒ&6öÆ÷#§f"ÒÖsS¶Ö×vGF£¶÷fW&fÆ÷s¦FFVã·FWBÖ÷fW&fÆ÷s¦VÆÆ63·vFR×76S¦æ÷w&"FFÆSÒ"r¶W62Rææ÷FW7ÇÂrr²r#âr¶W62Rææ÷FW7ÇÂuÇS#Br²sÂ÷FCãÂ÷G#âs·×F&öGæææW$DÔÃÖFÖÃ·Ð¦Fö7VÖVçBæFDWfVçDÆ7FVæW"tDôÔ6öçFVçDÆöFVBrÆæB°£ÅÂ÷67&Cà£Âö&öGà£ÂöFÖÃæ° ¦gVæ7FöâvWDF6&ö&DDÔÂFF¥4ôâ°¢&WGW&âDÕÅô²FF¥4ôâ²DÕÅô#°§Ð ¢òò)H)H5D%B)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H ¦Fö7VÖVçBæFDWfVçDÆ7FVæW"tDôÔ6öçFVçDÆöFVBrÂæB°£Â÷67&Cà£Âö&öGà£ÂöFÖÃà
